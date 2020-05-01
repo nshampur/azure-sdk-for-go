@@ -36,7 +36,9 @@ func NewNotificationRecipientEmailClient(subscriptionID string) NotificationReci
 	return NewNotificationRecipientEmailClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewNotificationRecipientEmailClientWithBaseURI creates an instance of the NotificationRecipientEmailClient client.
+// NewNotificationRecipientEmailClientWithBaseURI creates an instance of the NotificationRecipientEmailClient client
+// using a custom endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign
+// clouds, Azure stack).
 func NewNotificationRecipientEmailClientWithBaseURI(baseURI string, subscriptionID string) NotificationRecipientEmailClient {
 	return NotificationRecipientEmailClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -113,8 +115,8 @@ func (client NotificationRecipientEmailClient) CreateOrUpdatePreparer(ctx contex
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client NotificationRecipientEmailClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -202,8 +204,8 @@ func (client NotificationRecipientEmailClient) DeletePreparer(ctx context.Contex
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client NotificationRecipientEmailClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -290,8 +292,8 @@ func (client NotificationRecipientEmailClient) GetPreparer(ctx context.Context, 
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client NotificationRecipientEmailClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -376,8 +378,8 @@ func (client NotificationRecipientEmailClient) ListByNotificationPreparer(ctx co
 // ListByNotificationSender sends the ListByNotification request. The method will close the
 // http.Response Body if it receives an error.
 func (client NotificationRecipientEmailClient) ListByNotificationSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // ListByNotificationResponder handles the response to the ListByNotification request. The method always

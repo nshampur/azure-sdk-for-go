@@ -26,8 +26,7 @@ import (
 	"net/http"
 )
 
-// ProfilesClient is the use these APIs to manage Azure CDN resources through the Azure Resource Manager. You must make
-// sure that requests made to these resources are secure.
+// ProfilesClient is the cdn Management Client
 type ProfilesClient struct {
 	BaseClient
 }
@@ -37,7 +36,8 @@ func NewProfilesClient(subscriptionID string) ProfilesClient {
 	return NewProfilesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewProfilesClientWithBaseURI creates an instance of the ProfilesClient client.
+// NewProfilesClientWithBaseURI creates an instance of the ProfilesClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewProfilesClientWithBaseURI(baseURI string, subscriptionID string) ProfilesClient {
 	return ProfilesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -110,8 +110,7 @@ func (client ProfilesClient) CreatePreparer(ctx context.Context, resourceGroupNa
 // http.Response Body if it receives an error.
 func (client ProfilesClient) CreateSender(req *http.Request) (future ProfilesCreateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -196,8 +195,7 @@ func (client ProfilesClient) DeletePreparer(ctx context.Context, resourceGroupNa
 // http.Response Body if it receives an error.
 func (client ProfilesClient) DeleteSender(req *http.Request) (future ProfilesDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -288,8 +286,7 @@ func (client ProfilesClient) GenerateSsoURIPreparer(ctx context.Context, resourc
 // GenerateSsoURISender sends the GenerateSsoURI request. The method will close the
 // http.Response Body if it receives an error.
 func (client ProfilesClient) GenerateSsoURISender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GenerateSsoURIResponder handles the response to the GenerateSsoURI request. The method always
@@ -373,8 +370,7 @@ func (client ProfilesClient) GetPreparer(ctx context.Context, resourceGroupName 
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ProfilesClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -459,8 +455,7 @@ func (client ProfilesClient) GetSupportedOptimizationTypesPreparer(ctx context.C
 // GetSupportedOptimizationTypesSender sends the GetSupportedOptimizationTypes request. The method will close the
 // http.Response Body if it receives an error.
 func (client ProfilesClient) GetSupportedOptimizationTypesSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetSupportedOptimizationTypesResponder handles the response to the GetSupportedOptimizationTypes request. The method always
@@ -532,8 +527,7 @@ func (client ProfilesClient) ListPreparer(ctx context.Context) (*http.Request, e
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client ProfilesClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -653,8 +647,7 @@ func (client ProfilesClient) ListByResourceGroupPreparer(ctx context.Context, re
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client ProfilesClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -776,8 +769,7 @@ func (client ProfilesClient) ListResourceUsagePreparer(ctx context.Context, reso
 // ListResourceUsageSender sends the ListResourceUsage request. The method will close the
 // http.Response Body if it receives an error.
 func (client ProfilesClient) ListResourceUsageSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResourceUsageResponder handles the response to the ListResourceUsage request. The method always
@@ -897,8 +889,7 @@ func (client ProfilesClient) UpdatePreparer(ctx context.Context, resourceGroupNa
 // http.Response Body if it receives an error.
 func (client ProfilesClient) UpdateSender(req *http.Request) (future ProfilesUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}

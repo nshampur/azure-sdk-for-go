@@ -36,7 +36,8 @@ func NewClient(subscriptionID string) Client {
 	return NewClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewClientWithBaseURI creates an instance of the Client client.
+// NewClientWithBaseURI creates an instance of the Client client using a custom endpoint.  Use this when interacting
+// with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewClientWithBaseURI(baseURI string, subscriptionID string) Client {
 	return Client{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -114,8 +115,7 @@ func (client Client) CheckNameAvailabilityPreparer(ctx context.Context, location
 // CheckNameAvailabilitySender sends the CheckNameAvailability request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) CheckNameAvailabilitySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CheckNameAvailabilityResponder handles the response to the CheckNameAvailability request. The method always
@@ -187,7 +187,7 @@ func (client Client) CreateOrUpdatePreparer(ctx context.Context, resourceGroupNa
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.SignalRService/SignalR/{resourceName}", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.SignalRService/signalR/{resourceName}", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	if parameters != nil {
 		preparer = autorest.DecoratePreparer(preparer,
@@ -200,8 +200,7 @@ func (client Client) CreateOrUpdatePreparer(ctx context.Context, resourceGroupNa
 // http.Response Body if it receives an error.
 func (client Client) CreateOrUpdateSender(req *http.Request) (future CreateOrUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -269,7 +268,7 @@ func (client Client) DeletePreparer(ctx context.Context, resourceGroupName strin
 	preparer := autorest.CreatePreparer(
 		autorest.AsDelete(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.SignalRService/SignalR/{resourceName}", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.SignalRService/signalR/{resourceName}", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
@@ -278,8 +277,7 @@ func (client Client) DeletePreparer(ctx context.Context, resourceGroupName strin
 // http.Response Body if it receives an error.
 func (client Client) DeleteSender(req *http.Request) (future DeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -352,7 +350,7 @@ func (client Client) GetPreparer(ctx context.Context, resourceGroupName string, 
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.SignalRService/SignalR/{resourceName}", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.SignalRService/signalR/{resourceName}", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
@@ -360,8 +358,7 @@ func (client Client) GetPreparer(ctx context.Context, resourceGroupName string, 
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -437,8 +434,7 @@ func (client Client) ListByResourceGroupPreparer(ctx context.Context, resourceGr
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -547,8 +543,7 @@ func (client Client) ListBySubscriptionPreparer(ctx context.Context) (*http.Requ
 // ListBySubscriptionSender sends the ListBySubscription request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) ListBySubscriptionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListBySubscriptionResponder handles the response to the ListBySubscription request. The method always
@@ -662,8 +657,7 @@ func (client Client) ListKeysPreparer(ctx context.Context, resourceGroupName str
 // ListKeysSender sends the ListKeys request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) ListKeysSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListKeysResponder handles the response to the ListKeys request. The method always
@@ -742,8 +736,7 @@ func (client Client) RegenerateKeyPreparer(ctx context.Context, resourceGroupNam
 // http.Response Body if it receives an error.
 func (client Client) RegenerateKeySender(req *http.Request) (future RegenerateKeyFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -761,6 +754,82 @@ func (client Client) RegenerateKeyResponder(resp *http.Response) (result Keys, e
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// Restart operation to restart a SignalR service.
+// Parameters:
+// resourceGroupName - the name of the resource group that contains the resource. You can obtain this value
+// from the Azure Resource Manager API or the portal.
+// resourceName - the name of the SignalR resource.
+func (client Client) Restart(ctx context.Context, resourceGroupName string, resourceName string) (result RestartFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Restart")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.RestartPreparer(ctx, resourceGroupName, resourceName)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "signalr.Client", "Restart", nil, "Failure preparing request")
+		return
+	}
+
+	result, err = client.RestartSender(req)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "signalr.Client", "Restart", result.Response(), "Failure sending request")
+		return
+	}
+
+	return
+}
+
+// RestartPreparer prepares the Restart request.
+func (client Client) RestartPreparer(ctx context.Context, resourceGroupName string, resourceName string) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"resourceName":      autorest.Encode("path", resourceName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-10-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsPost(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.SignalRService/signalR/{resourceName}/restart", pathParameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// RestartSender sends the Restart request. The method will close the
+// http.Response Body if it receives an error.
+func (client Client) RestartSender(req *http.Request) (future RestartFuture, err error) {
+	var resp *http.Response
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
+	if err != nil {
+		return
+	}
+	future.Future, err = azure.NewFutureFromResponse(resp)
+	return
+}
+
+// RestartResponder handles the response to the Restart request. The method always
+// closes the http.Response Body.
+func (client Client) RestartResponder(resp *http.Response) (result autorest.Response, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent),
+		autorest.ByClosing())
+	result.Response = resp
 	return
 }
 
@@ -813,7 +882,7 @@ func (client Client) UpdatePreparer(ctx context.Context, resourceGroupName strin
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPatch(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.SignalRService/SignalR/{resourceName}", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.SignalRService/signalR/{resourceName}", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	if parameters != nil {
 		preparer = autorest.DecoratePreparer(preparer,
@@ -826,8 +895,7 @@ func (client Client) UpdatePreparer(ctx context.Context, resourceGroupName strin
 // http.Response Body if it receives an error.
 func (client Client) UpdateSender(req *http.Request) (future UpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}

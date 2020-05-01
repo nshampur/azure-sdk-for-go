@@ -36,7 +36,9 @@ func NewBillingAccountDimensionsClient(subscriptionID string) BillingAccountDime
 	return NewBillingAccountDimensionsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewBillingAccountDimensionsClientWithBaseURI creates an instance of the BillingAccountDimensionsClient client.
+// NewBillingAccountDimensionsClientWithBaseURI creates an instance of the BillingAccountDimensionsClient client using
+// a custom endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign
+// clouds, Azure stack).
 func NewBillingAccountDimensionsClientWithBaseURI(baseURI string, subscriptionID string) BillingAccountDimensionsClient {
 	return BillingAccountDimensionsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -67,7 +69,7 @@ func (client BillingAccountDimensionsClient) List(ctx context.Context, billingAc
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("costmanagement.BillingAccountDimensionsClient", "List", err.Error())
 	}
@@ -127,8 +129,7 @@ func (client BillingAccountDimensionsClient) ListPreparer(ctx context.Context, b
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client BillingAccountDimensionsClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListResponder handles the response to the List request. The method always

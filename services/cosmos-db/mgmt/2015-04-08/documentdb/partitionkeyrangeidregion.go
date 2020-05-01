@@ -36,7 +36,9 @@ func NewPartitionKeyRangeIDRegionClient(subscriptionID string) PartitionKeyRange
 	return NewPartitionKeyRangeIDRegionClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewPartitionKeyRangeIDRegionClientWithBaseURI creates an instance of the PartitionKeyRangeIDRegionClient client.
+// NewPartitionKeyRangeIDRegionClientWithBaseURI creates an instance of the PartitionKeyRangeIDRegionClient client
+// using a custom endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign
+// clouds, Azure stack).
 func NewPartitionKeyRangeIDRegionClientWithBaseURI(baseURI string, subscriptionID string) PartitionKeyRangeIDRegionClient {
 	return PartitionKeyRangeIDRegionClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -70,7 +72,8 @@ func (client PartitionKeyRangeIDRegionClient) ListMetrics(ctx context.Context, r
 				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 50, Chain: nil},
-				{Target: "accountName", Name: validation.MinLength, Rule: 3, Chain: nil}}}}); err != nil {
+				{Target: "accountName", Name: validation.MinLength, Rule: 3, Chain: nil},
+				{Target: "accountName", Name: validation.Pattern, Rule: `^[a-z0-9]+(-[a-z0-9]+)*`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("documentdb.PartitionKeyRangeIDRegionClient", "ListMetrics", err.Error())
 	}
 
@@ -124,8 +127,7 @@ func (client PartitionKeyRangeIDRegionClient) ListMetricsPreparer(ctx context.Co
 // ListMetricsSender sends the ListMetrics request. The method will close the
 // http.Response Body if it receives an error.
 func (client PartitionKeyRangeIDRegionClient) ListMetricsSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListMetricsResponder handles the response to the ListMetrics request. The method always

@@ -40,7 +40,9 @@ func NewOperationalizationClustersClient(subscriptionID string) Operationalizati
 	return NewOperationalizationClustersClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewOperationalizationClustersClientWithBaseURI creates an instance of the OperationalizationClustersClient client.
+// NewOperationalizationClustersClientWithBaseURI creates an instance of the OperationalizationClustersClient client
+// using a custom endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign
+// clouds, Azure stack).
 func NewOperationalizationClustersClientWithBaseURI(baseURI string, subscriptionID string) OperationalizationClustersClient {
 	return OperationalizationClustersClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -117,8 +119,7 @@ func (client OperationalizationClustersClient) CheckSystemServicesUpdatesAvailab
 // CheckSystemServicesUpdatesAvailableSender sends the CheckSystemServicesUpdatesAvailable request. The method will close the
 // http.Response Body if it receives an error.
 func (client OperationalizationClustersClient) CheckSystemServicesUpdatesAvailableSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CheckSystemServicesUpdatesAvailableResponder handles the response to the CheckSystemServicesUpdatesAvailable request. The method always
@@ -170,11 +171,11 @@ func (client OperationalizationClustersClient) CreateOrUpdate(ctx context.Contex
 						}},
 						{Target: "parameters.OperationalizationClusterProperties.ContainerService.MasterCount", Name: validation.Null, Rule: false,
 							Chain: []validation.Constraint{{Target: "parameters.OperationalizationClusterProperties.ContainerService.MasterCount", Name: validation.InclusiveMaximum, Rule: int64(5), Chain: nil},
-								{Target: "parameters.OperationalizationClusterProperties.ContainerService.MasterCount", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+								{Target: "parameters.OperationalizationClusterProperties.ContainerService.MasterCount", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 							}},
 						{Target: "parameters.OperationalizationClusterProperties.ContainerService.AgentCount", Name: validation.Null, Rule: false,
 							Chain: []validation.Constraint{{Target: "parameters.OperationalizationClusterProperties.ContainerService.AgentCount", Name: validation.InclusiveMaximum, Rule: int64(100), Chain: nil},
-								{Target: "parameters.OperationalizationClusterProperties.ContainerService.AgentCount", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+								{Target: "parameters.OperationalizationClusterProperties.ContainerService.AgentCount", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 							}},
 					}},
 					{Target: "parameters.OperationalizationClusterProperties.GlobalServiceConfiguration", Name: validation.Null, Rule: false,
@@ -184,9 +185,9 @@ func (client OperationalizationClustersClient) CreateOrUpdate(ctx context.Contex
 							}},
 							{Target: "parameters.OperationalizationClusterProperties.GlobalServiceConfiguration.AutoScale", Name: validation.Null, Rule: false,
 								Chain: []validation.Constraint{{Target: "parameters.OperationalizationClusterProperties.GlobalServiceConfiguration.AutoScale.MinReplicas", Name: validation.Null, Rule: false,
-									Chain: []validation.Constraint{{Target: "parameters.OperationalizationClusterProperties.GlobalServiceConfiguration.AutoScale.MinReplicas", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}},
+									Chain: []validation.Constraint{{Target: "parameters.OperationalizationClusterProperties.GlobalServiceConfiguration.AutoScale.MinReplicas", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}},
 									{Target: "parameters.OperationalizationClusterProperties.GlobalServiceConfiguration.AutoScale.MaxReplicas", Name: validation.Null, Rule: false,
-										Chain: []validation.Constraint{{Target: "parameters.OperationalizationClusterProperties.GlobalServiceConfiguration.AutoScale.MaxReplicas", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}},
+										Chain: []validation.Constraint{{Target: "parameters.OperationalizationClusterProperties.GlobalServiceConfiguration.AutoScale.MaxReplicas", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}},
 								}},
 						}},
 				}}}}}); err != nil {
@@ -235,8 +236,7 @@ func (client OperationalizationClustersClient) CreateOrUpdatePreparer(ctx contex
 // http.Response Body if it receives an error.
 func (client OperationalizationClustersClient) CreateOrUpdateSender(req *http.Request) (future OperationalizationClustersCreateOrUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -328,8 +328,7 @@ func (client OperationalizationClustersClient) DeletePreparer(ctx context.Contex
 // http.Response Body if it receives an error.
 func (client OperationalizationClustersClient) DeleteSender(req *http.Request) (future OperationalizationClustersDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -422,8 +421,7 @@ func (client OperationalizationClustersClient) GetPreparer(ctx context.Context, 
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client OperationalizationClustersClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -510,8 +508,7 @@ func (client OperationalizationClustersClient) ListByResourceGroupPreparer(ctx c
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client OperationalizationClustersClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -625,8 +622,7 @@ func (client OperationalizationClustersClient) ListBySubscriptionIDPreparer(ctx 
 // ListBySubscriptionIDSender sends the ListBySubscriptionID request. The method will close the
 // http.Response Body if it receives an error.
 func (client OperationalizationClustersClient) ListBySubscriptionIDSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListBySubscriptionIDResponder handles the response to the ListBySubscriptionID request. The method always
@@ -752,8 +748,7 @@ func (client OperationalizationClustersClient) ListKeysPreparer(ctx context.Cont
 // ListKeysSender sends the ListKeys request. The method will close the
 // http.Response Body if it receives an error.
 func (client OperationalizationClustersClient) ListKeysSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListKeysResponder handles the response to the ListKeys request. The method always
@@ -845,8 +840,7 @@ func (client OperationalizationClustersClient) UpdatePreparer(ctx context.Contex
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client OperationalizationClustersClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateResponder handles the response to the Update request. The method always
@@ -929,8 +923,7 @@ func (client OperationalizationClustersClient) UpdateSystemServicesPreparer(ctx 
 // http.Response Body if it receives an error.
 func (client OperationalizationClustersClient) UpdateSystemServicesSender(req *http.Request) (future OperationalizationClustersUpdateSystemServicesFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}

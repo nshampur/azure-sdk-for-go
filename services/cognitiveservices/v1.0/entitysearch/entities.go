@@ -238,8 +238,7 @@ func (client EntitiesClient) SearchPreparer(ctx context.Context, query string, a
 // SearchSender sends the Search request. The method will close the
 // http.Response Body if it receives an error.
 func (client EntitiesClient) SearchSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // SearchResponder handles the response to the Search request. The method always

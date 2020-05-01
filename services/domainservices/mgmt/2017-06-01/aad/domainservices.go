@@ -36,7 +36,8 @@ func NewDomainServicesClient(subscriptionID string) DomainServicesClient {
 	return NewDomainServicesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewDomainServicesClientWithBaseURI creates an instance of the DomainServicesClient client.
+// NewDomainServicesClientWithBaseURI creates an instance of the DomainServicesClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewDomainServicesClientWithBaseURI(baseURI string, subscriptionID string) DomainServicesClient {
 	return DomainServicesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -110,8 +111,7 @@ func (client DomainServicesClient) CreateOrUpdatePreparer(ctx context.Context, r
 // http.Response Body if it receives an error.
 func (client DomainServicesClient) CreateOrUpdateSender(req *http.Request) (future DomainServicesCreateOrUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -196,8 +196,7 @@ func (client DomainServicesClient) DeletePreparer(ctx context.Context, resourceG
 // http.Response Body if it receives an error.
 func (client DomainServicesClient) DeleteSender(req *http.Request) (future DomainServicesDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -207,14 +206,13 @@ func (client DomainServicesClient) DeleteSender(req *http.Request) (future Domai
 
 // DeleteResponder handles the response to the Delete request. The method always
 // closes the http.Response Body.
-func (client DomainServicesClient) DeleteResponder(resp *http.Response) (result DomainService, err error) {
+func (client DomainServicesClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent),
-		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
-	result.Response = autorest.Response{Response: resp}
+	result.Response = resp
 	return
 }
 
@@ -287,8 +285,7 @@ func (client DomainServicesClient) GetPreparer(ctx context.Context, resourceGrou
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client DomainServicesClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -361,8 +358,7 @@ func (client DomainServicesClient) ListPreparer(ctx context.Context) (*http.Requ
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client DomainServicesClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -484,8 +480,7 @@ func (client DomainServicesClient) ListByResourceGroupPreparer(ctx context.Conte
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client DomainServicesClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -606,8 +601,7 @@ func (client DomainServicesClient) UpdatePreparer(ctx context.Context, resourceG
 // http.Response Body if it receives an error.
 func (client DomainServicesClient) UpdateSender(req *http.Request) (future DomainServicesUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}

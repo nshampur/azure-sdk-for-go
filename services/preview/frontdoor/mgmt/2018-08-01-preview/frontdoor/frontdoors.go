@@ -36,7 +36,8 @@ func NewFrontDoorsClient(subscriptionID string) FrontDoorsClient {
 	return NewFrontDoorsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewFrontDoorsClientWithBaseURI creates an instance of the FrontDoorsClient client.
+// NewFrontDoorsClientWithBaseURI creates an instance of the FrontDoorsClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewFrontDoorsClientWithBaseURI(baseURI string, subscriptionID string) FrontDoorsClient {
 	return FrontDoorsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -111,8 +112,7 @@ func (client FrontDoorsClient) CreateOrUpdatePreparer(ctx context.Context, resou
 // http.Response Body if it receives an error.
 func (client FrontDoorsClient) CreateOrUpdateSender(req *http.Request) (future FrontDoorsCreateOrUpdateFutureType, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -200,8 +200,7 @@ func (client FrontDoorsClient) DeletePreparer(ctx context.Context, resourceGroup
 // http.Response Body if it receives an error.
 func (client FrontDoorsClient) DeleteSender(req *http.Request) (future FrontDoorsDeleteFutureType, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -293,8 +292,7 @@ func (client FrontDoorsClient) GetPreparer(ctx context.Context, resourceGroupNam
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client FrontDoorsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -366,8 +364,7 @@ func (client FrontDoorsClient) ListPreparer(ctx context.Context) (*http.Request,
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client FrontDoorsClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -487,8 +484,7 @@ func (client FrontDoorsClient) ListByResourceGroupPreparer(ctx context.Context, 
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client FrontDoorsClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -619,8 +615,7 @@ func (client FrontDoorsClient) ValidateCustomDomainPreparer(ctx context.Context,
 // ValidateCustomDomainSender sends the ValidateCustomDomain request. The method will close the
 // http.Response Body if it receives an error.
 func (client FrontDoorsClient) ValidateCustomDomainSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ValidateCustomDomainResponder handles the response to the ValidateCustomDomain request. The method always

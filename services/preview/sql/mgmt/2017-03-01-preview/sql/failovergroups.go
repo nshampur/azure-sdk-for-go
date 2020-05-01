@@ -38,7 +38,8 @@ func NewFailoverGroupsClient(subscriptionID string) FailoverGroupsClient {
 	return NewFailoverGroupsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewFailoverGroupsClientWithBaseURI creates an instance of the FailoverGroupsClient client.
+// NewFailoverGroupsClientWithBaseURI creates an instance of the FailoverGroupsClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewFailoverGroupsClientWithBaseURI(baseURI string, subscriptionID string) FailoverGroupsClient {
 	return FailoverGroupsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -99,6 +100,7 @@ func (client FailoverGroupsClient) CreateOrUpdatePreparer(ctx context.Context, r
 		"api-version": APIVersion,
 	}
 
+	parameters.Location = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
@@ -113,8 +115,7 @@ func (client FailoverGroupsClient) CreateOrUpdatePreparer(ctx context.Context, r
 // http.Response Body if it receives an error.
 func (client FailoverGroupsClient) CreateOrUpdateSender(req *http.Request) (future FailoverGroupsCreateOrUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -193,8 +194,7 @@ func (client FailoverGroupsClient) DeletePreparer(ctx context.Context, resourceG
 // http.Response Body if it receives an error.
 func (client FailoverGroupsClient) DeleteSender(req *http.Request) (future FailoverGroupsDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -272,8 +272,7 @@ func (client FailoverGroupsClient) FailoverPreparer(ctx context.Context, resourc
 // http.Response Body if it receives an error.
 func (client FailoverGroupsClient) FailoverSender(req *http.Request) (future FailoverGroupsFailoverFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -353,8 +352,7 @@ func (client FailoverGroupsClient) ForceFailoverAllowDataLossPreparer(ctx contex
 // http.Response Body if it receives an error.
 func (client FailoverGroupsClient) ForceFailoverAllowDataLossSender(req *http.Request) (future FailoverGroupsForceFailoverAllowDataLossFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -438,8 +436,7 @@ func (client FailoverGroupsClient) GetPreparer(ctx context.Context, resourceGrou
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client FailoverGroupsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -517,8 +514,7 @@ func (client FailoverGroupsClient) ListByServerPreparer(ctx context.Context, res
 // ListByServerSender sends the ListByServer request. The method will close the
 // http.Response Body if it receives an error.
 func (client FailoverGroupsClient) ListByServerSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByServerResponder handles the response to the ListByServer request. The method always
@@ -632,8 +628,7 @@ func (client FailoverGroupsClient) UpdatePreparer(ctx context.Context, resourceG
 // http.Response Body if it receives an error.
 func (client FailoverGroupsClient) UpdateSender(req *http.Request) (future FailoverGroupsUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}

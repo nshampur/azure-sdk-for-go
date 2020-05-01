@@ -35,25 +35,26 @@ func NewActivityLogsClient(subscriptionID string) ActivityLogsClient {
 	return NewActivityLogsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewActivityLogsClientWithBaseURI creates an instance of the ActivityLogsClient client.
+// NewActivityLogsClientWithBaseURI creates an instance of the ActivityLogsClient client using a custom endpoint.  Use
+// this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewActivityLogsClientWithBaseURI(baseURI string, subscriptionID string) ActivityLogsClient {
 	return ActivityLogsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
 // List provides the list of records from the activity logs.
 // Parameters:
-// filter - reduces the set of data collected.<br>The **$filter** argument is very restricted and allows only
-// the following patterns.<br>- *List events for a resource group*: $filter=eventTimestamp ge
-// '2014-07-16T04:36:37.6407898Z' and eventTimestamp le '2014-07-20T04:36:37.6407898Z' and resourceGroupName eq
-// 'resourceGroupName'.<br>- *List events for resource*: $filter=eventTimestamp ge
-// '2014-07-16T04:36:37.6407898Z' and eventTimestamp le '2014-07-20T04:36:37.6407898Z' and resourceUri eq
-// 'resourceURI'.<br>- *List events for a subscription in a time range*: $filter=eventTimestamp ge
-// '2014-07-16T04:36:37.6407898Z' and eventTimestamp le '2014-07-20T04:36:37.6407898Z'.<br>- *List events for a
-// resource provider*: $filter=eventTimestamp ge '2014-07-16T04:36:37.6407898Z' and eventTimestamp le
-// '2014-07-20T04:36:37.6407898Z' and resourceProvider eq 'resourceProviderName'.<br>- *List events for a
-// correlation Id*: $filter=eventTimestamp ge '2014-07-16T04:36:37.6407898Z' and eventTimestamp le
-// '2014-07-20T04:36:37.6407898Z' and correlationId eq 'correlationID'.<br><br>**NOTE**: No other syntax is
-// allowed.
+// filter - reduces the set of data collected.<br>This argument is required and it also requires at least the
+// start date/time.<br>The **$filter** argument is very restricted and allows only the following patterns.<br>-
+// *List events for a resource group*: $filter=eventTimestamp ge '2014-07-16T04:36:37.6407898Z' and
+// eventTimestamp le '2014-07-20T04:36:37.6407898Z' and resourceGroupName eq 'resourceGroupName'.<br>- *List
+// events for resource*: $filter=eventTimestamp ge '2014-07-16T04:36:37.6407898Z' and eventTimestamp le
+// '2014-07-20T04:36:37.6407898Z' and resourceUri eq 'resourceURI'.<br>- *List events for a subscription in a
+// time range*: $filter=eventTimestamp ge '2014-07-16T04:36:37.6407898Z' and eventTimestamp le
+// '2014-07-20T04:36:37.6407898Z'.<br>- *List events for a resource provider*: $filter=eventTimestamp ge
+// '2014-07-16T04:36:37.6407898Z' and eventTimestamp le '2014-07-20T04:36:37.6407898Z' and resourceProvider eq
+// 'resourceProviderName'.<br>- *List events for a correlation Id*: $filter=eventTimestamp ge
+// '2014-07-16T04:36:37.6407898Z' and eventTimestamp le '2014-07-20T04:36:37.6407898Z' and correlationId eq
+// 'correlationID'.<br><br>**NOTE**: No other syntax is allowed.
 // selectParameter - used to fetch events with only the given properties.<br>The **$select** argument is a
 // comma separated list of property names to be returned. Possible values are: *authorization*, *claims*,
 // *correlationId*, *description*, *eventDataId*, *eventName*, *eventTimestamp*, *httpRequest*, *level*,
@@ -100,10 +101,8 @@ func (client ActivityLogsClient) ListPreparer(ctx context.Context, filter string
 
 	const APIVersion = "2015-04-01"
 	queryParameters := map[string]interface{}{
+		"$filter":     autorest.Encode("query", filter),
 		"api-version": APIVersion,
-	}
-	if len(filter) > 0 {
-		queryParameters["$filter"] = autorest.Encode("query", filter)
 	}
 	if len(selectParameter) > 0 {
 		queryParameters["$select"] = autorest.Encode("query", selectParameter)
@@ -120,8 +119,7 @@ func (client ActivityLogsClient) ListPreparer(ctx context.Context, filter string
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client ActivityLogsClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always

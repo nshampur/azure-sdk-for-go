@@ -36,7 +36,9 @@ func NewResourceGroupDimensionsClient(subscriptionID string) ResourceGroupDimens
 	return NewResourceGroupDimensionsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewResourceGroupDimensionsClientWithBaseURI creates an instance of the ResourceGroupDimensionsClient client.
+// NewResourceGroupDimensionsClientWithBaseURI creates an instance of the ResourceGroupDimensionsClient client using a
+// custom endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds,
+// Azure stack).
 func NewResourceGroupDimensionsClientWithBaseURI(baseURI string, subscriptionID string) ResourceGroupDimensionsClient {
 	return ResourceGroupDimensionsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -67,7 +69,7 @@ func (client ResourceGroupDimensionsClient) List(ctx context.Context, resourceGr
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("costmanagement.ResourceGroupDimensionsClient", "List", err.Error())
 	}
@@ -128,8 +130,7 @@ func (client ResourceGroupDimensionsClient) ListPreparer(ctx context.Context, re
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client ResourceGroupDimensionsClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always

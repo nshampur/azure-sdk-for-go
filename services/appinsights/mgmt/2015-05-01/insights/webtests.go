@@ -36,14 +36,15 @@ func NewWebTestsClient(subscriptionID string) WebTestsClient {
 	return NewWebTestsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewWebTestsClientWithBaseURI creates an instance of the WebTestsClient client.
+// NewWebTestsClientWithBaseURI creates an instance of the WebTestsClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewWebTestsClientWithBaseURI(baseURI string, subscriptionID string) WebTestsClient {
 	return WebTestsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
 // CreateOrUpdate creates or updates an Application Insights web test definition.
 // Parameters:
-// resourceGroupName - the name of the resource group.
+// resourceGroupName - the name of the resource group. The name is case insensitive.
 // webTestName - the name of the Application Insights webtest resource.
 // webTestDefinition - properties that need to be specified to create or update an Application Insights web
 // test definition.
@@ -59,6 +60,12 @@ func (client WebTestsClient) CreateOrUpdate(ctx context.Context, resourceGroupNa
 		}()
 	}
 	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}},
 		{TargetValue: webTestDefinition,
 			Constraints: []validation.Constraint{{Target: "webTestDefinition.WebTestProperties", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "webTestDefinition.WebTestProperties.SyntheticMonitorID", Name: validation.Null, Rule: true, Chain: nil},
@@ -115,8 +122,7 @@ func (client WebTestsClient) CreateOrUpdatePreparer(ctx context.Context, resourc
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client WebTestsClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -134,7 +140,7 @@ func (client WebTestsClient) CreateOrUpdateResponder(resp *http.Response) (resul
 
 // Delete deletes an Application Insights web test.
 // Parameters:
-// resourceGroupName - the name of the resource group.
+// resourceGroupName - the name of the resource group. The name is case insensitive.
 // webTestName - the name of the Application Insights webtest resource.
 func (client WebTestsClient) Delete(ctx context.Context, resourceGroupName string, webTestName string) (result autorest.Response, err error) {
 	if tracing.IsEnabled() {
@@ -147,6 +153,16 @@ func (client WebTestsClient) Delete(ctx context.Context, resourceGroupName strin
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}},
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("insights.WebTestsClient", "Delete", err.Error())
+	}
+
 	req, err := client.DeletePreparer(ctx, resourceGroupName, webTestName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.WebTestsClient", "Delete", nil, "Failure preparing request")
@@ -192,8 +208,7 @@ func (client WebTestsClient) DeletePreparer(ctx context.Context, resourceGroupNa
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client WebTestsClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -210,7 +225,7 @@ func (client WebTestsClient) DeleteResponder(resp *http.Response) (result autore
 
 // Get get a specific Application Insights web test definition.
 // Parameters:
-// resourceGroupName - the name of the resource group.
+// resourceGroupName - the name of the resource group. The name is case insensitive.
 // webTestName - the name of the Application Insights webtest resource.
 func (client WebTestsClient) Get(ctx context.Context, resourceGroupName string, webTestName string) (result WebTest, err error) {
 	if tracing.IsEnabled() {
@@ -223,6 +238,16 @@ func (client WebTestsClient) Get(ctx context.Context, resourceGroupName string, 
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("insights.WebTestsClient", "Get", err.Error())
+	}
+
 	req, err := client.GetPreparer(ctx, resourceGroupName, webTestName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.WebTestsClient", "Get", nil, "Failure preparing request")
@@ -268,8 +293,7 @@ func (client WebTestsClient) GetPreparer(ctx context.Context, resourceGroupName 
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client WebTestsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -297,6 +321,12 @@ func (client WebTestsClient) List(ctx context.Context) (result WebTestListResult
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("insights.WebTestsClient", "List", err.Error())
+	}
+
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -341,8 +371,7 @@ func (client WebTestsClient) ListPreparer(ctx context.Context) (*http.Request, e
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client WebTestsClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -398,7 +427,7 @@ func (client WebTestsClient) ListComplete(ctx context.Context) (result WebTestLi
 // ListByComponent get all Application Insights web tests defined for the specified component.
 // Parameters:
 // componentName - the name of the Application Insights component resource.
-// resourceGroupName - the name of the resource group.
+// resourceGroupName - the name of the resource group. The name is case insensitive.
 func (client WebTestsClient) ListByComponent(ctx context.Context, componentName string, resourceGroupName string) (result WebTestListResultPage, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/WebTestsClient.ListByComponent")
@@ -410,6 +439,16 @@ func (client WebTestsClient) ListByComponent(ctx context.Context, componentName 
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("insights.WebTestsClient", "ListByComponent", err.Error())
+	}
+
 	result.fn = client.listByComponentNextResults
 	req, err := client.ListByComponentPreparer(ctx, componentName, resourceGroupName)
 	if err != nil {
@@ -456,8 +495,7 @@ func (client WebTestsClient) ListByComponentPreparer(ctx context.Context, compon
 // ListByComponentSender sends the ListByComponent request. The method will close the
 // http.Response Body if it receives an error.
 func (client WebTestsClient) ListByComponentSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByComponentResponder handles the response to the ListByComponent request. The method always
@@ -512,7 +550,7 @@ func (client WebTestsClient) ListByComponentComplete(ctx context.Context, compon
 
 // ListByResourceGroup get all Application Insights web tests defined within a specified resource group.
 // Parameters:
-// resourceGroupName - the name of the resource group.
+// resourceGroupName - the name of the resource group. The name is case insensitive.
 func (client WebTestsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result WebTestListResultPage, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/WebTestsClient.ListByResourceGroup")
@@ -524,6 +562,16 @@ func (client WebTestsClient) ListByResourceGroup(ctx context.Context, resourceGr
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("insights.WebTestsClient", "ListByResourceGroup", err.Error())
+	}
+
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -569,8 +617,7 @@ func (client WebTestsClient) ListByResourceGroupPreparer(ctx context.Context, re
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client WebTestsClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -625,7 +672,7 @@ func (client WebTestsClient) ListByResourceGroupComplete(ctx context.Context, re
 
 // UpdateTags creates or updates an Application Insights web test definition.
 // Parameters:
-// resourceGroupName - the name of the resource group.
+// resourceGroupName - the name of the resource group. The name is case insensitive.
 // webTestName - the name of the Application Insights webtest resource.
 // webTestTags - updated tag information to set into the web test instance.
 func (client WebTestsClient) UpdateTags(ctx context.Context, resourceGroupName string, webTestName string, webTestTags TagsResource) (result WebTest, err error) {
@@ -639,6 +686,16 @@ func (client WebTestsClient) UpdateTags(ctx context.Context, resourceGroupName s
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("insights.WebTestsClient", "UpdateTags", err.Error())
+	}
+
 	req, err := client.UpdateTagsPreparer(ctx, resourceGroupName, webTestName, webTestTags)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.WebTestsClient", "UpdateTags", nil, "Failure preparing request")
@@ -686,8 +743,7 @@ func (client WebTestsClient) UpdateTagsPreparer(ctx context.Context, resourceGro
 // UpdateTagsSender sends the UpdateTags request. The method will close the
 // http.Response Body if it receives an error.
 func (client WebTestsClient) UpdateTagsSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateTagsResponder handles the response to the UpdateTags request. The method always

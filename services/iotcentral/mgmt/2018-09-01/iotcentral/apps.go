@@ -36,7 +36,8 @@ func NewAppsClient(subscriptionID string) AppsClient {
 	return NewAppsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewAppsClientWithBaseURI creates an instance of the AppsClient client.
+// NewAppsClientWithBaseURI creates an instance of the AppsClient client using a custom endpoint.  Use this when
+// interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewAppsClientWithBaseURI(baseURI string, subscriptionID string) AppsClient {
 	return AppsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -58,8 +59,7 @@ func (client AppsClient) CheckNameAvailability(ctx context.Context, operationInp
 	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: operationInputs,
-			Constraints: []validation.Constraint{{Target: "operationInputs.Name", Name: validation.Null, Rule: true,
-				Chain: []validation.Constraint{{Target: "operationInputs.Name", Name: validation.Pattern, Rule: `^[a-z0-9-]{1,63}$`, Chain: nil}}}}}}); err != nil {
+			Constraints: []validation.Constraint{{Target: "operationInputs.Name", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("iotcentral.AppsClient", "CheckNameAvailability", err.Error())
 	}
 
@@ -108,8 +108,7 @@ func (client AppsClient) CheckNameAvailabilityPreparer(ctx context.Context, oper
 // CheckNameAvailabilitySender sends the CheckNameAvailability request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppsClient) CheckNameAvailabilitySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CheckNameAvailabilityResponder handles the response to the CheckNameAvailability request. The method always
@@ -142,8 +141,7 @@ func (client AppsClient) CheckSubdomainAvailability(ctx context.Context, operati
 	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: operationInputs,
-			Constraints: []validation.Constraint{{Target: "operationInputs.Name", Name: validation.Null, Rule: true,
-				Chain: []validation.Constraint{{Target: "operationInputs.Name", Name: validation.Pattern, Rule: `^[a-z0-9-]{1,63}$`, Chain: nil}}}}}}); err != nil {
+			Constraints: []validation.Constraint{{Target: "operationInputs.Name", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("iotcentral.AppsClient", "CheckSubdomainAvailability", err.Error())
 	}
 
@@ -192,8 +190,7 @@ func (client AppsClient) CheckSubdomainAvailabilityPreparer(ctx context.Context,
 // CheckSubdomainAvailabilitySender sends the CheckSubdomainAvailability request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppsClient) CheckSubdomainAvailabilitySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CheckSubdomainAvailabilityResponder handles the response to the CheckSubdomainAvailability request. The method always
@@ -229,13 +226,7 @@ func (client AppsClient) CreateOrUpdate(ctx context.Context, resourceGroupName s
 	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: app,
-			Constraints: []validation.Constraint{{Target: "app.AppProperties", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "app.AppProperties.DisplayName", Name: validation.Null, Rule: false,
-					Chain: []validation.Constraint{{Target: "app.AppProperties.DisplayName", Name: validation.Pattern, Rule: `^.{1,200}$`, Chain: nil}}},
-					{Target: "app.AppProperties.Subdomain", Name: validation.Null, Rule: false,
-						Chain: []validation.Constraint{{Target: "app.AppProperties.Subdomain", Name: validation.Pattern, Rule: `^[a-z0-9-]{1,63}$`, Chain: nil}}},
-				}},
-				{Target: "app.Sku", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
+			Constraints: []validation.Constraint{{Target: "app.Sku", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("iotcentral.AppsClient", "CreateOrUpdate", err.Error())
 	}
 
@@ -281,8 +272,7 @@ func (client AppsClient) CreateOrUpdatePreparer(ctx context.Context, resourceGro
 // http.Response Body if it receives an error.
 func (client AppsClient) CreateOrUpdateSender(req *http.Request) (future AppsCreateOrUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -358,8 +348,7 @@ func (client AppsClient) DeletePreparer(ctx context.Context, resourceGroupName s
 // http.Response Body if it receives an error.
 func (client AppsClient) DeleteSender(req *http.Request) (future AppsDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -439,8 +428,7 @@ func (client AppsClient) GetPreparer(ctx context.Context, resourceGroupName stri
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -515,8 +503,7 @@ func (client AppsClient) ListByResourceGroupPreparer(ctx context.Context, resour
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppsClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -625,8 +612,7 @@ func (client AppsClient) ListBySubscriptionPreparer(ctx context.Context) (*http.
 // ListBySubscriptionSender sends the ListBySubscription request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppsClient) ListBySubscriptionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListBySubscriptionResponder handles the response to the ListBySubscription request. The method always
@@ -676,6 +662,115 @@ func (client AppsClient) ListBySubscriptionComplete(ctx context.Context) (result
 		}()
 	}
 	result.page, err = client.ListBySubscription(ctx)
+	return
+}
+
+// ListTemplates get all available application templates.
+func (client AppsClient) ListTemplates(ctx context.Context) (result AppTemplatesResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.ListTemplates")
+		defer func() {
+			sc := -1
+			if result.atr.Response.Response != nil {
+				sc = result.atr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	result.fn = client.listTemplatesNextResults
+	req, err := client.ListTemplatesPreparer(ctx)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "iotcentral.AppsClient", "ListTemplates", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.ListTemplatesSender(req)
+	if err != nil {
+		result.atr.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "iotcentral.AppsClient", "ListTemplates", resp, "Failure sending request")
+		return
+	}
+
+	result.atr, err = client.ListTemplatesResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "iotcentral.AppsClient", "ListTemplates", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// ListTemplatesPreparer prepares the ListTemplates request.
+func (client AppsClient) ListTemplatesPreparer(ctx context.Context) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"subscriptionId": autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-09-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsPost(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/providers/Microsoft.IoTCentral/appTemplates", pathParameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// ListTemplatesSender sends the ListTemplates request. The method will close the
+// http.Response Body if it receives an error.
+func (client AppsClient) ListTemplatesSender(req *http.Request) (*http.Response, error) {
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
+}
+
+// ListTemplatesResponder handles the response to the ListTemplates request. The method always
+// closes the http.Response Body.
+func (client AppsClient) ListTemplatesResponder(resp *http.Response) (result AppTemplatesResult, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// listTemplatesNextResults retrieves the next set of results, if any.
+func (client AppsClient) listTemplatesNextResults(ctx context.Context, lastResults AppTemplatesResult) (result AppTemplatesResult, err error) {
+	req, err := lastResults.appTemplatesResultPreparer(ctx)
+	if err != nil {
+		return result, autorest.NewErrorWithError(err, "iotcentral.AppsClient", "listTemplatesNextResults", nil, "Failure preparing next results request")
+	}
+	if req == nil {
+		return
+	}
+	resp, err := client.ListTemplatesSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		return result, autorest.NewErrorWithError(err, "iotcentral.AppsClient", "listTemplatesNextResults", resp, "Failure sending next results request")
+	}
+	result, err = client.ListTemplatesResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "iotcentral.AppsClient", "listTemplatesNextResults", resp, "Failure responding to next results request")
+	}
+	return
+}
+
+// ListTemplatesComplete enumerates all values, automatically crossing page boundaries as required.
+func (client AppsClient) ListTemplatesComplete(ctx context.Context) (result AppTemplatesResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.ListTemplates")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	result.page, err = client.ListTemplates(ctx)
 	return
 }
 
@@ -737,8 +832,7 @@ func (client AppsClient) UpdatePreparer(ctx context.Context, resourceGroupName s
 // http.Response Body if it receives an error.
 func (client AppsClient) UpdateSender(req *http.Request) (future AppsUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}

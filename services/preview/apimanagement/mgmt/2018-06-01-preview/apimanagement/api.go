@@ -36,7 +36,8 @@ func NewAPIClient(subscriptionID string) APIClient {
 	return NewAPIClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewAPIClientWithBaseURI creates an instance of the APIClient client.
+// NewAPIClientWithBaseURI creates an instance of the APIClient client using a custom endpoint.  Use this when
+// interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewAPIClientWithBaseURI(baseURI string, subscriptionID string) APIClient {
 	return APIClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -49,13 +50,13 @@ func NewAPIClientWithBaseURI(baseURI string, subscriptionID string) APIClient {
 // revision has ;rev=n as a suffix where n is the revision number.
 // parameters - create or update parameters.
 // ifMatch - eTag of the Entity. Not required when creating an entity, but required when updating an entity.
-func (client APIClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, apiid string, parameters APICreateOrUpdateParameter, ifMatch string) (result APIContract, err error) {
+func (client APIClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, apiid string, parameters APICreateOrUpdateParameter, ifMatch string) (result APICreateOrUpdateFuture, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/APIClient.CreateOrUpdate")
 		defer func() {
 			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
 			}
 			tracing.EndSpan(ctx, sc, err)
 		}()
@@ -78,16 +79,10 @@ func (client APIClient) CreateOrUpdate(ctx context.Context, resourceGroupName st
 		return
 	}
 
-	resp, err := client.CreateOrUpdateSender(req)
+	result, err = client.CreateOrUpdateSender(req)
 	if err != nil {
-		result.Response = autorest.Response{Response: resp}
-		err = autorest.NewErrorWithError(err, "apimanagement.APIClient", "CreateOrUpdate", resp, "Failure sending request")
+		err = autorest.NewErrorWithError(err, "apimanagement.APIClient", "CreateOrUpdate", result.Response(), "Failure sending request")
 		return
-	}
-
-	result, err = client.CreateOrUpdateResponder(resp)
-	if err != nil {
-		err = autorest.NewErrorWithError(err, "apimanagement.APIClient", "CreateOrUpdate", resp, "Failure responding to request")
 	}
 
 	return
@@ -123,9 +118,15 @@ func (client APIClient) CreateOrUpdatePreparer(ctx context.Context, resourceGrou
 
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
-func (client APIClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+func (client APIClient) CreateOrUpdateSender(req *http.Request) (future APICreateOrUpdateFuture, err error) {
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	var resp *http.Response
+	resp, err = autorest.SendWithSender(client, req, sd...)
+	if err != nil {
+		return
+	}
+	future.Future, err = azure.NewFutureFromResponse(resp)
+	return
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -134,7 +135,7 @@ func (client APIClient) CreateOrUpdateResponder(resp *http.Response) (result API
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
-		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}
@@ -223,8 +224,8 @@ func (client APIClient) DeletePreparer(ctx context.Context, resourceGroupName st
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -314,8 +315,8 @@ func (client APIClient) GetPreparer(ctx context.Context, resourceGroupName strin
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -406,8 +407,8 @@ func (client APIClient) GetEntityTagPreparer(ctx context.Context, resourceGroupN
 // GetEntityTagSender sends the GetEntityTag request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIClient) GetEntityTagSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // GetEntityTagResponder handles the response to the GetEntityTag request. The method always
@@ -428,15 +429,17 @@ func (client APIClient) GetEntityTagResponder(resp *http.Response) (result autor
 // serviceName - the name of the API Management service.
 // filter - | Field       | Supported operators    | Supported functions               |
 // |-------------|------------------------|-----------------------------------|
-// | id          | ge, le, eq, ne, gt, lt | substringof, startswith, endswith |
-// | name        | ge, le, eq, ne, gt, lt | substringof, startswith, endswith |
-// | description | ge, le, eq, ne, gt, lt | substringof, startswith, endswith |
-// | serviceUrl  | ge, le, eq, ne, gt, lt | substringof, startswith, endswith |
-// | path        | ge, le, eq, ne, gt, lt | substringof, startswith, endswith |
+//
+// |name | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |displayName | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |description | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |serviceUrl | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |path | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
 // top - number of records to return.
 // skip - number of records to skip.
+// tags - include tags in the response.
 // expandAPIVersionSet - include full ApiVersionSet resource in response
-func (client APIClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32, expandAPIVersionSet *bool) (result APICollectionPage, err error) {
+func (client APIClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32, tags string, expandAPIVersionSet *bool) (result APICollectionPage, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/APIClient.ListByService")
 		defer func() {
@@ -454,15 +457,15 @@ func (client APIClient) ListByService(ctx context.Context, resourceGroupName str
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}},
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("apimanagement.APIClient", "ListByService", err.Error())
 	}
 
 	result.fn = client.listByServiceNextResults
-	req, err := client.ListByServicePreparer(ctx, resourceGroupName, serviceName, filter, top, skip, expandAPIVersionSet)
+	req, err := client.ListByServicePreparer(ctx, resourceGroupName, serviceName, filter, top, skip, tags, expandAPIVersionSet)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.APIClient", "ListByService", nil, "Failure preparing request")
 		return
@@ -484,7 +487,7 @@ func (client APIClient) ListByService(ctx context.Context, resourceGroupName str
 }
 
 // ListByServicePreparer prepares the ListByService request.
-func (client APIClient) ListByServicePreparer(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32, expandAPIVersionSet *bool) (*http.Request, error) {
+func (client APIClient) ListByServicePreparer(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32, tags string, expandAPIVersionSet *bool) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
 		"serviceName":       autorest.Encode("path", serviceName),
@@ -504,10 +507,11 @@ func (client APIClient) ListByServicePreparer(ctx context.Context, resourceGroup
 	if skip != nil {
 		queryParameters["$skip"] = autorest.Encode("query", *skip)
 	}
+	if len(tags) > 0 {
+		queryParameters["tags"] = autorest.Encode("query", tags)
+	}
 	if expandAPIVersionSet != nil {
 		queryParameters["expandApiVersionSet"] = autorest.Encode("query", *expandAPIVersionSet)
-	} else {
-		queryParameters["expandApiVersionSet"] = autorest.Encode("query", false)
 	}
 
 	preparer := autorest.CreatePreparer(
@@ -521,8 +525,8 @@ func (client APIClient) ListByServicePreparer(ctx context.Context, resourceGroup
 // ListByServiceSender sends the ListByService request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIClient) ListByServiceSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // ListByServiceResponder handles the response to the ListByService request. The method always
@@ -560,7 +564,7 @@ func (client APIClient) listByServiceNextResults(ctx context.Context, lastResult
 }
 
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
-func (client APIClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32, expandAPIVersionSet *bool) (result APICollectionIterator, err error) {
+func (client APIClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32, tags string, expandAPIVersionSet *bool) (result APICollectionIterator, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/APIClient.ListByService")
 		defer func() {
@@ -571,7 +575,7 @@ func (client APIClient) ListByServiceComplete(ctx context.Context, resourceGroup
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, filter, top, skip, expandAPIVersionSet)
+	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, filter, top, skip, tags, expandAPIVersionSet)
 	return
 }
 
@@ -579,19 +583,19 @@ func (client APIClient) ListByServiceComplete(ctx context.Context, resourceGroup
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
-// filter - | Field       | Supported operators    | Supported functions                         |
-// |-------------|------------------------|---------------------------------------------|
-// | id          | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | name        | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | aid         | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | apiRevision | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | path        | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | description | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | serviceUrl  | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | isCurrent   | eq                     | substringof, contains, startswith, endswith |
+// filter - | Field       | Supported operators    | Supported functions               |
+// |-------------|------------------------|-----------------------------------|
+//
+// |name | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |displayName | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |apiRevision | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |path | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |description | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |serviceUrl | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |isCurrent | eq |    |
 // top - number of records to return.
 // skip - number of records to skip.
-// includeNotTaggedApis - include not tagged apis in response
+// includeNotTaggedApis - include not tagged APIs.
 func (client APIClient) ListByTags(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32, includeNotTaggedApis *bool) (result TagResourceCollectionPage, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/APIClient.ListByTags")
@@ -610,10 +614,10 @@ func (client APIClient) ListByTags(ctx context.Context, resourceGroupName string
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}},
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("apimanagement.APIClient", "ListByTags", err.Error())
 	}
 
@@ -662,8 +666,6 @@ func (client APIClient) ListByTagsPreparer(ctx context.Context, resourceGroupNam
 	}
 	if includeNotTaggedApis != nil {
 		queryParameters["includeNotTaggedApis"] = autorest.Encode("query", *includeNotTaggedApis)
-	} else {
-		queryParameters["includeNotTaggedApis"] = autorest.Encode("query", false)
 	}
 
 	preparer := autorest.CreatePreparer(
@@ -677,8 +679,8 @@ func (client APIClient) ListByTagsPreparer(ctx context.Context, resourceGroupNam
 // ListByTagsSender sends the ListByTags request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIClient) ListByTagsSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // ListByTagsResponder handles the response to the ListByTags request. The method always
@@ -812,8 +814,8 @@ func (client APIClient) UpdatePreparer(ctx context.Context, resourceGroupName st
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // UpdateResponder handles the response to the Update request. The method always

@@ -26,9 +26,7 @@ import (
 	"net/http"
 )
 
-// CustomDomainsClient is the use these APIs to manage Azure CDN resources through the Azure Resource Manager. You must
-// make sure that requests made to these resources are secure. For more information, see
-// https://msdn.microsoft.com/en-us/library/azure/dn790557.aspx.
+// CustomDomainsClient is the cdn Management Client
 type CustomDomainsClient struct {
 	BaseClient
 }
@@ -38,7 +36,8 @@ func NewCustomDomainsClient(subscriptionID string) CustomDomainsClient {
 	return NewCustomDomainsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewCustomDomainsClientWithBaseURI creates an instance of the CustomDomainsClient client.
+// NewCustomDomainsClientWithBaseURI creates an instance of the CustomDomainsClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewCustomDomainsClientWithBaseURI(baseURI string, subscriptionID string) CustomDomainsClient {
 	return CustomDomainsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -112,8 +111,7 @@ func (client CustomDomainsClient) CreatePreparer(ctx context.Context, customDoma
 // http.Response Body if it receives an error.
 func (client CustomDomainsClient) CreateSender(req *http.Request) (future CustomDomainsCreateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -193,8 +191,7 @@ func (client CustomDomainsClient) DeleteIfExistsPreparer(ctx context.Context, cu
 // http.Response Body if it receives an error.
 func (client CustomDomainsClient) DeleteIfExistsSender(req *http.Request) (future CustomDomainsDeleteIfExistsFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -279,8 +276,7 @@ func (client CustomDomainsClient) GetPreparer(ctx context.Context, customDomainN
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client CustomDomainsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -358,8 +354,7 @@ func (client CustomDomainsClient) ListByEndpointPreparer(ctx context.Context, en
 // ListByEndpointSender sends the ListByEndpoint request. The method will close the
 // http.Response Body if it receives an error.
 func (client CustomDomainsClient) ListByEndpointSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByEndpointResponder handles the response to the ListByEndpoint request. The method always
@@ -442,8 +437,7 @@ func (client CustomDomainsClient) UpdatePreparer(ctx context.Context, customDoma
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client CustomDomainsClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateResponder handles the response to the Update request. The method always

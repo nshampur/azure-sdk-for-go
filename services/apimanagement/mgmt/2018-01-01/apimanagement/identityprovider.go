@@ -36,7 +36,9 @@ func NewIdentityProviderClient(subscriptionID string) IdentityProviderClient {
 	return NewIdentityProviderClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewIdentityProviderClientWithBaseURI creates an instance of the IdentityProviderClient client.
+// NewIdentityProviderClientWithBaseURI creates an instance of the IdentityProviderClient client using a custom
+// endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure
+// stack).
 func NewIdentityProviderClientWithBaseURI(baseURI string, subscriptionID string) IdentityProviderClient {
 	return IdentityProviderClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -126,8 +128,8 @@ func (client IdentityProviderClient) CreateOrUpdatePreparer(ctx context.Context,
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client IdentityProviderClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -216,8 +218,8 @@ func (client IdentityProviderClient) DeletePreparer(ctx context.Context, resourc
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client IdentityProviderClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -302,8 +304,8 @@ func (client IdentityProviderClient) GetPreparer(ctx context.Context, resourceGr
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client IdentityProviderClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -389,8 +391,8 @@ func (client IdentityProviderClient) GetEntityTagPreparer(ctx context.Context, r
 // GetEntityTagSender sends the GetEntityTag request. The method will close the
 // http.Response Body if it receives an error.
 func (client IdentityProviderClient) GetEntityTagSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // GetEntityTagResponder handles the response to the GetEntityTag request. The method always
@@ -474,8 +476,8 @@ func (client IdentityProviderClient) ListByServicePreparer(ctx context.Context, 
 // ListByServiceSender sends the ListByService request. The method will close the
 // http.Response Body if it receives an error.
 func (client IdentityProviderClient) ListByServiceSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // ListByServiceResponder handles the response to the ListByService request. The method always
@@ -604,8 +606,8 @@ func (client IdentityProviderClient) UpdatePreparer(ctx context.Context, resourc
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client IdentityProviderClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // UpdateResponder handles the response to the Update request. The method always

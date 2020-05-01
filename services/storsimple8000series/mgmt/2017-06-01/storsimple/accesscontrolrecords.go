@@ -36,7 +36,9 @@ func NewAccessControlRecordsClient(subscriptionID string) AccessControlRecordsCl
 	return NewAccessControlRecordsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewAccessControlRecordsClientWithBaseURI creates an instance of the AccessControlRecordsClient client.
+// NewAccessControlRecordsClientWithBaseURI creates an instance of the AccessControlRecordsClient client using a custom
+// endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure
+// stack).
 func NewAccessControlRecordsClientWithBaseURI(baseURI string, subscriptionID string) AccessControlRecordsClient {
 	return AccessControlRecordsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -111,8 +113,7 @@ func (client AccessControlRecordsClient) CreateOrUpdatePreparer(ctx context.Cont
 // http.Response Body if it receives an error.
 func (client AccessControlRecordsClient) CreateOrUpdateSender(req *http.Request) (future AccessControlRecordsCreateOrUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -197,8 +198,7 @@ func (client AccessControlRecordsClient) DeletePreparer(ctx context.Context, acc
 // http.Response Body if it receives an error.
 func (client AccessControlRecordsClient) DeleteSender(req *http.Request) (future AccessControlRecordsDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -287,8 +287,7 @@ func (client AccessControlRecordsClient) GetPreparer(ctx context.Context, access
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client AccessControlRecordsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -371,8 +370,7 @@ func (client AccessControlRecordsClient) ListByManagerPreparer(ctx context.Conte
 // ListByManagerSender sends the ListByManager request. The method will close the
 // http.Response Body if it receives an error.
 func (client AccessControlRecordsClient) ListByManagerSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByManagerResponder handles the response to the ListByManager request. The method always

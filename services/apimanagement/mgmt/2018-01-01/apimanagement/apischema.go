@@ -36,7 +36,8 @@ func NewAPISchemaClient(subscriptionID string) APISchemaClient {
 	return NewAPISchemaClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewAPISchemaClientWithBaseURI creates an instance of the APISchemaClient client.
+// NewAPISchemaClientWithBaseURI creates an instance of the APISchemaClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewAPISchemaClientWithBaseURI(baseURI string, subscriptionID string) APISchemaClient {
 	return APISchemaClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -133,8 +134,8 @@ func (client APISchemaClient) CreateOrUpdatePreparer(ctx context.Context, resour
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client APISchemaClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -234,8 +235,8 @@ func (client APISchemaClient) DeletePreparer(ctx context.Context, resourceGroupN
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client APISchemaClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -331,8 +332,8 @@ func (client APISchemaClient) GetPreparer(ctx context.Context, resourceGroupName
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client APISchemaClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -429,8 +430,8 @@ func (client APISchemaClient) GetEntityTagPreparer(ctx context.Context, resource
 // GetEntityTagSender sends the GetEntityTag request. The method will close the
 // http.Response Body if it receives an error.
 func (client APISchemaClient) GetEntityTagSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // GetEntityTagResponder handles the response to the GetEntityTag request. The method always
@@ -521,8 +522,8 @@ func (client APISchemaClient) ListByAPIPreparer(ctx context.Context, resourceGro
 // ListByAPISender sends the ListByAPI request. The method will close the
 // http.Response Body if it receives an error.
 func (client APISchemaClient) ListByAPISender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // ListByAPIResponder handles the response to the ListByAPI request. The method always

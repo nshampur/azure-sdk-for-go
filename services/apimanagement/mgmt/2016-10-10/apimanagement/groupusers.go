@@ -36,7 +36,8 @@ func NewGroupUsersClient(subscriptionID string) GroupUsersClient {
 	return NewGroupUsersClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewGroupUsersClientWithBaseURI creates an instance of the GroupUsersClient client.
+// NewGroupUsersClientWithBaseURI creates an instance of the GroupUsersClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewGroupUsersClientWithBaseURI(baseURI string, subscriptionID string) GroupUsersClient {
 	return GroupUsersClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -121,8 +122,8 @@ func (client GroupUsersClient) CreatePreparer(ctx context.Context, resourceGroup
 // CreateSender sends the Create request. The method will close the
 // http.Response Body if it receives an error.
 func (client GroupUsersClient) CreateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // CreateResponder handles the response to the Create request. The method always
@@ -218,8 +219,8 @@ func (client GroupUsersClient) DeletePreparer(ctx context.Context, resourceGroup
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client GroupUsersClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -273,10 +274,10 @@ func (client GroupUsersClient) ListByGroups(ctx context.Context, resourceGroupNa
 				{Target: "groupID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}},
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("apimanagement.GroupUsersClient", "ListByGroups", err.Error())
 	}
 
@@ -336,8 +337,8 @@ func (client GroupUsersClient) ListByGroupsPreparer(ctx context.Context, resourc
 // ListByGroupsSender sends the ListByGroups request. The method will close the
 // http.Response Body if it receives an error.
 func (client GroupUsersClient) ListByGroupsSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // ListByGroupsResponder handles the response to the ListByGroups request. The method always

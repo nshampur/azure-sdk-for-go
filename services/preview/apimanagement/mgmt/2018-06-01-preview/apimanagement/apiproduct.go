@@ -36,7 +36,8 @@ func NewAPIProductClient(subscriptionID string) APIProductClient {
 	return NewAPIProductClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewAPIProductClientWithBaseURI creates an instance of the APIProductClient client.
+// NewAPIProductClientWithBaseURI creates an instance of the APIProductClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewAPIProductClientWithBaseURI(baseURI string, subscriptionID string) APIProductClient {
 	return APIProductClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -46,9 +47,10 @@ func NewAPIProductClientWithBaseURI(baseURI string, subscriptionID string) APIPr
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // apiid - API identifier. Must be unique in the current API Management service instance.
-// filter - | Field | Supported operators    | Supported functions                         |
-// |-------|------------------------|---------------------------------------------|
-// | name  | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
+// filter - | Field       | Supported operators    | Supported functions               |
+// |-------------|------------------------|-----------------------------------|
+//
+// |displayName | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
 // top - number of records to return.
 // skip - number of records to skip.
 func (client APIProductClient) ListByApis(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (result ProductCollectionPage, err error) {
@@ -70,13 +72,13 @@ func (client APIProductClient) ListByApis(ctx context.Context, resourceGroupName
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "apiid", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "apiid", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "apiid", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}},
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("apimanagement.APIProductClient", "ListByApis", err.Error())
 	}
 
@@ -136,8 +138,8 @@ func (client APIProductClient) ListByApisPreparer(ctx context.Context, resourceG
 // ListByApisSender sends the ListByApis request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIProductClient) ListByApisSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // ListByApisResponder handles the response to the ListByApis request. The method always

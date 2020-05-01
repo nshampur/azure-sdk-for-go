@@ -36,7 +36,9 @@ func NewProductSubscriptionsClient(subscriptionID string) ProductSubscriptionsCl
 	return NewProductSubscriptionsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewProductSubscriptionsClientWithBaseURI creates an instance of the ProductSubscriptionsClient client.
+// NewProductSubscriptionsClientWithBaseURI creates an instance of the ProductSubscriptionsClient client using a custom
+// endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure
+// stack).
 func NewProductSubscriptionsClientWithBaseURI(baseURI string, subscriptionID string) ProductSubscriptionsClient {
 	return ProductSubscriptionsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -46,14 +48,18 @@ func NewProductSubscriptionsClientWithBaseURI(baseURI string, subscriptionID str
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // productID - product identifier. Must be unique in the current API Management service instance.
-// filter - | Field        | Supported operators    | Supported functions                         |
-// |--------------|------------------------|---------------------------------------------|
-// | id           | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | name         | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | stateComment | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | userId       | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | productId    | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | state        | eq                     |                                             |
+// filter - | Field       | Supported operators    | Supported functions               |
+// |-------------|------------------------|-----------------------------------|
+//
+// |name | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |displayName | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |stateComment | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |ownerId | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |scope | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |userId | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |productId | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |state | eq |    |
+// |user |     |    |
 // top - number of records to return.
 // skip - number of records to skip.
 func (client ProductSubscriptionsClient) List(ctx context.Context, resourceGroupName string, serviceName string, productID string, filter string, top *int32, skip *int32) (result SubscriptionCollectionPage, err error) {
@@ -73,15 +79,15 @@ func (client ProductSubscriptionsClient) List(ctx context.Context, resourceGroup
 				{Target: "serviceName", Name: validation.MinLength, Rule: 1, Chain: nil},
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
 		{TargetValue: productID,
-			Constraints: []validation.Constraint{{Target: "productID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+			Constraints: []validation.Constraint{{Target: "productID", Name: validation.MaxLength, Rule: 256, Chain: nil},
 				{Target: "productID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "productID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "productID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}},
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("apimanagement.ProductSubscriptionsClient", "List", err.Error())
 	}
 
@@ -141,8 +147,8 @@ func (client ProductSubscriptionsClient) ListPreparer(ctx context.Context, resou
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client ProductSubscriptionsClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // ListResponder handles the response to the List request. The method always

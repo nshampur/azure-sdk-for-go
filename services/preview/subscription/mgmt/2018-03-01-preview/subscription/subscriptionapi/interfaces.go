@@ -29,13 +29,6 @@ type OperationsClientAPI interface {
 
 var _ OperationsClientAPI = (*subscription.OperationsClient)(nil)
 
-// OperationsGroupClientAPI contains the set of methods on the OperationsGroupClient type.
-type OperationsGroupClientAPI interface {
-	List(ctx context.Context) (result subscription.OperationListResultType, err error)
-}
-
-var _ OperationsGroupClientAPI = (*subscription.OperationsGroupClient)(nil)
-
 // FactoryClientAPI contains the set of methods on the FactoryClient type.
 type FactoryClientAPI interface {
 	CreateSubscriptionInEnrollmentAccount(ctx context.Context, enrollmentAccountName string, body subscription.CreationParameters) (result subscription.FactoryCreateSubscriptionInEnrollmentAccountFuture, err error)
@@ -47,6 +40,7 @@ var _ FactoryClientAPI = (*subscription.FactoryClient)(nil)
 type SubscriptionsClientAPI interface {
 	Get(ctx context.Context, subscriptionID string) (result subscription.Model, err error)
 	List(ctx context.Context) (result subscription.ListResultPage, err error)
+	ListComplete(ctx context.Context) (result subscription.ListResultIterator, err error)
 	ListLocations(ctx context.Context, subscriptionID string) (result subscription.LocationListResult, err error)
 }
 
@@ -55,6 +49,7 @@ var _ SubscriptionsClientAPI = (*subscription.SubscriptionsClient)(nil)
 // TenantsClientAPI contains the set of methods on the TenantsClient type.
 type TenantsClientAPI interface {
 	List(ctx context.Context) (result subscription.TenantListResultPage, err error)
+	ListComplete(ctx context.Context) (result subscription.TenantListResultIterator, err error)
 }
 
 var _ TenantsClientAPI = (*subscription.TenantsClient)(nil)

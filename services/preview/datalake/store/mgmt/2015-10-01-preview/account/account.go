@@ -35,7 +35,8 @@ func NewClient(subscriptionID string) Client {
 	return NewClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewClientWithBaseURI creates an instance of the Client client.
+// NewClientWithBaseURI creates an instance of the Client client using a custom endpoint.  Use this when interacting
+// with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewClientWithBaseURI(baseURI string, subscriptionID string) Client {
 	return Client{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -84,6 +85,8 @@ func (client Client) CreatePreparer(ctx context.Context, resourceGroupName strin
 		"api-version": APIVersion,
 	}
 
+	parameters.Type = nil
+	parameters.ID = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
@@ -98,8 +101,7 @@ func (client Client) CreatePreparer(ctx context.Context, resourceGroupName strin
 // http.Response Body if it receives an error.
 func (client Client) CreateSender(req *http.Request) (future CreateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -172,6 +174,7 @@ func (client Client) CreateOrUpdateFirewallRulePreparer(ctx context.Context, res
 		"api-version": APIVersion,
 	}
 
+	parameters.Type = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
@@ -185,8 +188,7 @@ func (client Client) CreateOrUpdateFirewallRulePreparer(ctx context.Context, res
 // CreateOrUpdateFirewallRuleSender sends the CreateOrUpdateFirewallRule request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) CreateOrUpdateFirewallRuleSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateOrUpdateFirewallRuleResponder handles the response to the CreateOrUpdateFirewallRule request. The method always
@@ -257,8 +259,7 @@ func (client Client) DeletePreparer(ctx context.Context, resourceGroupName strin
 // http.Response Body if it receives an error.
 func (client Client) DeleteSender(req *http.Request) (future DeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -340,8 +341,7 @@ func (client Client) DeleteFirewallRulePreparer(ctx context.Context, resourceGro
 // DeleteFirewallRuleSender sends the DeleteFirewallRule request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) DeleteFirewallRuleSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteFirewallRuleResponder handles the response to the DeleteFirewallRule request. The method always
@@ -416,8 +416,7 @@ func (client Client) EnableKeyVaultPreparer(ctx context.Context, resourceGroupNa
 // EnableKeyVaultSender sends the EnableKeyVault request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) EnableKeyVaultSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // EnableKeyVaultResponder handles the response to the EnableKeyVault request. The method always
@@ -492,8 +491,7 @@ func (client Client) GetPreparer(ctx context.Context, resourceGroupName string, 
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -571,8 +569,7 @@ func (client Client) GetFirewallRulePreparer(ctx context.Context, resourceGroupN
 // GetFirewallRuleSender sends the GetFirewallRule request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) GetFirewallRuleSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetFirewallRuleResponder handles the response to the GetFirewallRule request. The method always
@@ -689,8 +686,7 @@ func (client Client) ListPreparer(ctx context.Context, filter string, top *int32
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -846,8 +842,7 @@ func (client Client) ListByResourceGroupPreparer(ctx context.Context, resourceGr
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -961,8 +956,7 @@ func (client Client) ListFirewallRulesPreparer(ctx context.Context, resourceGrou
 // ListFirewallRulesSender sends the ListFirewallRules request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) ListFirewallRulesSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListFirewallRulesResponder handles the response to the ListFirewallRules request. The method always
@@ -1059,6 +1053,8 @@ func (client Client) UpdatePreparer(ctx context.Context, resourceGroupName strin
 		"api-version": APIVersion,
 	}
 
+	parameters.Type = nil
+	parameters.ID = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPatch(),
@@ -1073,8 +1069,7 @@ func (client Client) UpdatePreparer(ctx context.Context, resourceGroupName strin
 // http.Response Body if it receives an error.
 func (client Client) UpdateSender(req *http.Request) (future UpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}

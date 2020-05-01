@@ -36,7 +36,8 @@ func NewSolutionsClient(subscriptionID string, providerName string, resourceType
 	return NewSolutionsClientWithBaseURI(DefaultBaseURI, subscriptionID, providerName, resourceType, resourceName)
 }
 
-// NewSolutionsClientWithBaseURI creates an instance of the SolutionsClient client.
+// NewSolutionsClientWithBaseURI creates an instance of the SolutionsClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewSolutionsClientWithBaseURI(baseURI string, subscriptionID string, providerName string, resourceType string, resourceName string) SolutionsClient {
 	return SolutionsClient{NewWithBaseURI(baseURI, subscriptionID, providerName, resourceType, resourceName)}
 }
@@ -96,6 +97,9 @@ func (client SolutionsClient) CreateOrUpdatePreparer(ctx context.Context, resour
 		"api-version": APIVersion,
 	}
 
+	parameters.ID = nil
+	parameters.Name = nil
+	parameters.Type = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
@@ -110,8 +114,7 @@ func (client SolutionsClient) CreateOrUpdatePreparer(ctx context.Context, resour
 // http.Response Body if it receives an error.
 func (client SolutionsClient) CreateOrUpdateSender(req *http.Request) (future SolutionsCreateOrUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -195,8 +198,7 @@ func (client SolutionsClient) DeletePreparer(ctx context.Context, resourceGroupN
 // http.Response Body if it receives an error.
 func (client SolutionsClient) DeleteSender(req *http.Request) (future SolutionsDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -284,8 +286,7 @@ func (client SolutionsClient) GetPreparer(ctx context.Context, resourceGroupName
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client SolutionsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -367,8 +368,7 @@ func (client SolutionsClient) ListByResourceGroupPreparer(ctx context.Context, r
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client SolutionsClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -439,13 +439,99 @@ func (client SolutionsClient) ListBySubscriptionPreparer(ctx context.Context) (*
 // ListBySubscriptionSender sends the ListBySubscription request. The method will close the
 // http.Response Body if it receives an error.
 func (client SolutionsClient) ListBySubscriptionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListBySubscriptionResponder handles the response to the ListBySubscription request. The method always
 // closes the http.Response Body.
 func (client SolutionsClient) ListBySubscriptionResponder(resp *http.Response) (result SolutionPropertiesList, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// Update patch a Solution. Only updating tags supported.
+// Parameters:
+// resourceGroupName - the name of the resource group to get. The name is case insensitive.
+// solutionName - user Solution Name.
+// parameters - the parameters required to patch a Solution.
+func (client SolutionsClient) Update(ctx context.Context, resourceGroupName string, solutionName string, parameters SolutionPatch) (result SolutionsUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SolutionsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("operationsmanagement.SolutionsClient", "Update", err.Error())
+	}
+
+	req, err := client.UpdatePreparer(ctx, resourceGroupName, solutionName, parameters)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "operationsmanagement.SolutionsClient", "Update", nil, "Failure preparing request")
+		return
+	}
+
+	result, err = client.UpdateSender(req)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "operationsmanagement.SolutionsClient", "Update", result.Response(), "Failure sending request")
+		return
+	}
+
+	return
+}
+
+// UpdatePreparer prepares the Update request.
+func (client SolutionsClient) UpdatePreparer(ctx context.Context, resourceGroupName string, solutionName string, parameters SolutionPatch) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"solutionName":      autorest.Encode("path", solutionName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2015-11-01-preview"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPatch(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationsManagement/solutions/{solutionName}", pathParameters),
+		autorest.WithJSON(parameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// UpdateSender sends the Update request. The method will close the
+// http.Response Body if it receives an error.
+func (client SolutionsClient) UpdateSender(req *http.Request) (future SolutionsUpdateFuture, err error) {
+	var resp *http.Response
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
+	if err != nil {
+		return
+	}
+	future.Future, err = azure.NewFutureFromResponse(resp)
+	return
+}
+
+// UpdateResponder handles the response to the Update request. The method always
+// closes the http.Response Body.
+func (client SolutionsClient) UpdateResponder(resp *http.Response) (result Solution, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),

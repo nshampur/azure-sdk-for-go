@@ -36,7 +36,8 @@ func NewServiceClient() ServiceClient {
 	return NewServiceClientWithBaseURI(DefaultBaseURI)
 }
 
-// NewServiceClientWithBaseURI creates an instance of the ServiceClient client.
+// NewServiceClientWithBaseURI creates an instance of the ServiceClient client using a custom endpoint.  Use this when
+// interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewServiceClientWithBaseURI(baseURI string) ServiceClient {
 	return ServiceClient{NewWithBaseURI(baseURI)}
 }
@@ -114,8 +115,7 @@ func (client ServiceClient) GetMetricsPreparer(ctx context.Context, serviceName 
 // GetMetricsSender sends the GetMetrics request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceClient) GetMetricsSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetMetricsResponder handles the response to the GetMetrics request. The method always

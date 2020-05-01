@@ -32,13 +32,14 @@ type KeysClient struct {
 }
 
 // NewKeysClient creates an instance of the KeysClient client.
-func NewKeysClient(subscriptionID string, countType1 CountType) KeysClient {
-	return NewKeysClientWithBaseURI(DefaultBaseURI, subscriptionID, countType1)
+func NewKeysClient(subscriptionID string) KeysClient {
+	return NewKeysClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewKeysClientWithBaseURI creates an instance of the KeysClient client.
-func NewKeysClientWithBaseURI(baseURI string, subscriptionID string, countType1 CountType) KeysClient {
-	return KeysClient{NewWithBaseURI(baseURI, subscriptionID, countType1)}
+// NewKeysClientWithBaseURI creates an instance of the KeysClient client using a custom endpoint.  Use this when
+// interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
+func NewKeysClientWithBaseURI(baseURI string, subscriptionID string) KeysClient {
+	return KeysClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
 // ListByAutomationAccount retrieve the automation keys for an account.
@@ -109,8 +110,7 @@ func (client KeysClient) ListByAutomationAccountPreparer(ctx context.Context, re
 // ListByAutomationAccountSender sends the ListByAutomationAccount request. The method will close the
 // http.Response Body if it receives an error.
 func (client KeysClient) ListByAutomationAccountSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByAutomationAccountResponder handles the response to the ListByAutomationAccount request. The method always

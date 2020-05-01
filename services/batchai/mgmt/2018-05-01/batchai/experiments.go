@@ -36,7 +36,8 @@ func NewExperimentsClient(subscriptionID string) ExperimentsClient {
 	return NewExperimentsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewExperimentsClientWithBaseURI creates an instance of the ExperimentsClient client.
+// NewExperimentsClientWithBaseURI creates an instance of the ExperimentsClient client using a custom endpoint.  Use
+// this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewExperimentsClientWithBaseURI(baseURI string, subscriptionID string) ExperimentsClient {
 	return ExperimentsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -114,8 +115,7 @@ func (client ExperimentsClient) CreatePreparer(ctx context.Context, resourceGrou
 // http.Response Body if it receives an error.
 func (client ExperimentsClient) CreateSender(req *http.Request) (future ExperimentsCreateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -209,8 +209,7 @@ func (client ExperimentsClient) DeletePreparer(ctx context.Context, resourceGrou
 // http.Response Body if it receives an error.
 func (client ExperimentsClient) DeleteSender(req *http.Request) (future ExperimentsDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -308,8 +307,7 @@ func (client ExperimentsClient) GetPreparer(ctx context.Context, resourceGroupNa
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ExperimentsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -352,7 +350,7 @@ func (client ExperimentsClient) ListByWorkspace(ctx context.Context, resourceGro
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("batchai.ExperimentsClient", "ListByWorkspace", err.Error())
 	}
@@ -408,8 +406,7 @@ func (client ExperimentsClient) ListByWorkspacePreparer(ctx context.Context, res
 // ListByWorkspaceSender sends the ListByWorkspace request. The method will close the
 // http.Response Body if it receives an error.
 func (client ExperimentsClient) ListByWorkspaceSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByWorkspaceResponder handles the response to the ListByWorkspace request. The method always

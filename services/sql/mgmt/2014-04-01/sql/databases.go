@@ -38,7 +38,8 @@ func NewDatabasesClient(subscriptionID string) DatabasesClient {
 	return NewDatabasesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewDatabasesClientWithBaseURI creates an instance of the DatabasesClient client.
+// NewDatabasesClientWithBaseURI creates an instance of the DatabasesClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewDatabasesClientWithBaseURI(baseURI string, subscriptionID string) DatabasesClient {
 	return DatabasesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -113,8 +114,7 @@ func (client DatabasesClient) CreateImportOperationPreparer(ctx context.Context,
 // http.Response Body if it receives an error.
 func (client DatabasesClient) CreateImportOperationSender(req *http.Request) (future DatabasesCreateImportOperationFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -182,6 +182,7 @@ func (client DatabasesClient) CreateOrUpdatePreparer(ctx context.Context, resour
 		"api-version": APIVersion,
 	}
 
+	parameters.Kind = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
@@ -196,8 +197,7 @@ func (client DatabasesClient) CreateOrUpdatePreparer(ctx context.Context, resour
 // http.Response Body if it receives an error.
 func (client DatabasesClient) CreateOrUpdateSender(req *http.Request) (future DatabasesCreateOrUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -281,8 +281,7 @@ func (client DatabasesClient) DeletePreparer(ctx context.Context, resourceGroupN
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client DatabasesClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -367,8 +366,7 @@ func (client DatabasesClient) ExportPreparer(ctx context.Context, resourceGroupN
 // http.Response Body if it receives an error.
 func (client DatabasesClient) ExportSender(req *http.Request) (future DatabasesExportFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -457,8 +455,7 @@ func (client DatabasesClient) GetPreparer(ctx context.Context, resourceGroupName
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client DatabasesClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -539,8 +536,7 @@ func (client DatabasesClient) GetByElasticPoolPreparer(ctx context.Context, reso
 // GetByElasticPoolSender sends the GetByElasticPool request. The method will close the
 // http.Response Body if it receives an error.
 func (client DatabasesClient) GetByElasticPoolSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetByElasticPoolResponder handles the response to the GetByElasticPool request. The method always
@@ -621,8 +617,7 @@ func (client DatabasesClient) GetByRecommendedElasticPoolPreparer(ctx context.Co
 // GetByRecommendedElasticPoolSender sends the GetByRecommendedElasticPool request. The method will close the
 // http.Response Body if it receives an error.
 func (client DatabasesClient) GetByRecommendedElasticPoolSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetByRecommendedElasticPoolResponder handles the response to the GetByRecommendedElasticPool request. The method always
@@ -704,8 +699,7 @@ func (client DatabasesClient) ImportPreparer(ctx context.Context, resourceGroupN
 // http.Response Body if it receives an error.
 func (client DatabasesClient) ImportSender(req *http.Request) (future DatabasesImportFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -789,8 +783,7 @@ func (client DatabasesClient) ListByElasticPoolPreparer(ctx context.Context, res
 // ListByElasticPoolSender sends the ListByElasticPool request. The method will close the
 // http.Response Body if it receives an error.
 func (client DatabasesClient) ListByElasticPoolSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByElasticPoolResponder handles the response to the ListByElasticPool request. The method always
@@ -869,8 +862,7 @@ func (client DatabasesClient) ListByRecommendedElasticPoolPreparer(ctx context.C
 // ListByRecommendedElasticPoolSender sends the ListByRecommendedElasticPool request. The method will close the
 // http.Response Body if it receives an error.
 func (client DatabasesClient) ListByRecommendedElasticPoolSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByRecommendedElasticPoolResponder handles the response to the ListByRecommendedElasticPool request. The method always
@@ -956,13 +948,172 @@ func (client DatabasesClient) ListByServerPreparer(ctx context.Context, resource
 // ListByServerSender sends the ListByServer request. The method will close the
 // http.Response Body if it receives an error.
 func (client DatabasesClient) ListByServerSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByServerResponder handles the response to the ListByServer request. The method always
 // closes the http.Response Body.
 func (client DatabasesClient) ListByServerResponder(resp *http.Response) (result DatabaseListResult, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// ListMetricDefinitions returns database metric definitions.
+// Parameters:
+// resourceGroupName - the name of the resource group that contains the resource. You can obtain this value
+// from the Azure Resource Manager API or the portal.
+// serverName - the name of the server.
+// databaseName - the name of the database.
+func (client DatabasesClient) ListMetricDefinitions(ctx context.Context, resourceGroupName string, serverName string, databaseName string) (result MetricDefinitionListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DatabasesClient.ListMetricDefinitions")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.ListMetricDefinitionsPreparer(ctx, resourceGroupName, serverName, databaseName)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "sql.DatabasesClient", "ListMetricDefinitions", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.ListMetricDefinitionsSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "sql.DatabasesClient", "ListMetricDefinitions", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.ListMetricDefinitionsResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "sql.DatabasesClient", "ListMetricDefinitions", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// ListMetricDefinitionsPreparer prepares the ListMetricDefinitions request.
+func (client DatabasesClient) ListMetricDefinitionsPreparer(ctx context.Context, resourceGroupName string, serverName string, databaseName string) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"databaseName":      autorest.Encode("path", databaseName),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"serverName":        autorest.Encode("path", serverName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2014-04-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsGet(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Sql/servers/{serverName}/databases/{databaseName}/metricDefinitions", pathParameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// ListMetricDefinitionsSender sends the ListMetricDefinitions request. The method will close the
+// http.Response Body if it receives an error.
+func (client DatabasesClient) ListMetricDefinitionsSender(req *http.Request) (*http.Response, error) {
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
+}
+
+// ListMetricDefinitionsResponder handles the response to the ListMetricDefinitions request. The method always
+// closes the http.Response Body.
+func (client DatabasesClient) ListMetricDefinitionsResponder(resp *http.Response) (result MetricDefinitionListResult, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// ListMetrics returns database metrics.
+// Parameters:
+// resourceGroupName - the name of the resource group that contains the resource. You can obtain this value
+// from the Azure Resource Manager API or the portal.
+// serverName - the name of the server.
+// databaseName - the name of the database.
+// filter - an OData filter expression that describes a subset of metrics to return.
+func (client DatabasesClient) ListMetrics(ctx context.Context, resourceGroupName string, serverName string, databaseName string, filter string) (result MetricListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DatabasesClient.ListMetrics")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.ListMetricsPreparer(ctx, resourceGroupName, serverName, databaseName, filter)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "sql.DatabasesClient", "ListMetrics", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.ListMetricsSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "sql.DatabasesClient", "ListMetrics", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.ListMetricsResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "sql.DatabasesClient", "ListMetrics", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// ListMetricsPreparer prepares the ListMetrics request.
+func (client DatabasesClient) ListMetricsPreparer(ctx context.Context, resourceGroupName string, serverName string, databaseName string, filter string) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"databaseName":      autorest.Encode("path", databaseName),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"serverName":        autorest.Encode("path", serverName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2014-04-01"
+	queryParameters := map[string]interface{}{
+		"$filter":     autorest.Encode("query", filter),
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsGet(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Sql/servers/{serverName}/databases/{databaseName}/metrics", pathParameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// ListMetricsSender sends the ListMetrics request. The method will close the
+// http.Response Body if it receives an error.
+func (client DatabasesClient) ListMetricsSender(req *http.Request) (*http.Response, error) {
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
+}
+
+// ListMetricsResponder handles the response to the ListMetrics request. The method always
+// closes the http.Response Body.
+func (client DatabasesClient) ListMetricsResponder(resp *http.Response) (result MetricListResult, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
@@ -1031,8 +1182,7 @@ func (client DatabasesClient) PausePreparer(ctx context.Context, resourceGroupNa
 // http.Response Body if it receives an error.
 func (client DatabasesClient) PauseSender(req *http.Request) (future DatabasesPauseFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -1110,8 +1260,7 @@ func (client DatabasesClient) ResumePreparer(ctx context.Context, resourceGroupN
 // http.Response Body if it receives an error.
 func (client DatabasesClient) ResumeSender(req *http.Request) (future DatabasesResumeFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -1192,8 +1341,7 @@ func (client DatabasesClient) UpdatePreparer(ctx context.Context, resourceGroupN
 // http.Response Body if it receives an error.
 func (client DatabasesClient) UpdateSender(req *http.Request) (future DatabasesUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}

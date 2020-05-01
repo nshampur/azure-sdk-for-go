@@ -36,7 +36,8 @@ func NewDevicesClient(subscriptionID string) DevicesClient {
 	return NewDevicesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewDevicesClientWithBaseURI creates an instance of the DevicesClient client.
+// NewDevicesClientWithBaseURI creates an instance of the DevicesClient client using a custom endpoint.  Use this when
+// interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewDevicesClientWithBaseURI(baseURI string, subscriptionID string) DevicesClient {
 	return DevicesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -110,8 +111,7 @@ func (client DevicesClient) AuthorizeForServiceEncryptionKeyRolloverPreparer(ctx
 // AuthorizeForServiceEncryptionKeyRolloverSender sends the AuthorizeForServiceEncryptionKeyRollover request. The method will close the
 // http.Response Body if it receives an error.
 func (client DevicesClient) AuthorizeForServiceEncryptionKeyRolloverSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // AuthorizeForServiceEncryptionKeyRolloverResponder handles the response to the AuthorizeForServiceEncryptionKeyRollover request. The method always
@@ -197,8 +197,7 @@ func (client DevicesClient) ConfigurePreparer(ctx context.Context, parameters Co
 // http.Response Body if it receives an error.
 func (client DevicesClient) ConfigureSender(req *http.Request) (future DevicesConfigureFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -282,8 +281,7 @@ func (client DevicesClient) DeactivatePreparer(ctx context.Context, deviceName s
 // http.Response Body if it receives an error.
 func (client DevicesClient) DeactivateSender(req *http.Request) (future DevicesDeactivateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -367,8 +365,7 @@ func (client DevicesClient) DeletePreparer(ctx context.Context, deviceName strin
 // http.Response Body if it receives an error.
 func (client DevicesClient) DeleteSender(req *http.Request) (future DevicesDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -456,8 +453,7 @@ func (client DevicesClient) FailoverPreparer(ctx context.Context, sourceDeviceNa
 // http.Response Body if it receives an error.
 func (client DevicesClient) FailoverSender(req *http.Request) (future DevicesFailoverFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -552,8 +548,7 @@ func (client DevicesClient) GetPreparer(ctx context.Context, deviceName string, 
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client DevicesClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -638,8 +633,7 @@ func (client DevicesClient) GetUpdateSummaryPreparer(ctx context.Context, device
 // GetUpdateSummarySender sends the GetUpdateSummary request. The method will close the
 // http.Response Body if it receives an error.
 func (client DevicesClient) GetUpdateSummarySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetUpdateSummaryResponder handles the response to the GetUpdateSummary request. The method always
@@ -719,8 +713,7 @@ func (client DevicesClient) InstallUpdatesPreparer(ctx context.Context, deviceNa
 // http.Response Body if it receives an error.
 func (client DevicesClient) InstallUpdatesSender(req *http.Request) (future DevicesInstallUpdatesFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -813,8 +806,7 @@ func (client DevicesClient) ListByManagerPreparer(ctx context.Context, resourceG
 // ListByManagerSender sends the ListByManager request. The method will close the
 // http.Response Body if it receives an error.
 func (client DevicesClient) ListByManagerSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByManagerResponder handles the response to the ListByManager request. The method always
@@ -901,8 +893,7 @@ func (client DevicesClient) ListFailoverSetsPreparer(ctx context.Context, device
 // ListFailoverSetsSender sends the ListFailoverSets request. The method will close the
 // http.Response Body if it receives an error.
 func (client DevicesClient) ListFailoverSetsSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListFailoverSetsResponder handles the response to the ListFailoverSets request. The method always
@@ -991,8 +982,7 @@ func (client DevicesClient) ListFailoverTargetsPreparer(ctx context.Context, sou
 // ListFailoverTargetsSender sends the ListFailoverTargets request. The method will close the
 // http.Response Body if it receives an error.
 func (client DevicesClient) ListFailoverTargetsSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListFailoverTargetsResponder handles the response to the ListFailoverTargets request. The method always
@@ -1077,8 +1067,7 @@ func (client DevicesClient) ListMetricDefinitionPreparer(ctx context.Context, de
 // ListMetricDefinitionSender sends the ListMetricDefinition request. The method will close the
 // http.Response Body if it receives an error.
 func (client DevicesClient) ListMetricDefinitionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListMetricDefinitionResponder handles the response to the ListMetricDefinition request. The method always
@@ -1165,8 +1154,7 @@ func (client DevicesClient) ListMetricsPreparer(ctx context.Context, deviceName 
 // ListMetricsSender sends the ListMetrics request. The method will close the
 // http.Response Body if it receives an error.
 func (client DevicesClient) ListMetricsSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListMetricsResponder handles the response to the ListMetrics request. The method always
@@ -1246,8 +1234,7 @@ func (client DevicesClient) ScanForUpdatesPreparer(ctx context.Context, deviceNa
 // http.Response Body if it receives an error.
 func (client DevicesClient) ScanForUpdatesSender(req *http.Request) (future DevicesScanForUpdatesFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -1339,8 +1326,7 @@ func (client DevicesClient) UpdatePreparer(ctx context.Context, deviceName strin
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client DevicesClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateResponder handles the response to the Update request. The method always

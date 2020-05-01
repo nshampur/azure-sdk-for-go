@@ -32,13 +32,14 @@ type LinkedWorkspaceClient struct {
 }
 
 // NewLinkedWorkspaceClient creates an instance of the LinkedWorkspaceClient client.
-func NewLinkedWorkspaceClient(subscriptionID string, countType1 CountType) LinkedWorkspaceClient {
-	return NewLinkedWorkspaceClientWithBaseURI(DefaultBaseURI, subscriptionID, countType1)
+func NewLinkedWorkspaceClient(subscriptionID string) LinkedWorkspaceClient {
+	return NewLinkedWorkspaceClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewLinkedWorkspaceClientWithBaseURI creates an instance of the LinkedWorkspaceClient client.
-func NewLinkedWorkspaceClientWithBaseURI(baseURI string, subscriptionID string, countType1 CountType) LinkedWorkspaceClient {
-	return LinkedWorkspaceClient{NewWithBaseURI(baseURI, subscriptionID, countType1)}
+// NewLinkedWorkspaceClientWithBaseURI creates an instance of the LinkedWorkspaceClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
+func NewLinkedWorkspaceClientWithBaseURI(baseURI string, subscriptionID string) LinkedWorkspaceClient {
+	return LinkedWorkspaceClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
 // Get retrieve the linked workspace for the account id.
@@ -109,8 +110,7 @@ func (client LinkedWorkspaceClient) GetPreparer(ctx context.Context, resourceGro
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client LinkedWorkspaceClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always

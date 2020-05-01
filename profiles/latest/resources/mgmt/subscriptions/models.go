@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2020 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ package subscriptions
 import (
 	"context"
 
-	original "github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2016-06-01/subscriptions"
+	original "github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2019-06-01/subscriptions"
 )
 
 const (
@@ -47,6 +47,14 @@ const (
 	Warned   State = original.Warned
 )
 
+type TenantCategory = original.TenantCategory
+
+const (
+	Home        TenantCategory = original.Home
+	ManagedBy   TenantCategory = original.ManagedBy
+	ProjectedBy TenantCategory = original.ProjectedBy
+)
+
 type BaseClient = original.BaseClient
 type Client = original.Client
 type ListResult = original.ListResult
@@ -54,6 +62,7 @@ type ListResultIterator = original.ListResultIterator
 type ListResultPage = original.ListResultPage
 type Location = original.Location
 type LocationListResult = original.LocationListResult
+type ManagedByTenant = original.ManagedByTenant
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
@@ -115,6 +124,9 @@ func PossibleSpendingLimitValues() []SpendingLimit {
 }
 func PossibleStateValues() []State {
 	return original.PossibleStateValues()
+}
+func PossibleTenantCategoryValues() []TenantCategory {
+	return original.PossibleTenantCategoryValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/latest"

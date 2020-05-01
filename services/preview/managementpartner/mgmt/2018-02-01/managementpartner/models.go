@@ -255,7 +255,7 @@ type PartnerProperties struct {
 	// ObjectID - This is the object id.
 	ObjectID *string `json:"objectId,omitempty"`
 	// Version - This is the version.
-	Version *string `json:"version,omitempty"`
+	Version *int32 `json:"version,omitempty"`
 	// UpdatedTime - This is the DateTime when the partner was updated.
 	UpdatedTime *date.Time `json:"updatedTime,omitempty"`
 	// CreatedTime - This is the DateTime when the partner was created.
@@ -269,13 +269,13 @@ type PartnerResponse struct {
 	autorest.Response `json:"-"`
 	// Etag - Type of the partner
 	Etag *int32 `json:"etag,omitempty"`
-	// ID - Identifier of the partner
+	// ID - READ-ONLY; Identifier of the partner
 	ID *string `json:"id,omitempty"`
-	// Name - Name of the partner
+	// Name - READ-ONLY; Name of the partner
 	Name *string `json:"name,omitempty"`
 	// PartnerProperties - Properties of the partner
 	*PartnerProperties `json:"properties,omitempty"`
-	// Type - Type of resource. "Microsoft.ManagementPartner/partners"
+	// Type - READ-ONLY; Type of resource. "Microsoft.ManagementPartner/partners"
 	Type *string `json:"type,omitempty"`
 }
 
@@ -285,17 +285,8 @@ func (pr PartnerResponse) MarshalJSON() ([]byte, error) {
 	if pr.Etag != nil {
 		objectMap["etag"] = pr.Etag
 	}
-	if pr.ID != nil {
-		objectMap["id"] = pr.ID
-	}
-	if pr.Name != nil {
-		objectMap["name"] = pr.Name
-	}
 	if pr.PartnerProperties != nil {
 		objectMap["properties"] = pr.PartnerProperties
-	}
-	if pr.Type != nil {
-		objectMap["type"] = pr.Type
 	}
 	return json.Marshal(objectMap)
 }

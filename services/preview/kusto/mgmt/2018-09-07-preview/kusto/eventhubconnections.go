@@ -38,7 +38,9 @@ func NewEventHubConnectionsClient(subscriptionID string) EventHubConnectionsClie
 	return NewEventHubConnectionsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewEventHubConnectionsClientWithBaseURI creates an instance of the EventHubConnectionsClient client.
+// NewEventHubConnectionsClientWithBaseURI creates an instance of the EventHubConnectionsClient client using a custom
+// endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure
+// stack).
 func NewEventHubConnectionsClientWithBaseURI(baseURI string, subscriptionID string) EventHubConnectionsClient {
 	return EventHubConnectionsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -114,8 +116,7 @@ func (client EventHubConnectionsClient) CreateOrUpdatePreparer(ctx context.Conte
 // http.Response Body if it receives an error.
 func (client EventHubConnectionsClient) CreateOrUpdateSender(req *http.Request) (future EventHubConnectionsCreateOrUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -195,8 +196,7 @@ func (client EventHubConnectionsClient) DeletePreparer(ctx context.Context, reso
 // http.Response Body if it receives an error.
 func (client EventHubConnectionsClient) DeleteSender(req *http.Request) (future EventHubConnectionsDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -290,8 +290,7 @@ func (client EventHubConnectionsClient) EventhubConnectionValidationPreparer(ctx
 // EventhubConnectionValidationSender sends the EventhubConnectionValidation request. The method will close the
 // http.Response Body if it receives an error.
 func (client EventHubConnectionsClient) EventhubConnectionValidationSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // EventhubConnectionValidationResponder handles the response to the EventhubConnectionValidation request. The method always
@@ -371,8 +370,7 @@ func (client EventHubConnectionsClient) GetPreparer(ctx context.Context, resourc
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client EventHubConnectionsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -450,8 +448,7 @@ func (client EventHubConnectionsClient) ListByDatabasePreparer(ctx context.Conte
 // ListByDatabaseSender sends the ListByDatabase request. The method will close the
 // http.Response Body if it receives an error.
 func (client EventHubConnectionsClient) ListByDatabaseSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByDatabaseResponder handles the response to the ListByDatabase request. The method always
@@ -529,8 +526,7 @@ func (client EventHubConnectionsClient) UpdatePreparer(ctx context.Context, reso
 // http.Response Body if it receives an error.
 func (client EventHubConnectionsClient) UpdateSender(req *http.Request) (future EventHubConnectionsUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}

@@ -25,8 +25,7 @@ import (
 	"net/http"
 )
 
-// ResourceUsageClient is the use these APIs to manage Azure CDN resources through the Azure Resource Manager. You must
-// make sure that requests made to these resources are secure.
+// ResourceUsageClient is the cdn Management Client
 type ResourceUsageClient struct {
 	BaseClient
 }
@@ -36,7 +35,8 @@ func NewResourceUsageClient(subscriptionID string) ResourceUsageClient {
 	return NewResourceUsageClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewResourceUsageClientWithBaseURI creates an instance of the ResourceUsageClient client.
+// NewResourceUsageClientWithBaseURI creates an instance of the ResourceUsageClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewResourceUsageClientWithBaseURI(baseURI string, subscriptionID string) ResourceUsageClient {
 	return ResourceUsageClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -97,8 +97,7 @@ func (client ResourceUsageClient) ListPreparer(ctx context.Context) (*http.Reque
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client ResourceUsageClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always

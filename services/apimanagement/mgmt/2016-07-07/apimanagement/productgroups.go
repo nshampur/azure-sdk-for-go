@@ -36,7 +36,8 @@ func NewProductGroupsClient(subscriptionID string) ProductGroupsClient {
 	return NewProductGroupsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewProductGroupsClientWithBaseURI creates an instance of the ProductGroupsClient client.
+// NewProductGroupsClientWithBaseURI creates an instance of the ProductGroupsClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewProductGroupsClientWithBaseURI(baseURI string, subscriptionID string) ProductGroupsClient {
 	return ProductGroupsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -121,8 +122,8 @@ func (client ProductGroupsClient) AddPreparer(ctx context.Context, resourceGroup
 // AddSender sends the Add request. The method will close the
 // http.Response Body if it receives an error.
 func (client ProductGroupsClient) AddSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // AddResponder handles the response to the Add request. The method always
@@ -172,10 +173,10 @@ func (client ProductGroupsClient) ListByProduct(ctx context.Context, resourceGro
 				{Target: "productID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}},
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("apimanagement.ProductGroupsClient", "ListByProduct", err.Error())
 	}
 
@@ -235,8 +236,8 @@ func (client ProductGroupsClient) ListByProductPreparer(ctx context.Context, res
 // ListByProductSender sends the ListByProduct request. The method will close the
 // http.Response Body if it receives an error.
 func (client ProductGroupsClient) ListByProductSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // ListByProductResponder handles the response to the ListByProduct request. The method always
@@ -369,8 +370,8 @@ func (client ProductGroupsClient) RemovePreparer(ctx context.Context, resourceGr
 // RemoveSender sends the Remove request. The method will close the
 // http.Response Body if it receives an error.
 func (client ProductGroupsClient) RemoveSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // RemoveResponder handles the response to the Remove request. The method always

@@ -39,7 +39,8 @@ func NewClient(subscriptionID string) Client {
 	return NewClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewClientWithBaseURI creates an instance of the Client client.
+// NewClientWithBaseURI creates an instance of the Client client using a custom endpoint.  Use this when interacting
+// with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewClientWithBaseURI(baseURI string, subscriptionID string) Client {
 	return Client{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -68,7 +69,7 @@ func (client Client) CreateOrUpdate(ctx context.Context, resourceGroupName strin
 				Chain: []validation.Constraint{{Target: "createOrUpdatePayload.Properties.RealtimeConfiguration", Name: validation.Null, Rule: false,
 					Chain: []validation.Constraint{{Target: "createOrUpdatePayload.Properties.RealtimeConfiguration.MaxConcurrentCalls", Name: validation.Null, Rule: false,
 						Chain: []validation.Constraint{{Target: "createOrUpdatePayload.Properties.RealtimeConfiguration.MaxConcurrentCalls", Name: validation.InclusiveMaximum, Rule: int64(200), Chain: nil},
-							{Target: "createOrUpdatePayload.Properties.RealtimeConfiguration.MaxConcurrentCalls", Name: validation.InclusiveMinimum, Rule: 4, Chain: nil},
+							{Target: "createOrUpdatePayload.Properties.RealtimeConfiguration.MaxConcurrentCalls", Name: validation.InclusiveMinimum, Rule: int64(4), Chain: nil},
 						}},
 					}},
 					{Target: "createOrUpdatePayload.Properties.MachineLearningWorkspace", Name: validation.Null, Rule: false,
@@ -131,8 +132,7 @@ func (client Client) CreateOrUpdatePreparer(ctx context.Context, resourceGroupNa
 // http.Response Body if it receives an error.
 func (client Client) CreateOrUpdateSender(req *http.Request) (future CreateOrUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -213,8 +213,7 @@ func (client Client) CreateRegionalPropertiesPreparer(ctx context.Context, resou
 // http.Response Body if it receives an error.
 func (client Client) CreateRegionalPropertiesSender(req *http.Request) (future CreateRegionalPropertiesFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -300,8 +299,7 @@ func (client Client) GetPreparer(ctx context.Context, resourceGroupName string, 
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -380,8 +378,7 @@ func (client Client) ListByResourceGroupPreparer(ctx context.Context, resourceGr
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -495,8 +492,7 @@ func (client Client) ListBySubscriptionIDPreparer(ctx context.Context, skiptoken
 // ListBySubscriptionIDSender sends the ListBySubscriptionID request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) ListBySubscriptionIDSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListBySubscriptionIDResponder handles the response to the ListBySubscriptionID request. The method always
@@ -609,8 +605,7 @@ func (client Client) ListKeysPreparer(ctx context.Context, resourceGroupName str
 // ListKeysSender sends the ListKeys request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) ListKeysSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListKeysResponder handles the response to the ListKeys request. The method always
@@ -632,7 +627,7 @@ func (client Client) ListKeysResponder(resp *http.Response) (result Keys, err er
 // resourceGroupName - name of the resource group in which the web service is located.
 // webServiceName - the name of the web service.
 // patchPayload - the payload to use to patch the web service.
-func (client Client) Patch(ctx context.Context, resourceGroupName string, webServiceName string, patchPayload WebService) (result PatchFuture, err error) {
+func (client Client) Patch(ctx context.Context, resourceGroupName string, webServiceName string, patchPayload PatchedWebService) (result PatchFuture, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Patch")
 		defer func() {
@@ -659,7 +654,7 @@ func (client Client) Patch(ctx context.Context, resourceGroupName string, webSer
 }
 
 // PatchPreparer prepares the Patch request.
-func (client Client) PatchPreparer(ctx context.Context, resourceGroupName string, webServiceName string, patchPayload WebService) (*http.Request, error) {
+func (client Client) PatchPreparer(ctx context.Context, resourceGroupName string, webServiceName string, patchPayload PatchedWebService) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
@@ -685,8 +680,7 @@ func (client Client) PatchPreparer(ctx context.Context, resourceGroupName string
 // http.Response Body if it receives an error.
 func (client Client) PatchSender(req *http.Request) (future PatchFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -762,8 +756,7 @@ func (client Client) RemovePreparer(ctx context.Context, resourceGroupName strin
 // http.Response Body if it receives an error.
 func (client Client) RemoveSender(req *http.Request) (future RemoveFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}

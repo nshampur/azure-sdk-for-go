@@ -35,7 +35,8 @@ func NewCostClient(subscriptionID string) CostClient {
 	return NewCostClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewCostClientWithBaseURI creates an instance of the CostClient client.
+// NewCostClientWithBaseURI creates an instance of the CostClient client using a custom endpoint.  Use this when
+// interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewCostClientWithBaseURI(baseURI string, subscriptionID string) CostClient {
 	return CostClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -102,8 +103,7 @@ func (client CostClient) GetResourcePreparer(ctx context.Context, resourceGroupN
 // GetResourceSender sends the GetResource request. The method will close the
 // http.Response Body if it receives an error.
 func (client CostClient) GetResourceSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResourceResponder handles the response to the GetResource request. The method always
@@ -190,8 +190,7 @@ func (client CostClient) ListPreparer(ctx context.Context, resourceGroupName str
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client CostClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -301,8 +300,7 @@ func (client CostClient) RefreshDataPreparer(ctx context.Context, resourceGroupN
 // http.Response Body if it receives an error.
 func (client CostClient) RefreshDataSender(req *http.Request) (future CostRefreshDataFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}

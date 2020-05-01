@@ -37,7 +37,8 @@ func NewPolicyStatesClient() PolicyStatesClient {
 	return NewPolicyStatesClientWithBaseURI(DefaultBaseURI)
 }
 
-// NewPolicyStatesClientWithBaseURI creates an instance of the PolicyStatesClient client.
+// NewPolicyStatesClientWithBaseURI creates an instance of the PolicyStatesClient client using a custom endpoint.  Use
+// this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewPolicyStatesClientWithBaseURI(baseURI string) PolicyStatesClient {
 	return PolicyStatesClient{NewWithBaseURI(baseURI)}
 }
@@ -84,7 +85,7 @@ func (client PolicyStatesClient) GetMetadataPreparer(ctx context.Context, scope 
 		"scope": scope,
 	}
 
-	const APIVersion = "2018-04-04"
+	const APIVersion = "2018-07-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -100,8 +101,7 @@ func (client PolicyStatesClient) GetMetadataPreparer(ctx context.Context, scope 
 // GetMetadataSender sends the GetMetadata request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyStatesClient) GetMetadataSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetMetadataResponder handles the response to the GetMetadata request. The method always
@@ -147,7 +147,7 @@ func (client PolicyStatesClient) ListQueryResultsForManagementGroup(ctx context.
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("policyinsights.PolicyStatesClient", "ListQueryResultsForManagementGroup", err.Error())
 	}
 
@@ -180,7 +180,7 @@ func (client PolicyStatesClient) ListQueryResultsForManagementGroupPreparer(ctx 
 		"policyStatesResource":      autorest.Encode("path", policyStatesResource),
 	}
 
-	const APIVersion = "2018-04-04"
+	const APIVersion = "2018-07-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -217,8 +217,7 @@ func (client PolicyStatesClient) ListQueryResultsForManagementGroupPreparer(ctx 
 // ListQueryResultsForManagementGroupSender sends the ListQueryResultsForManagementGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyStatesClient) ListQueryResultsForManagementGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListQueryResultsForManagementGroupResponder handles the response to the ListQueryResultsForManagementGroup request. The method always
@@ -265,7 +264,7 @@ func (client PolicyStatesClient) ListQueryResultsForPolicyDefinition(ctx context
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("policyinsights.PolicyStatesClient", "ListQueryResultsForPolicyDefinition", err.Error())
 	}
 
@@ -299,7 +298,7 @@ func (client PolicyStatesClient) ListQueryResultsForPolicyDefinitionPreparer(ctx
 		"subscriptionId":         autorest.Encode("path", subscriptionID),
 	}
 
-	const APIVersion = "2018-04-04"
+	const APIVersion = "2018-07-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -336,8 +335,7 @@ func (client PolicyStatesClient) ListQueryResultsForPolicyDefinitionPreparer(ctx
 // ListQueryResultsForPolicyDefinitionSender sends the ListQueryResultsForPolicyDefinition request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyStatesClient) ListQueryResultsForPolicyDefinitionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListQueryResultsForPolicyDefinitionResponder handles the response to the ListQueryResultsForPolicyDefinition request. The method always
@@ -384,7 +382,7 @@ func (client PolicyStatesClient) ListQueryResultsForPolicySetDefinition(ctx cont
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("policyinsights.PolicyStatesClient", "ListQueryResultsForPolicySetDefinition", err.Error())
 	}
 
@@ -418,7 +416,7 @@ func (client PolicyStatesClient) ListQueryResultsForPolicySetDefinitionPreparer(
 		"subscriptionId":          autorest.Encode("path", subscriptionID),
 	}
 
-	const APIVersion = "2018-04-04"
+	const APIVersion = "2018-07-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -455,8 +453,7 @@ func (client PolicyStatesClient) ListQueryResultsForPolicySetDefinitionPreparer(
 // ListQueryResultsForPolicySetDefinitionSender sends the ListQueryResultsForPolicySetDefinition request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyStatesClient) ListQueryResultsForPolicySetDefinitionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListQueryResultsForPolicySetDefinitionResponder handles the response to the ListQueryResultsForPolicySetDefinition request. The method always
@@ -488,7 +485,9 @@ func (client PolicyStatesClient) ListQueryResultsForPolicySetDefinitionResponder
 // specified, the service uses request time.
 // filter - oData filter expression.
 // apply - oData apply expression for aggregations.
-func (client PolicyStatesClient) ListQueryResultsForResource(ctx context.Context, policyStatesResource PolicyStatesResource, resourceID string, top *int32, orderBy string, selectParameter string, from *date.Time, toParameter *date.Time, filter string, apply string) (result PolicyStatesQueryResults, err error) {
+// expand - the $expand query parameter. For example, to expand policyEvaluationDetails, use
+// $expand=policyEvaluationDetails
+func (client PolicyStatesClient) ListQueryResultsForResource(ctx context.Context, policyStatesResource PolicyStatesResource, resourceID string, top *int32, orderBy string, selectParameter string, from *date.Time, toParameter *date.Time, filter string, apply string, expand string) (result PolicyStatesQueryResults, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyStatesClient.ListQueryResultsForResource")
 		defer func() {
@@ -502,11 +501,11 @@ func (client PolicyStatesClient) ListQueryResultsForResource(ctx context.Context
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("policyinsights.PolicyStatesClient", "ListQueryResultsForResource", err.Error())
 	}
 
-	req, err := client.ListQueryResultsForResourcePreparer(ctx, policyStatesResource, resourceID, top, orderBy, selectParameter, from, toParameter, filter, apply)
+	req, err := client.ListQueryResultsForResourcePreparer(ctx, policyStatesResource, resourceID, top, orderBy, selectParameter, from, toParameter, filter, apply, expand)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policyinsights.PolicyStatesClient", "ListQueryResultsForResource", nil, "Failure preparing request")
 		return
@@ -528,13 +527,13 @@ func (client PolicyStatesClient) ListQueryResultsForResource(ctx context.Context
 }
 
 // ListQueryResultsForResourcePreparer prepares the ListQueryResultsForResource request.
-func (client PolicyStatesClient) ListQueryResultsForResourcePreparer(ctx context.Context, policyStatesResource PolicyStatesResource, resourceID string, top *int32, orderBy string, selectParameter string, from *date.Time, toParameter *date.Time, filter string, apply string) (*http.Request, error) {
+func (client PolicyStatesClient) ListQueryResultsForResourcePreparer(ctx context.Context, policyStatesResource PolicyStatesResource, resourceID string, top *int32, orderBy string, selectParameter string, from *date.Time, toParameter *date.Time, filter string, apply string, expand string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"policyStatesResource": autorest.Encode("path", policyStatesResource),
 		"resourceId":           resourceID,
 	}
 
-	const APIVersion = "2018-04-04"
+	const APIVersion = "2018-07-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -559,6 +558,9 @@ func (client PolicyStatesClient) ListQueryResultsForResourcePreparer(ctx context
 	if len(apply) > 0 {
 		queryParameters["$apply"] = autorest.Encode("query", apply)
 	}
+	if len(expand) > 0 {
+		queryParameters["$expand"] = autorest.Encode("query", expand)
+	}
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsPost(),
@@ -571,8 +573,7 @@ func (client PolicyStatesClient) ListQueryResultsForResourcePreparer(ctx context
 // ListQueryResultsForResourceSender sends the ListQueryResultsForResource request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyStatesClient) ListQueryResultsForResourceSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListQueryResultsForResourceResponder handles the response to the ListQueryResultsForResource request. The method always
@@ -619,7 +620,7 @@ func (client PolicyStatesClient) ListQueryResultsForResourceGroup(ctx context.Co
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("policyinsights.PolicyStatesClient", "ListQueryResultsForResourceGroup", err.Error())
 	}
 
@@ -652,7 +653,7 @@ func (client PolicyStatesClient) ListQueryResultsForResourceGroupPreparer(ctx co
 		"subscriptionId":       autorest.Encode("path", subscriptionID),
 	}
 
-	const APIVersion = "2018-04-04"
+	const APIVersion = "2018-07-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -689,8 +690,7 @@ func (client PolicyStatesClient) ListQueryResultsForResourceGroupPreparer(ctx co
 // ListQueryResultsForResourceGroupSender sends the ListQueryResultsForResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyStatesClient) ListQueryResultsForResourceGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListQueryResultsForResourceGroupResponder handles the response to the ListQueryResultsForResourceGroup request. The method always
@@ -739,7 +739,7 @@ func (client PolicyStatesClient) ListQueryResultsForResourceGroupLevelPolicyAssi
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("policyinsights.PolicyStatesClient", "ListQueryResultsForResourceGroupLevelPolicyAssignment", err.Error())
 	}
 
@@ -774,7 +774,7 @@ func (client PolicyStatesClient) ListQueryResultsForResourceGroupLevelPolicyAssi
 		"subscriptionId":         autorest.Encode("path", subscriptionID),
 	}
 
-	const APIVersion = "2018-04-04"
+	const APIVersion = "2018-07-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -811,8 +811,7 @@ func (client PolicyStatesClient) ListQueryResultsForResourceGroupLevelPolicyAssi
 // ListQueryResultsForResourceGroupLevelPolicyAssignmentSender sends the ListQueryResultsForResourceGroupLevelPolicyAssignment request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyStatesClient) ListQueryResultsForResourceGroupLevelPolicyAssignmentSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListQueryResultsForResourceGroupLevelPolicyAssignmentResponder handles the response to the ListQueryResultsForResourceGroupLevelPolicyAssignment request. The method always
@@ -858,7 +857,7 @@ func (client PolicyStatesClient) ListQueryResultsForSubscription(ctx context.Con
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("policyinsights.PolicyStatesClient", "ListQueryResultsForSubscription", err.Error())
 	}
 
@@ -890,7 +889,7 @@ func (client PolicyStatesClient) ListQueryResultsForSubscriptionPreparer(ctx con
 		"subscriptionId":       autorest.Encode("path", subscriptionID),
 	}
 
-	const APIVersion = "2018-04-04"
+	const APIVersion = "2018-07-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -927,8 +926,7 @@ func (client PolicyStatesClient) ListQueryResultsForSubscriptionPreparer(ctx con
 // ListQueryResultsForSubscriptionSender sends the ListQueryResultsForSubscription request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyStatesClient) ListQueryResultsForSubscriptionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListQueryResultsForSubscriptionResponder handles the response to the ListQueryResultsForSubscription request. The method always
@@ -976,7 +974,7 @@ func (client PolicyStatesClient) ListQueryResultsForSubscriptionLevelPolicyAssig
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("policyinsights.PolicyStatesClient", "ListQueryResultsForSubscriptionLevelPolicyAssignment", err.Error())
 	}
 
@@ -1010,7 +1008,7 @@ func (client PolicyStatesClient) ListQueryResultsForSubscriptionLevelPolicyAssig
 		"subscriptionId":         autorest.Encode("path", subscriptionID),
 	}
 
-	const APIVersion = "2018-04-04"
+	const APIVersion = "2018-07-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -1047,8 +1045,7 @@ func (client PolicyStatesClient) ListQueryResultsForSubscriptionLevelPolicyAssig
 // ListQueryResultsForSubscriptionLevelPolicyAssignmentSender sends the ListQueryResultsForSubscriptionLevelPolicyAssignment request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyStatesClient) ListQueryResultsForSubscriptionLevelPolicyAssignmentSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListQueryResultsForSubscriptionLevelPolicyAssignmentResponder handles the response to the ListQueryResultsForSubscriptionLevelPolicyAssignment request. The method always
@@ -1087,7 +1084,7 @@ func (client PolicyStatesClient) SummarizeForManagementGroup(ctx context.Context
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("policyinsights.PolicyStatesClient", "SummarizeForManagementGroup", err.Error())
 	}
 
@@ -1120,7 +1117,7 @@ func (client PolicyStatesClient) SummarizeForManagementGroupPreparer(ctx context
 		"policyStatesSummaryResource": autorest.Encode("path", "latest"),
 	}
 
-	const APIVersion = "2018-04-04"
+	const APIVersion = "2018-07-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -1148,8 +1145,7 @@ func (client PolicyStatesClient) SummarizeForManagementGroupPreparer(ctx context
 // SummarizeForManagementGroupSender sends the SummarizeForManagementGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyStatesClient) SummarizeForManagementGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // SummarizeForManagementGroupResponder handles the response to the SummarizeForManagementGroup request. The method always
@@ -1189,7 +1185,7 @@ func (client PolicyStatesClient) SummarizeForPolicyDefinition(ctx context.Contex
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("policyinsights.PolicyStatesClient", "SummarizeForPolicyDefinition", err.Error())
 	}
 
@@ -1223,7 +1219,7 @@ func (client PolicyStatesClient) SummarizeForPolicyDefinitionPreparer(ctx contex
 		"subscriptionId":              autorest.Encode("path", subscriptionID),
 	}
 
-	const APIVersion = "2018-04-04"
+	const APIVersion = "2018-07-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -1251,8 +1247,7 @@ func (client PolicyStatesClient) SummarizeForPolicyDefinitionPreparer(ctx contex
 // SummarizeForPolicyDefinitionSender sends the SummarizeForPolicyDefinition request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyStatesClient) SummarizeForPolicyDefinitionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // SummarizeForPolicyDefinitionResponder handles the response to the SummarizeForPolicyDefinition request. The method always
@@ -1292,7 +1287,7 @@ func (client PolicyStatesClient) SummarizeForPolicySetDefinition(ctx context.Con
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("policyinsights.PolicyStatesClient", "SummarizeForPolicySetDefinition", err.Error())
 	}
 
@@ -1326,7 +1321,7 @@ func (client PolicyStatesClient) SummarizeForPolicySetDefinitionPreparer(ctx con
 		"subscriptionId":              autorest.Encode("path", subscriptionID),
 	}
 
-	const APIVersion = "2018-04-04"
+	const APIVersion = "2018-07-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -1354,8 +1349,7 @@ func (client PolicyStatesClient) SummarizeForPolicySetDefinitionPreparer(ctx con
 // SummarizeForPolicySetDefinitionSender sends the SummarizeForPolicySetDefinition request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyStatesClient) SummarizeForPolicySetDefinitionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // SummarizeForPolicySetDefinitionResponder handles the response to the SummarizeForPolicySetDefinition request. The method always
@@ -1394,7 +1388,7 @@ func (client PolicyStatesClient) SummarizeForResource(ctx context.Context, resou
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("policyinsights.PolicyStatesClient", "SummarizeForResource", err.Error())
 	}
 
@@ -1426,7 +1420,7 @@ func (client PolicyStatesClient) SummarizeForResourcePreparer(ctx context.Contex
 		"resourceId":                  resourceID,
 	}
 
-	const APIVersion = "2018-04-04"
+	const APIVersion = "2018-07-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -1454,8 +1448,7 @@ func (client PolicyStatesClient) SummarizeForResourcePreparer(ctx context.Contex
 // SummarizeForResourceSender sends the SummarizeForResource request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyStatesClient) SummarizeForResourceSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // SummarizeForResourceResponder handles the response to the SummarizeForResource request. The method always
@@ -1495,7 +1488,7 @@ func (client PolicyStatesClient) SummarizeForResourceGroup(ctx context.Context, 
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("policyinsights.PolicyStatesClient", "SummarizeForResourceGroup", err.Error())
 	}
 
@@ -1528,7 +1521,7 @@ func (client PolicyStatesClient) SummarizeForResourceGroupPreparer(ctx context.C
 		"subscriptionId":              autorest.Encode("path", subscriptionID),
 	}
 
-	const APIVersion = "2018-04-04"
+	const APIVersion = "2018-07-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -1556,8 +1549,7 @@ func (client PolicyStatesClient) SummarizeForResourceGroupPreparer(ctx context.C
 // SummarizeForResourceGroupSender sends the SummarizeForResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyStatesClient) SummarizeForResourceGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // SummarizeForResourceGroupResponder handles the response to the SummarizeForResourceGroup request. The method always
@@ -1599,7 +1591,7 @@ func (client PolicyStatesClient) SummarizeForResourceGroupLevelPolicyAssignment(
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("policyinsights.PolicyStatesClient", "SummarizeForResourceGroupLevelPolicyAssignment", err.Error())
 	}
 
@@ -1634,7 +1626,7 @@ func (client PolicyStatesClient) SummarizeForResourceGroupLevelPolicyAssignmentP
 		"subscriptionId":              autorest.Encode("path", subscriptionID),
 	}
 
-	const APIVersion = "2018-04-04"
+	const APIVersion = "2018-07-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -1662,8 +1654,7 @@ func (client PolicyStatesClient) SummarizeForResourceGroupLevelPolicyAssignmentP
 // SummarizeForResourceGroupLevelPolicyAssignmentSender sends the SummarizeForResourceGroupLevelPolicyAssignment request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyStatesClient) SummarizeForResourceGroupLevelPolicyAssignmentSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // SummarizeForResourceGroupLevelPolicyAssignmentResponder handles the response to the SummarizeForResourceGroupLevelPolicyAssignment request. The method always
@@ -1702,7 +1693,7 @@ func (client PolicyStatesClient) SummarizeForSubscription(ctx context.Context, s
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("policyinsights.PolicyStatesClient", "SummarizeForSubscription", err.Error())
 	}
 
@@ -1734,7 +1725,7 @@ func (client PolicyStatesClient) SummarizeForSubscriptionPreparer(ctx context.Co
 		"subscriptionId":              autorest.Encode("path", subscriptionID),
 	}
 
-	const APIVersion = "2018-04-04"
+	const APIVersion = "2018-07-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -1762,8 +1753,7 @@ func (client PolicyStatesClient) SummarizeForSubscriptionPreparer(ctx context.Co
 // SummarizeForSubscriptionSender sends the SummarizeForSubscription request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyStatesClient) SummarizeForSubscriptionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // SummarizeForSubscriptionResponder handles the response to the SummarizeForSubscription request. The method always
@@ -1803,7 +1793,7 @@ func (client PolicyStatesClient) SummarizeForSubscriptionLevelPolicyAssignment(c
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("policyinsights.PolicyStatesClient", "SummarizeForSubscriptionLevelPolicyAssignment", err.Error())
 	}
 
@@ -1837,7 +1827,7 @@ func (client PolicyStatesClient) SummarizeForSubscriptionLevelPolicyAssignmentPr
 		"subscriptionId":              autorest.Encode("path", subscriptionID),
 	}
 
-	const APIVersion = "2018-04-04"
+	const APIVersion = "2018-07-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -1865,8 +1855,7 @@ func (client PolicyStatesClient) SummarizeForSubscriptionLevelPolicyAssignmentPr
 // SummarizeForSubscriptionLevelPolicyAssignmentSender sends the SummarizeForSubscriptionLevelPolicyAssignment request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyStatesClient) SummarizeForSubscriptionLevelPolicyAssignmentSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // SummarizeForSubscriptionLevelPolicyAssignmentResponder handles the response to the SummarizeForSubscriptionLevelPolicyAssignment request. The method always

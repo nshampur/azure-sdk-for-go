@@ -37,7 +37,9 @@ func NewDataMaskingPoliciesClient(subscriptionID string) DataMaskingPoliciesClie
 	return NewDataMaskingPoliciesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewDataMaskingPoliciesClientWithBaseURI creates an instance of the DataMaskingPoliciesClient client.
+// NewDataMaskingPoliciesClientWithBaseURI creates an instance of the DataMaskingPoliciesClient client using a custom
+// endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure
+// stack).
 func NewDataMaskingPoliciesClientWithBaseURI(baseURI string, subscriptionID string) DataMaskingPoliciesClient {
 	return DataMaskingPoliciesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -96,6 +98,8 @@ func (client DataMaskingPoliciesClient) CreateOrUpdatePreparer(ctx context.Conte
 		"api-version": APIVersion,
 	}
 
+	parameters.Location = nil
+	parameters.Kind = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
@@ -109,8 +113,7 @@ func (client DataMaskingPoliciesClient) CreateOrUpdatePreparer(ctx context.Conte
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client DataMaskingPoliciesClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -190,8 +193,7 @@ func (client DataMaskingPoliciesClient) GetPreparer(ctx context.Context, resourc
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client DataMaskingPoliciesClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always

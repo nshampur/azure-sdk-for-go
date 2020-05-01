@@ -36,7 +36,8 @@ func NewUserGroupsClient(subscriptionID string) UserGroupsClient {
 	return NewUserGroupsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewUserGroupsClientWithBaseURI creates an instance of the UserGroupsClient client.
+// NewUserGroupsClientWithBaseURI creates an instance of the UserGroupsClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewUserGroupsClientWithBaseURI(baseURI string, subscriptionID string) UserGroupsClient {
 	return UserGroupsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -75,10 +76,10 @@ func (client UserGroupsClient) ListByUsers(ctx context.Context, resourceGroupNam
 				{Target: "UID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}},
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("apimanagement.UserGroupsClient", "ListByUsers", err.Error())
 	}
 
@@ -138,8 +139,8 @@ func (client UserGroupsClient) ListByUsersPreparer(ctx context.Context, resource
 // ListByUsersSender sends the ListByUsers request. The method will close the
 // http.Response Body if it receives an error.
 func (client UserGroupsClient) ListByUsersSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // ListByUsersResponder handles the response to the ListByUsers request. The method always

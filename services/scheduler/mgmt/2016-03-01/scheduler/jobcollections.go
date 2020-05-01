@@ -35,7 +35,8 @@ func NewJobCollectionsClient(subscriptionID string) JobCollectionsClient {
 	return NewJobCollectionsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewJobCollectionsClientWithBaseURI creates an instance of the JobCollectionsClient client.
+// NewJobCollectionsClientWithBaseURI creates an instance of the JobCollectionsClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewJobCollectionsClientWithBaseURI(baseURI string, subscriptionID string) JobCollectionsClient {
 	return JobCollectionsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -90,6 +91,8 @@ func (client JobCollectionsClient) CreateOrUpdatePreparer(ctx context.Context, r
 		"api-version": APIVersion,
 	}
 
+	jobCollection.ID = nil
+	jobCollection.Type = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
@@ -103,8 +106,7 @@ func (client JobCollectionsClient) CreateOrUpdatePreparer(ctx context.Context, r
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobCollectionsClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -175,8 +177,7 @@ func (client JobCollectionsClient) DeletePreparer(ctx context.Context, resourceG
 // http.Response Body if it receives an error.
 func (client JobCollectionsClient) DeleteSender(req *http.Request) (future JobCollectionsDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -251,8 +252,7 @@ func (client JobCollectionsClient) DisablePreparer(ctx context.Context, resource
 // http.Response Body if it receives an error.
 func (client JobCollectionsClient) DisableSender(req *http.Request) (future JobCollectionsDisableFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -327,8 +327,7 @@ func (client JobCollectionsClient) EnablePreparer(ctx context.Context, resourceG
 // http.Response Body if it receives an error.
 func (client JobCollectionsClient) EnableSender(req *http.Request) (future JobCollectionsEnableFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -408,8 +407,7 @@ func (client JobCollectionsClient) GetPreparer(ctx context.Context, resourceGrou
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobCollectionsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -484,8 +482,7 @@ func (client JobCollectionsClient) ListByResourceGroupPreparer(ctx context.Conte
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobCollectionsClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -594,8 +591,7 @@ func (client JobCollectionsClient) ListBySubscriptionPreparer(ctx context.Contex
 // ListBySubscriptionSender sends the ListBySubscription request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobCollectionsClient) ListBySubscriptionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListBySubscriptionResponder handles the response to the ListBySubscription request. The method always
@@ -698,6 +694,8 @@ func (client JobCollectionsClient) PatchPreparer(ctx context.Context, resourceGr
 		"api-version": APIVersion,
 	}
 
+	jobCollection.ID = nil
+	jobCollection.Type = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPatch(),
@@ -711,8 +709,7 @@ func (client JobCollectionsClient) PatchPreparer(ctx context.Context, resourceGr
 // PatchSender sends the Patch request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobCollectionsClient) PatchSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // PatchResponder handles the response to the Patch request. The method always

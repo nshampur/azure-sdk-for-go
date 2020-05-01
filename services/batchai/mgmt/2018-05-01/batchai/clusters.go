@@ -36,7 +36,8 @@ func NewClustersClient(subscriptionID string) ClustersClient {
 	return NewClustersClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewClustersClientWithBaseURI creates an instance of the ClustersClient client.
+// NewClustersClientWithBaseURI creates an instance of the ClustersClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewClustersClientWithBaseURI(baseURI string, subscriptionID string) ClustersClient {
 	return ClustersClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -158,8 +159,7 @@ func (client ClustersClient) CreatePreparer(ctx context.Context, resourceGroupNa
 // http.Response Body if it receives an error.
 func (client ClustersClient) CreateSender(req *http.Request) (future ClustersCreateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -254,8 +254,7 @@ func (client ClustersClient) DeletePreparer(ctx context.Context, resourceGroupNa
 // http.Response Body if it receives an error.
 func (client ClustersClient) DeleteSender(req *http.Request) (future ClustersDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -354,8 +353,7 @@ func (client ClustersClient) GetPreparer(ctx context.Context, resourceGroupName 
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ClustersClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -398,7 +396,7 @@ func (client ClustersClient) ListByWorkspace(ctx context.Context, resourceGroupN
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("batchai.ClustersClient", "ListByWorkspace", err.Error())
 	}
@@ -454,8 +452,7 @@ func (client ClustersClient) ListByWorkspacePreparer(ctx context.Context, resour
 // ListByWorkspaceSender sends the ListByWorkspace request. The method will close the
 // http.Response Body if it receives an error.
 func (client ClustersClient) ListByWorkspaceSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByWorkspaceResponder handles the response to the ListByWorkspace request. The method always
@@ -588,8 +585,7 @@ func (client ClustersClient) ListRemoteLoginInformationPreparer(ctx context.Cont
 // ListRemoteLoginInformationSender sends the ListRemoteLoginInformation request. The method will close the
 // http.Response Body if it receives an error.
 func (client ClustersClient) ListRemoteLoginInformationSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListRemoteLoginInformationResponder handles the response to the ListRemoteLoginInformation request. The method always
@@ -724,8 +720,7 @@ func (client ClustersClient) UpdatePreparer(ctx context.Context, resourceGroupNa
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client ClustersClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateResponder handles the response to the Update request. The method always

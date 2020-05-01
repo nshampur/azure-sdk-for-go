@@ -36,7 +36,9 @@ func NewProductSubscriptionsClient(subscriptionID string) ProductSubscriptionsCl
 	return NewProductSubscriptionsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewProductSubscriptionsClientWithBaseURI creates an instance of the ProductSubscriptionsClient client.
+// NewProductSubscriptionsClientWithBaseURI creates an instance of the ProductSubscriptionsClient client using a custom
+// endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure
+// stack).
 func NewProductSubscriptionsClientWithBaseURI(baseURI string, subscriptionID string) ProductSubscriptionsClient {
 	return ProductSubscriptionsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -78,10 +80,10 @@ func (client ProductSubscriptionsClient) ListByProduct(ctx context.Context, reso
 				{Target: "productID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}},
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("apimanagement.ProductSubscriptionsClient", "ListByProduct", err.Error())
 	}
 
@@ -141,8 +143,8 @@ func (client ProductSubscriptionsClient) ListByProductPreparer(ctx context.Conte
 // ListByProductSender sends the ListByProduct request. The method will close the
 // http.Response Body if it receives an error.
 func (client ProductSubscriptionsClient) ListByProductSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // ListByProductResponder handles the response to the ListByProduct request. The method always

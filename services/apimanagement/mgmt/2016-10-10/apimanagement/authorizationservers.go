@@ -36,7 +36,9 @@ func NewAuthorizationServersClient(subscriptionID string) AuthorizationServersCl
 	return NewAuthorizationServersClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewAuthorizationServersClientWithBaseURI creates an instance of the AuthorizationServersClient client.
+// NewAuthorizationServersClientWithBaseURI creates an instance of the AuthorizationServersClient client using a custom
+// endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure
+// stack).
 func NewAuthorizationServersClientWithBaseURI(baseURI string, subscriptionID string) AuthorizationServersClient {
 	return AuthorizationServersClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -113,6 +115,7 @@ func (client AuthorizationServersClient) CreateOrUpdatePreparer(ctx context.Cont
 		"api-version": APIVersion,
 	}
 
+	parameters.ID = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
@@ -126,8 +129,8 @@ func (client AuthorizationServersClient) CreateOrUpdatePreparer(ctx context.Cont
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client AuthorizationServersClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -218,8 +221,8 @@ func (client AuthorizationServersClient) DeletePreparer(ctx context.Context, res
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client AuthorizationServersClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -307,8 +310,8 @@ func (client AuthorizationServersClient) GetPreparer(ctx context.Context, resour
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client AuthorizationServersClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -352,10 +355,10 @@ func (client AuthorizationServersClient) ListByService(ctx context.Context, reso
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}},
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("apimanagement.AuthorizationServersClient", "ListByService", err.Error())
 	}
 
@@ -414,8 +417,8 @@ func (client AuthorizationServersClient) ListByServicePreparer(ctx context.Conte
 // ListByServiceSender sends the ListByService request. The method will close the
 // http.Response Body if it receives an error.
 func (client AuthorizationServersClient) ListByServiceSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // ListByServiceResponder handles the response to the ListByService request. The method always
@@ -547,8 +550,8 @@ func (client AuthorizationServersClient) UpdatePreparer(ctx context.Context, res
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client AuthorizationServersClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // UpdateResponder handles the response to the Update request. The method always

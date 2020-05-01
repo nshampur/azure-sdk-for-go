@@ -36,7 +36,8 @@ func NewJobsClient(subscriptionID string) JobsClient {
 	return NewJobsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewJobsClientWithBaseURI creates an instance of the JobsClient client.
+// NewJobsClientWithBaseURI creates an instance of the JobsClient client using a custom endpoint.  Use this when
+// interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewJobsClientWithBaseURI(baseURI string, subscriptionID string) JobsClient {
 	return JobsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -142,8 +143,7 @@ func (client JobsClient) CreatePreparer(ctx context.Context, resourceGroupName s
 // http.Response Body if it receives an error.
 func (client JobsClient) CreateSender(req *http.Request) (future JobsCreateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -231,8 +231,7 @@ func (client JobsClient) DeletePreparer(ctx context.Context, resourceGroupName s
 // http.Response Body if it receives an error.
 func (client JobsClient) DeleteSender(req *http.Request) (future JobsDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -324,8 +323,7 @@ func (client JobsClient) GetPreparer(ctx context.Context, resourceGroupName stri
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -361,7 +359,7 @@ func (client JobsClient) List(ctx context.Context, filter string, selectParamete
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("batchai.JobsClient", "List", err.Error())
 	}
@@ -421,8 +419,7 @@ func (client JobsClient) ListPreparer(ctx context.Context, filter string, select
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobsClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -498,7 +495,7 @@ func (client JobsClient) ListByResourceGroup(ctx context.Context, resourceGroupN
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("batchai.JobsClient", "ListByResourceGroup", err.Error())
 	}
@@ -559,8 +556,7 @@ func (client JobsClient) ListByResourceGroupPreparer(ctx context.Context, resour
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobsClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -646,12 +642,12 @@ func (client JobsClient) ListOutputFiles(ctx context.Context, resourceGroupName 
 		{TargetValue: linkexpiryinminutes,
 			Constraints: []validation.Constraint{{Target: "linkexpiryinminutes", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "linkexpiryinminutes", Name: validation.InclusiveMaximum, Rule: int64(600), Chain: nil},
-					{Target: "linkexpiryinminutes", Name: validation.InclusiveMinimum, Rule: 5, Chain: nil},
+					{Target: "linkexpiryinminutes", Name: validation.InclusiveMinimum, Rule: int64(5), Chain: nil},
 				}}}},
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("batchai.JobsClient", "ListOutputFiles", err.Error())
 	}
@@ -718,8 +714,7 @@ func (client JobsClient) ListOutputFilesPreparer(ctx context.Context, resourceGr
 // ListOutputFilesSender sends the ListOutputFiles request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobsClient) ListOutputFilesSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListOutputFilesResponder handles the response to the ListOutputFiles request. The method always
@@ -846,8 +841,7 @@ func (client JobsClient) ListRemoteLoginInformationPreparer(ctx context.Context,
 // ListRemoteLoginInformationSender sends the ListRemoteLoginInformation request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobsClient) ListRemoteLoginInformationSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListRemoteLoginInformationResponder handles the response to the ListRemoteLoginInformation request. The method always
@@ -967,8 +961,7 @@ func (client JobsClient) TerminatePreparer(ctx context.Context, resourceGroupNam
 // http.Response Body if it receives an error.
 func (client JobsClient) TerminateSender(req *http.Request) (future JobsTerminateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}

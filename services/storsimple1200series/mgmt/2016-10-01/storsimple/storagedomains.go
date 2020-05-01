@@ -36,7 +36,8 @@ func NewStorageDomainsClient(subscriptionID string) StorageDomainsClient {
 	return NewStorageDomainsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewStorageDomainsClientWithBaseURI creates an instance of the StorageDomainsClient client.
+// NewStorageDomainsClientWithBaseURI creates an instance of the StorageDomainsClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewStorageDomainsClientWithBaseURI(baseURI string, subscriptionID string) StorageDomainsClient {
 	return StorageDomainsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -114,8 +115,7 @@ func (client StorageDomainsClient) CreateOrUpdatePreparer(ctx context.Context, s
 // http.Response Body if it receives an error.
 func (client StorageDomainsClient) CreateOrUpdateSender(req *http.Request) (future StorageDomainsCreateOrUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -200,8 +200,7 @@ func (client StorageDomainsClient) DeletePreparer(ctx context.Context, storageDo
 // http.Response Body if it receives an error.
 func (client StorageDomainsClient) DeleteSender(req *http.Request) (future StorageDomainsDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -290,8 +289,7 @@ func (client StorageDomainsClient) GetPreparer(ctx context.Context, storageDomai
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client StorageDomainsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -374,8 +372,7 @@ func (client StorageDomainsClient) ListByManagerPreparer(ctx context.Context, re
 // ListByManagerSender sends the ListByManager request. The method will close the
 // http.Response Body if it receives an error.
 func (client StorageDomainsClient) ListByManagerSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByManagerResponder handles the response to the ListByManager request. The method always

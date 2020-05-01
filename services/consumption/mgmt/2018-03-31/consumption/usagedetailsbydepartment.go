@@ -37,7 +37,9 @@ func NewUsageDetailsByDepartmentClient(subscriptionID string) UsageDetailsByDepa
 	return NewUsageDetailsByDepartmentClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewUsageDetailsByDepartmentClientWithBaseURI creates an instance of the UsageDetailsByDepartmentClient client.
+// NewUsageDetailsByDepartmentClientWithBaseURI creates an instance of the UsageDetailsByDepartmentClient client using
+// a custom endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign
+// clouds, Azure stack).
 func NewUsageDetailsByDepartmentClientWithBaseURI(baseURI string, subscriptionID string) UsageDetailsByDepartmentClient {
 	return UsageDetailsByDepartmentClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -72,7 +74,7 @@ func (client UsageDetailsByDepartmentClient) List(ctx context.Context, departmen
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("consumption.UsageDetailsByDepartmentClient", "List", err.Error())
 	}
@@ -136,8 +138,7 @@ func (client UsageDetailsByDepartmentClient) ListPreparer(ctx context.Context, d
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client UsageDetailsByDepartmentClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -222,7 +223,7 @@ func (client UsageDetailsByDepartmentClient) ListByBillingPeriod(ctx context.Con
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("consumption.UsageDetailsByDepartmentClient", "ListByBillingPeriod", err.Error())
 	}
@@ -287,8 +288,7 @@ func (client UsageDetailsByDepartmentClient) ListByBillingPeriodPreparer(ctx con
 // ListByBillingPeriodSender sends the ListByBillingPeriod request. The method will close the
 // http.Response Body if it receives an error.
 func (client UsageDetailsByDepartmentClient) ListByBillingPeriodSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListByBillingPeriodResponder handles the response to the ListByBillingPeriod request. The method always

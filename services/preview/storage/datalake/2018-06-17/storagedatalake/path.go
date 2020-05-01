@@ -120,19 +120,23 @@ func (client PathClient) Create(ctx context.Context, filesystem string, pathPara
 	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: xMsLeaseID,
-			Constraints: []validation.Constraint{{Target: "xMsLeaseID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},
+			Constraints: []validation.Constraint{{Target: "xMsLeaseID", Name: validation.Empty, Rule: false,
+				Chain: []validation.Constraint{{Target: "xMsLeaseID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}}}},
 		{TargetValue: xMsProposedLeaseID,
-			Constraints: []validation.Constraint{{Target: "xMsProposedLeaseID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},
+			Constraints: []validation.Constraint{{Target: "xMsProposedLeaseID", Name: validation.Empty, Rule: false,
+				Chain: []validation.Constraint{{Target: "xMsProposedLeaseID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}}}},
 		{TargetValue: xMsSourceLeaseID,
-			Constraints: []validation.Constraint{{Target: "xMsSourceLeaseID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},
+			Constraints: []validation.Constraint{{Target: "xMsSourceLeaseID", Name: validation.Empty, Rule: false,
+				Chain: []validation.Constraint{{Target: "xMsSourceLeaseID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}}}},
 		{TargetValue: filesystem,
 			Constraints: []validation.Constraint{{Target: "filesystem", Name: validation.MaxLength, Rule: 63, Chain: nil},
 				{Target: "filesystem", Name: validation.MinLength, Rule: 3, Chain: nil}}},
 		{TargetValue: xMsClientRequestID,
-			Constraints: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},
+			Constraints: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Empty, Rule: false,
+				Chain: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("storagedatalake.PathClient", "Create", err.Error())
 	}
 
@@ -185,7 +189,7 @@ func (client PathClient) CreatePreparer(ctx context.Context, filesystem string, 
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsPut(),
-		autorest.WithCustomBaseURL("http://{accountName}.{dnsSuffix}", urlParameters),
+		autorest.WithCustomBaseURL("https://{accountName}.{dnsSuffix}", urlParameters),
 		autorest.WithPathParameters("/{filesystem}/{path}", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	if len(cacheControl) > 0 {
@@ -298,8 +302,7 @@ func (client PathClient) CreatePreparer(ctx context.Context, filesystem string, 
 // CreateSender sends the Create request. The method will close the
 // http.Response Body if it receives an error.
 func (client PathClient) CreateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // CreateResponder handles the response to the Create request. The method always
@@ -354,15 +357,17 @@ func (client PathClient) Delete(ctx context.Context, filesystem string, pathPara
 	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: xMsLeaseID,
-			Constraints: []validation.Constraint{{Target: "xMsLeaseID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},
+			Constraints: []validation.Constraint{{Target: "xMsLeaseID", Name: validation.Empty, Rule: false,
+				Chain: []validation.Constraint{{Target: "xMsLeaseID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}}}},
 		{TargetValue: filesystem,
 			Constraints: []validation.Constraint{{Target: "filesystem", Name: validation.MaxLength, Rule: 63, Chain: nil},
 				{Target: "filesystem", Name: validation.MinLength, Rule: 3, Chain: nil}}},
 		{TargetValue: xMsClientRequestID,
-			Constraints: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},
+			Constraints: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Empty, Rule: false,
+				Chain: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("storagedatalake.PathClient", "Delete", err.Error())
 	}
 
@@ -412,7 +417,7 @@ func (client PathClient) DeletePreparer(ctx context.Context, filesystem string, 
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsDelete(),
-		autorest.WithCustomBaseURL("http://{accountName}.{dnsSuffix}", urlParameters),
+		autorest.WithCustomBaseURL("https://{accountName}.{dnsSuffix}", urlParameters),
 		autorest.WithPathParameters("/{filesystem}/{path}", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	if len(xMsLeaseID) > 0 {
@@ -453,8 +458,7 @@ func (client PathClient) DeletePreparer(ctx context.Context, filesystem string, 
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client PathClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -508,10 +512,11 @@ func (client PathClient) GetProperties(ctx context.Context, filesystem string, p
 			Constraints: []validation.Constraint{{Target: "filesystem", Name: validation.MaxLength, Rule: 63, Chain: nil},
 				{Target: "filesystem", Name: validation.MinLength, Rule: 3, Chain: nil}}},
 		{TargetValue: xMsClientRequestID,
-			Constraints: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},
+			Constraints: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Empty, Rule: false,
+				Chain: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("storagedatalake.PathClient", "GetProperties", err.Error())
 	}
 
@@ -558,7 +563,7 @@ func (client PathClient) GetPropertiesPreparer(ctx context.Context, filesystem s
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsHead(),
-		autorest.WithCustomBaseURL("http://{accountName}.{dnsSuffix}", urlParameters),
+		autorest.WithCustomBaseURL("https://{accountName}.{dnsSuffix}", urlParameters),
 		autorest.WithPathParameters("/{filesystem}/{path}", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	if len(ifMatch) > 0 {
@@ -595,8 +600,7 @@ func (client PathClient) GetPropertiesPreparer(ctx context.Context, filesystem s
 // GetPropertiesSender sends the GetProperties request. The method will close the
 // http.Response Body if it receives an error.
 func (client PathClient) GetPropertiesSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetPropertiesResponder handles the response to the GetProperties request. The method always
@@ -661,17 +665,20 @@ func (client PathClient) Lease(ctx context.Context, xMsLeaseAction PathLeaseActi
 	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: xMsLeaseID,
-			Constraints: []validation.Constraint{{Target: "xMsLeaseID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},
+			Constraints: []validation.Constraint{{Target: "xMsLeaseID", Name: validation.Empty, Rule: false,
+				Chain: []validation.Constraint{{Target: "xMsLeaseID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}}}},
 		{TargetValue: xMsProposedLeaseID,
-			Constraints: []validation.Constraint{{Target: "xMsProposedLeaseID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},
+			Constraints: []validation.Constraint{{Target: "xMsProposedLeaseID", Name: validation.Empty, Rule: false,
+				Chain: []validation.Constraint{{Target: "xMsProposedLeaseID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}}}},
 		{TargetValue: filesystem,
 			Constraints: []validation.Constraint{{Target: "filesystem", Name: validation.MaxLength, Rule: 63, Chain: nil},
 				{Target: "filesystem", Name: validation.MinLength, Rule: 3, Chain: nil}}},
 		{TargetValue: xMsClientRequestID,
-			Constraints: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},
+			Constraints: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Empty, Rule: false,
+				Chain: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("storagedatalake.PathClient", "Lease", err.Error())
 	}
 
@@ -715,17 +722,17 @@ func (client PathClient) LeasePreparer(ctx context.Context, xMsLeaseAction PathL
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsPost(),
-		autorest.WithCustomBaseURL("http://{accountName}.{dnsSuffix}", urlParameters),
+		autorest.WithCustomBaseURL("https://{accountName}.{dnsSuffix}", urlParameters),
 		autorest.WithPathParameters("/{filesystem}/{path}", pathParameters),
 		autorest.WithQueryParameters(queryParameters),
 		autorest.WithHeader("x-ms-lease-action", autorest.String(xMsLeaseAction)))
 	if xMsLeaseDuration != nil {
 		preparer = autorest.DecoratePreparer(preparer,
-			autorest.WithHeader("x-ms-lease-duration", autorest.String(xMsLeaseDuration)))
+			autorest.WithHeader("x-ms-lease-duration", autorest.String(*xMsLeaseDuration)))
 	}
 	if xMsLeaseBreakPeriod != nil {
 		preparer = autorest.DecoratePreparer(preparer,
-			autorest.WithHeader("x-ms-lease-break-period", autorest.String(xMsLeaseBreakPeriod)))
+			autorest.WithHeader("x-ms-lease-break-period", autorest.String(*xMsLeaseBreakPeriod)))
 	}
 	if len(xMsLeaseID) > 0 {
 		preparer = autorest.DecoratePreparer(preparer,
@@ -769,8 +776,7 @@ func (client PathClient) LeasePreparer(ctx context.Context, xMsLeaseAction PathL
 // LeaseSender sends the Lease request. The method will close the
 // http.Response Body if it receives an error.
 func (client PathClient) LeaseSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // LeaseResponder handles the response to the Lease request. The method always
@@ -819,12 +825,13 @@ func (client PathClient) List(ctx context.Context, recursive bool, filesystem st
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}},
 		{TargetValue: xMsClientRequestID,
-			Constraints: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},
+			Constraints: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Empty, Rule: false,
+				Chain: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("storagedatalake.PathClient", "List", err.Error())
 	}
 
@@ -879,7 +886,7 @@ func (client PathClient) ListPreparer(ctx context.Context, recursive bool, files
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
-		autorest.WithCustomBaseURL("http://{accountName}.{dnsSuffix}", urlParameters),
+		autorest.WithCustomBaseURL("https://{accountName}.{dnsSuffix}", urlParameters),
 		autorest.WithPathParameters("/{filesystem}", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	if len(xMsClientRequestID) > 0 {
@@ -900,8 +907,7 @@ func (client PathClient) ListPreparer(ctx context.Context, recursive bool, files
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client PathClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -955,10 +961,11 @@ func (client PathClient) Read(ctx context.Context, filesystem string, pathParame
 			Constraints: []validation.Constraint{{Target: "filesystem", Name: validation.MaxLength, Rule: 63, Chain: nil},
 				{Target: "filesystem", Name: validation.MinLength, Rule: 3, Chain: nil}}},
 		{TargetValue: xMsClientRequestID,
-			Constraints: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},
+			Constraints: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Empty, Rule: false,
+				Chain: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("storagedatalake.PathClient", "Read", err.Error())
 	}
 
@@ -1002,7 +1009,7 @@ func (client PathClient) ReadPreparer(ctx context.Context, filesystem string, pa
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
-		autorest.WithCustomBaseURL("http://{accountName}.{dnsSuffix}", urlParameters),
+		autorest.WithCustomBaseURL("https://{accountName}.{dnsSuffix}", urlParameters),
 		autorest.WithPathParameters("/{filesystem}/{path}", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	if len(rangeParameter) > 0 {
@@ -1043,8 +1050,7 @@ func (client PathClient) ReadPreparer(ctx context.Context, filesystem string, pa
 // ReadSender sends the Read request. The method will close the
 // http.Response Body if it receives an error.
 func (client PathClient) ReadSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ReadResponder handles the response to the Read request. The method always
@@ -1160,15 +1166,17 @@ func (client PathClient) Update(ctx context.Context, action PathUpdateAction, fi
 	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: xMsLeaseID,
-			Constraints: []validation.Constraint{{Target: "xMsLeaseID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},
+			Constraints: []validation.Constraint{{Target: "xMsLeaseID", Name: validation.Empty, Rule: false,
+				Chain: []validation.Constraint{{Target: "xMsLeaseID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}}}},
 		{TargetValue: filesystem,
 			Constraints: []validation.Constraint{{Target: "filesystem", Name: validation.MaxLength, Rule: 63, Chain: nil},
 				{Target: "filesystem", Name: validation.MinLength, Rule: 3, Chain: nil}}},
 		{TargetValue: xMsClientRequestID,
-			Constraints: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}},
+			Constraints: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Empty, Rule: false,
+				Chain: []validation.Constraint{{Target: "xMsClientRequestID", Name: validation.Pattern, Rule: `^[{(]?[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}[)}]?$`, Chain: nil}}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("storagedatalake.PathClient", "Update", err.Error())
 	}
 
@@ -1221,7 +1229,7 @@ func (client PathClient) UpdatePreparer(ctx context.Context, action PathUpdateAc
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/octet-stream"),
 		autorest.AsPatch(),
-		autorest.WithCustomBaseURL("http://{accountName}.{dnsSuffix}", urlParameters),
+		autorest.WithCustomBaseURL("https://{accountName}.{dnsSuffix}", urlParameters),
 		autorest.WithPathParameters("/{filesystem}/{path}", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	if requestBody != nil {
@@ -1314,8 +1322,7 @@ func (client PathClient) UpdatePreparer(ctx context.Context, action PathUpdateAc
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client PathClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // UpdateResponder handles the response to the Update request. The method always

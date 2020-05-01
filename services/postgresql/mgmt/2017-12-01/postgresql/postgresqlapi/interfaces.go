@@ -29,10 +29,18 @@ type ServersClientAPI interface {
 	Get(ctx context.Context, resourceGroupName string, serverName string) (result postgresql.Server, err error)
 	List(ctx context.Context) (result postgresql.ServerListResult, err error)
 	ListByResourceGroup(ctx context.Context, resourceGroupName string) (result postgresql.ServerListResult, err error)
+	Restart(ctx context.Context, resourceGroupName string, serverName string) (result postgresql.ServersRestartFuture, err error)
 	Update(ctx context.Context, resourceGroupName string, serverName string, parameters postgresql.ServerUpdateParameters) (result postgresql.ServersUpdateFuture, err error)
 }
 
 var _ ServersClientAPI = (*postgresql.ServersClient)(nil)
+
+// ReplicasClientAPI contains the set of methods on the ReplicasClient type.
+type ReplicasClientAPI interface {
+	ListByServer(ctx context.Context, resourceGroupName string, serverName string) (result postgresql.ServerListResult, err error)
+}
+
+var _ ReplicasClientAPI = (*postgresql.ReplicasClient)(nil)
 
 // FirewallRulesClientAPI contains the set of methods on the FirewallRulesClient type.
 type FirewallRulesClientAPI interface {
@@ -50,6 +58,7 @@ type VirtualNetworkRulesClientAPI interface {
 	Delete(ctx context.Context, resourceGroupName string, serverName string, virtualNetworkRuleName string) (result postgresql.VirtualNetworkRulesDeleteFuture, err error)
 	Get(ctx context.Context, resourceGroupName string, serverName string, virtualNetworkRuleName string) (result postgresql.VirtualNetworkRule, err error)
 	ListByServer(ctx context.Context, resourceGroupName string, serverName string) (result postgresql.VirtualNetworkRuleListResultPage, err error)
+	ListByServerComplete(ctx context.Context, resourceGroupName string, serverName string) (result postgresql.VirtualNetworkRuleListResultIterator, err error)
 }
 
 var _ VirtualNetworkRulesClientAPI = (*postgresql.VirtualNetworkRulesClient)(nil)

@@ -33,14 +33,15 @@ type SoftwareUpdateConfigurationRunsClient struct {
 }
 
 // NewSoftwareUpdateConfigurationRunsClient creates an instance of the SoftwareUpdateConfigurationRunsClient client.
-func NewSoftwareUpdateConfigurationRunsClient(subscriptionID string, countType1 CountType) SoftwareUpdateConfigurationRunsClient {
-	return NewSoftwareUpdateConfigurationRunsClientWithBaseURI(DefaultBaseURI, subscriptionID, countType1)
+func NewSoftwareUpdateConfigurationRunsClient(subscriptionID string) SoftwareUpdateConfigurationRunsClient {
+	return NewSoftwareUpdateConfigurationRunsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
 // NewSoftwareUpdateConfigurationRunsClientWithBaseURI creates an instance of the SoftwareUpdateConfigurationRunsClient
-// client.
-func NewSoftwareUpdateConfigurationRunsClientWithBaseURI(baseURI string, subscriptionID string, countType1 CountType) SoftwareUpdateConfigurationRunsClient {
-	return SoftwareUpdateConfigurationRunsClient{NewWithBaseURI(baseURI, subscriptionID, countType1)}
+// client using a custom endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI
+// (sovereign clouds, Azure stack).
+func NewSoftwareUpdateConfigurationRunsClientWithBaseURI(baseURI string, subscriptionID string) SoftwareUpdateConfigurationRunsClient {
+	return SoftwareUpdateConfigurationRunsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
 // GetByID get a single software update configuration Run by Id.
@@ -118,8 +119,7 @@ func (client SoftwareUpdateConfigurationRunsClient) GetByIDPreparer(ctx context.
 // GetByIDSender sends the GetByID request. The method will close the
 // http.Response Body if it receives an error.
 func (client SoftwareUpdateConfigurationRunsClient) GetByIDSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetByIDResponder handles the response to the GetByID request. The method always
@@ -221,8 +221,7 @@ func (client SoftwareUpdateConfigurationRunsClient) ListPreparer(ctx context.Con
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client SoftwareUpdateConfigurationRunsClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always

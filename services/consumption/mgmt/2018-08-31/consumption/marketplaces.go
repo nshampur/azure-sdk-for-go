@@ -37,7 +37,8 @@ func NewMarketplacesClient(subscriptionID string) MarketplacesClient {
 	return NewMarketplacesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewMarketplacesClientWithBaseURI creates an instance of the MarketplacesClient client.
+// NewMarketplacesClientWithBaseURI creates an instance of the MarketplacesClient client using a custom endpoint.  Use
+// this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewMarketplacesClientWithBaseURI(baseURI string, subscriptionID string) MarketplacesClient {
 	return MarketplacesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -67,7 +68,7 @@ func (client MarketplacesClient) List(ctx context.Context, filter string, top *i
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("consumption.MarketplacesClient", "List", err.Error())
 	}
@@ -125,8 +126,7 @@ func (client MarketplacesClient) ListPreparer(ctx context.Context, filter string
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client MarketplacesClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -205,7 +205,7 @@ func (client MarketplacesClient) ListByBillingAccount(ctx context.Context, billi
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("consumption.MarketplacesClient", "ListByBillingAccount", err.Error())
 	}
@@ -263,8 +263,7 @@ func (client MarketplacesClient) ListByBillingAccountPreparer(ctx context.Contex
 // ListByBillingAccountSender sends the ListByBillingAccount request. The method will close the
 // http.Response Body if it receives an error.
 func (client MarketplacesClient) ListByBillingAccountSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListByBillingAccountResponder handles the response to the ListByBillingAccount request. The method always
@@ -343,7 +342,7 @@ func (client MarketplacesClient) ListByBillingPeriod(ctx context.Context, billin
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("consumption.MarketplacesClient", "ListByBillingPeriod", err.Error())
 	}
@@ -402,8 +401,7 @@ func (client MarketplacesClient) ListByBillingPeriodPreparer(ctx context.Context
 // ListByBillingPeriodSender sends the ListByBillingPeriod request. The method will close the
 // http.Response Body if it receives an error.
 func (client MarketplacesClient) ListByBillingPeriodSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByBillingPeriodResponder handles the response to the ListByBillingPeriod request. The method always
@@ -482,7 +480,7 @@ func (client MarketplacesClient) ListByDepartment(ctx context.Context, departmen
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("consumption.MarketplacesClient", "ListByDepartment", err.Error())
 	}
@@ -540,8 +538,7 @@ func (client MarketplacesClient) ListByDepartmentPreparer(ctx context.Context, d
 // ListByDepartmentSender sends the ListByDepartment request. The method will close the
 // http.Response Body if it receives an error.
 func (client MarketplacesClient) ListByDepartmentSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListByDepartmentResponder handles the response to the ListByDepartment request. The method always
@@ -620,7 +617,7 @@ func (client MarketplacesClient) ListByEnrollmentAccount(ctx context.Context, en
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("consumption.MarketplacesClient", "ListByEnrollmentAccount", err.Error())
 	}
@@ -678,8 +675,7 @@ func (client MarketplacesClient) ListByEnrollmentAccountPreparer(ctx context.Con
 // ListByEnrollmentAccountSender sends the ListByEnrollmentAccount request. The method will close the
 // http.Response Body if it receives an error.
 func (client MarketplacesClient) ListByEnrollmentAccountSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListByEnrollmentAccountResponder handles the response to the ListByEnrollmentAccount request. The method always
@@ -759,7 +755,7 @@ func (client MarketplacesClient) ListForBillingPeriodByBillingAccount(ctx contex
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("consumption.MarketplacesClient", "ListForBillingPeriodByBillingAccount", err.Error())
 	}
@@ -818,8 +814,7 @@ func (client MarketplacesClient) ListForBillingPeriodByBillingAccountPreparer(ct
 // ListForBillingPeriodByBillingAccountSender sends the ListForBillingPeriodByBillingAccount request. The method will close the
 // http.Response Body if it receives an error.
 func (client MarketplacesClient) ListForBillingPeriodByBillingAccountSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListForBillingPeriodByBillingAccountResponder handles the response to the ListForBillingPeriodByBillingAccount request. The method always
@@ -899,7 +894,7 @@ func (client MarketplacesClient) ListForBillingPeriodByDepartment(ctx context.Co
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("consumption.MarketplacesClient", "ListForBillingPeriodByDepartment", err.Error())
 	}
@@ -958,8 +953,7 @@ func (client MarketplacesClient) ListForBillingPeriodByDepartmentPreparer(ctx co
 // ListForBillingPeriodByDepartmentSender sends the ListForBillingPeriodByDepartment request. The method will close the
 // http.Response Body if it receives an error.
 func (client MarketplacesClient) ListForBillingPeriodByDepartmentSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListForBillingPeriodByDepartmentResponder handles the response to the ListForBillingPeriodByDepartment request. The method always
@@ -1039,7 +1033,7 @@ func (client MarketplacesClient) ListForBillingPeriodByEnrollmentAccount(ctx con
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("consumption.MarketplacesClient", "ListForBillingPeriodByEnrollmentAccount", err.Error())
 	}
@@ -1098,8 +1092,7 @@ func (client MarketplacesClient) ListForBillingPeriodByEnrollmentAccountPreparer
 // ListForBillingPeriodByEnrollmentAccountSender sends the ListForBillingPeriodByEnrollmentAccount request. The method will close the
 // http.Response Body if it receives an error.
 func (client MarketplacesClient) ListForBillingPeriodByEnrollmentAccountSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListForBillingPeriodByEnrollmentAccountResponder handles the response to the ListForBillingPeriodByEnrollmentAccount request. The method always

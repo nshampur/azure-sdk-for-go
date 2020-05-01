@@ -36,7 +36,8 @@ func NewUserIdentitiesClient(subscriptionID string) UserIdentitiesClient {
 	return NewUserIdentitiesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewUserIdentitiesClientWithBaseURI creates an instance of the UserIdentitiesClient client.
+// NewUserIdentitiesClientWithBaseURI creates an instance of the UserIdentitiesClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewUserIdentitiesClientWithBaseURI(baseURI string, subscriptionID string) UserIdentitiesClient {
 	return UserIdentitiesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -115,8 +116,8 @@ func (client UserIdentitiesClient) ListByUsersPreparer(ctx context.Context, reso
 // ListByUsersSender sends the ListByUsers request. The method will close the
 // http.Response Body if it receives an error.
 func (client UserIdentitiesClient) ListByUsersSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // ListByUsersResponder handles the response to the ListByUsers request. The method always

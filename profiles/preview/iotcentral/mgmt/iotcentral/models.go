@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2020 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,8 +32,11 @@ const (
 type AppSku = original.AppSku
 
 const (
-	F1 AppSku = original.F1
-	S1 AppSku = original.S1
+	F1  AppSku = original.F1
+	S1  AppSku = original.S1
+	ST0 AppSku = original.ST0
+	ST1 AppSku = original.ST1
+	ST2 AppSku = original.ST2
 )
 
 type App = original.App
@@ -44,13 +47,17 @@ type AppListResultPage = original.AppListResultPage
 type AppPatch = original.AppPatch
 type AppProperties = original.AppProperties
 type AppSkuInfo = original.AppSkuInfo
+type AppTemplate = original.AppTemplate
+type AppTemplatesResult = original.AppTemplatesResult
+type AppTemplatesResultIterator = original.AppTemplatesResultIterator
+type AppTemplatesResultPage = original.AppTemplatesResultPage
 type AppsClient = original.AppsClient
 type AppsCreateOrUpdateFuture = original.AppsCreateOrUpdateFuture
 type AppsDeleteFuture = original.AppsDeleteFuture
 type AppsUpdateFuture = original.AppsUpdateFuture
 type BaseClient = original.BaseClient
-type ErrorDetails = original.ErrorDetails
-type ErrorResponseBody = original.ErrorResponseBody
+type CloudError = original.CloudError
+type CloudErrorBody = original.CloudErrorBody
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
 type OperationInputs = original.OperationInputs
@@ -68,6 +75,12 @@ func NewAppListResultIterator(page AppListResultPage) AppListResultIterator {
 }
 func NewAppListResultPage(getNextPage func(context.Context, AppListResult) (AppListResult, error)) AppListResultPage {
 	return original.NewAppListResultPage(getNextPage)
+}
+func NewAppTemplatesResultIterator(page AppTemplatesResultPage) AppTemplatesResultIterator {
+	return original.NewAppTemplatesResultIterator(page)
+}
+func NewAppTemplatesResultPage(getNextPage func(context.Context, AppTemplatesResult) (AppTemplatesResult, error)) AppTemplatesResultPage {
+	return original.NewAppTemplatesResultPage(getNextPage)
 }
 func NewAppsClient(subscriptionID string) AppsClient {
 	return original.NewAppsClient(subscriptionID)

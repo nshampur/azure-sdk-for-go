@@ -36,7 +36,8 @@ func NewEnvironmentsClient(subscriptionID string) EnvironmentsClient {
 	return NewEnvironmentsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewEnvironmentsClientWithBaseURI creates an instance of the EnvironmentsClient client.
+// NewEnvironmentsClientWithBaseURI creates an instance of the EnvironmentsClient client using a custom endpoint.  Use
+// this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewEnvironmentsClientWithBaseURI(baseURI string, subscriptionID string) EnvironmentsClient {
 	return EnvironmentsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -66,7 +67,7 @@ func (client EnvironmentsClient) CreateOrUpdate(ctx context.Context, resourceGro
 			Constraints: []validation.Constraint{{Target: "parameters.Sku", Name: validation.Null, Rule: true,
 				Chain: []validation.Constraint{{Target: "parameters.Sku.Capacity", Name: validation.Null, Rule: true,
 					Chain: []validation.Constraint{{Target: "parameters.Sku.Capacity", Name: validation.InclusiveMaximum, Rule: int64(10), Chain: nil},
-						{Target: "parameters.Sku.Capacity", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+						{Target: "parameters.Sku.Capacity", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 					}},
 				}}}}}); err != nil {
 		return result, validation.NewError("timeseriesinsights.EnvironmentsClient", "CreateOrUpdate", err.Error())
@@ -114,8 +115,7 @@ func (client EnvironmentsClient) CreateOrUpdatePreparer(ctx context.Context, res
 // http.Response Body if it receives an error.
 func (client EnvironmentsClient) CreateOrUpdateSender(req *http.Request) (future EnvironmentsCreateOrUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -197,8 +197,7 @@ func (client EnvironmentsClient) DeletePreparer(ctx context.Context, resourceGro
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client EnvironmentsClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -279,8 +278,7 @@ func (client EnvironmentsClient) GetPreparer(ctx context.Context, resourceGroupN
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client EnvironmentsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -355,8 +353,7 @@ func (client EnvironmentsClient) ListByResourceGroupPreparer(ctx context.Context
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client EnvironmentsClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -427,8 +424,7 @@ func (client EnvironmentsClient) ListBySubscriptionPreparer(ctx context.Context)
 // ListBySubscriptionSender sends the ListBySubscription request. The method will close the
 // http.Response Body if it receives an error.
 func (client EnvironmentsClient) ListBySubscriptionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListBySubscriptionResponder handles the response to the ListBySubscription request. The method always
@@ -449,8 +445,9 @@ func (client EnvironmentsClient) ListBySubscriptionResponder(resp *http.Response
 // resourceGroupName - name of an Azure Resource group.
 // environmentName - the name of the Time Series Insights environment associated with the specified resource
 // group.
-// environmentUpdateParameters - request object that contains the updated information for the environment.
-func (client EnvironmentsClient) Update(ctx context.Context, resourceGroupName string, environmentName string, environmentUpdateParameters EnvironmentUpdateParameters) (result EnvironmentsUpdateFuture, err error) {
+// standardEnvironmentUpdateParameters - request object that contains the updated information for the
+// environment.
+func (client EnvironmentsClient) Update(ctx context.Context, resourceGroupName string, environmentName string, standardEnvironmentUpdateParameters StandardEnvironmentUpdateParameters) (result EnvironmentsUpdateFuture, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/EnvironmentsClient.Update")
 		defer func() {
@@ -461,7 +458,7 @@ func (client EnvironmentsClient) Update(ctx context.Context, resourceGroupName s
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	req, err := client.UpdatePreparer(ctx, resourceGroupName, environmentName, environmentUpdateParameters)
+	req, err := client.UpdatePreparer(ctx, resourceGroupName, environmentName, standardEnvironmentUpdateParameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "timeseriesinsights.EnvironmentsClient", "Update", nil, "Failure preparing request")
 		return
@@ -477,7 +474,7 @@ func (client EnvironmentsClient) Update(ctx context.Context, resourceGroupName s
 }
 
 // UpdatePreparer prepares the Update request.
-func (client EnvironmentsClient) UpdatePreparer(ctx context.Context, resourceGroupName string, environmentName string, environmentUpdateParameters EnvironmentUpdateParameters) (*http.Request, error) {
+func (client EnvironmentsClient) UpdatePreparer(ctx context.Context, resourceGroupName string, environmentName string, standardEnvironmentUpdateParameters StandardEnvironmentUpdateParameters) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"environmentName":   autorest.Encode("path", environmentName),
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
@@ -494,7 +491,7 @@ func (client EnvironmentsClient) UpdatePreparer(ctx context.Context, resourceGro
 		autorest.AsPatch(),
 		autorest.WithBaseURL(client.BaseURI),
 		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.TimeSeriesInsights/environments/{environmentName}", pathParameters),
-		autorest.WithJSON(environmentUpdateParameters),
+		autorest.WithJSON(standardEnvironmentUpdateParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
@@ -503,8 +500,7 @@ func (client EnvironmentsClient) UpdatePreparer(ctx context.Context, resourceGro
 // http.Response Body if it receives an error.
 func (client EnvironmentsClient) UpdateSender(req *http.Request) (future EnvironmentsUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}

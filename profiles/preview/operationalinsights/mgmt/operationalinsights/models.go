@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2020 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -43,6 +43,18 @@ const (
 	Desc SearchSortEnum = original.Desc
 )
 
+type SkuNameEnum = original.SkuNameEnum
+
+const (
+	CapacityReservation SkuNameEnum = original.CapacityReservation
+	Free                SkuNameEnum = original.Free
+	PerGB2018           SkuNameEnum = original.PerGB2018
+	PerNode             SkuNameEnum = original.PerNode
+	Premium             SkuNameEnum = original.Premium
+	Standalone          SkuNameEnum = original.Standalone
+	Standard            SkuNameEnum = original.Standard
+)
+
 type StorageInsightState = original.StorageInsightState
 
 const (
@@ -50,9 +62,11 @@ const (
 	OK    StorageInsightState = original.OK
 )
 
+type AvailableServiceTier = original.AvailableServiceTier
 type BaseClient = original.BaseClient
 type CoreSummary = original.CoreSummary
 type LinkTarget = original.LinkTarget
+type ListAvailableServiceTier = original.ListAvailableServiceTier
 type ListLinkTarget = original.ListLinkTarget
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
@@ -64,13 +78,9 @@ type SavedSearch = original.SavedSearch
 type SavedSearchProperties = original.SavedSearchProperties
 type SavedSearchesClient = original.SavedSearchesClient
 type SavedSearchesListResult = original.SavedSearchesListResult
-type SearchError = original.SearchError
 type SearchGetSchemaResponse = original.SearchGetSchemaResponse
-type SearchHighlight = original.SearchHighlight
 type SearchMetadata = original.SearchMetadata
 type SearchMetadataSchema = original.SearchMetadataSchema
-type SearchParameters = original.SearchParameters
-type SearchResultsResponse = original.SearchResultsResponse
 type SearchSchemaValue = original.SearchSchemaValue
 type SearchSort = original.SearchSort
 type SharedKeys = original.SharedKeys
@@ -88,7 +98,6 @@ type WorkspacePurgeBodyFilters = original.WorkspacePurgeBodyFilters
 type WorkspacePurgeResponse = original.WorkspacePurgeResponse
 type WorkspacePurgeStatusResponse = original.WorkspacePurgeStatusResponse
 type WorkspacesClient = original.WorkspacesClient
-type WorkspacesGetSearchResultsFuture = original.WorkspacesGetSearchResultsFuture
 
 func New(subscriptionID string, purgeID string) BaseClient {
 	return original.New(subscriptionID, purgeID)
@@ -131,6 +140,9 @@ func PossiblePurgeStateValues() []PurgeState {
 }
 func PossibleSearchSortEnumValues() []SearchSortEnum {
 	return original.PossibleSearchSortEnumValues()
+}
+func PossibleSkuNameEnumValues() []SkuNameEnum {
+	return original.PossibleSkuNameEnumValues()
 }
 func PossibleStorageInsightStateValues() []StorageInsightState {
 	return original.PossibleStorageInsightStateValues()

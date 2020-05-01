@@ -56,6 +56,11 @@ type BasicDependency struct {
 	ResourceName *string `json:"resourceName,omitempty"`
 }
 
+// CloudError an error response for a resource management request.
+type CloudError struct {
+	Error *ErrorResponse `json:"error,omitempty"`
+}
+
 // Dependency deployment dependency information.
 type Dependency struct {
 	// DependsOn - Gets the list of dependencies.
@@ -77,7 +82,7 @@ type Deployment struct {
 // DeploymentExtended deployment information.
 type DeploymentExtended struct {
 	autorest.Response `json:"-"`
-	// ID - Gets or sets the ID of the deployment.
+	// ID - READ-ONLY; Gets or sets the ID of the deployment.
 	ID *string `json:"id,omitempty"`
 	// Name - Gets or sets the name of the deployment.
 	Name *string `json:"name,omitempty"`
@@ -459,7 +464,7 @@ type DeploymentsCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *DeploymentsCreateOrUpdateFuture) Result(client DeploymentsClient) (de DeploymentExtended, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "resources.DeploymentsCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -488,7 +493,7 @@ type DeploymentsDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *DeploymentsDeleteFuture) Result(client DeploymentsClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "resources.DeploymentsDeleteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -510,6 +515,28 @@ type DeploymentValidateResult struct {
 	Properties *DeploymentPropertiesExtended `json:"properties,omitempty"`
 }
 
+// ErrorAdditionalInfo the resource management error additional info.
+type ErrorAdditionalInfo struct {
+	// Type - READ-ONLY; The additional info type.
+	Type *string `json:"type,omitempty"`
+	// Info - READ-ONLY; The additional info.
+	Info interface{} `json:"info,omitempty"`
+}
+
+// ErrorResponse the resource management error response.
+type ErrorResponse struct {
+	// Code - READ-ONLY; The error code.
+	Code *string `json:"code,omitempty"`
+	// Message - READ-ONLY; The error message.
+	Message *string `json:"message,omitempty"`
+	// Target - READ-ONLY; The error target.
+	Target *string `json:"target,omitempty"`
+	// Details - READ-ONLY; The error details.
+	Details *[]ErrorResponse `json:"details,omitempty"`
+	// AdditionalInfo - READ-ONLY; The error additional info.
+	AdditionalInfo *[]ErrorAdditionalInfo `json:"additionalInfo,omitempty"`
+}
+
 // GenericResource resource information.
 type GenericResource struct {
 	autorest.Response `json:"-"`
@@ -517,11 +544,11 @@ type GenericResource struct {
 	Plan *Plan `json:"plan,omitempty"`
 	// Properties - Gets or sets the resource properties.
 	Properties interface{} `json:"properties,omitempty"`
-	// ID - Resource Id
+	// ID - READ-ONLY; Resource Id
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name
+	// Name - READ-ONLY; Resource name
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type
+	// Type - READ-ONLY; Resource type
 	Type *string `json:"type,omitempty"`
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
@@ -538,20 +565,53 @@ func (gr GenericResource) MarshalJSON() ([]byte, error) {
 	if gr.Properties != nil {
 		objectMap["properties"] = gr.Properties
 	}
-	if gr.ID != nil {
-		objectMap["id"] = gr.ID
-	}
-	if gr.Name != nil {
-		objectMap["name"] = gr.Name
-	}
-	if gr.Type != nil {
-		objectMap["type"] = gr.Type
-	}
 	if gr.Location != nil {
 		objectMap["location"] = gr.Location
 	}
 	if gr.Tags != nil {
 		objectMap["tags"] = gr.Tags
+	}
+	return json.Marshal(objectMap)
+}
+
+// GenericResourceExpanded resource information.
+type GenericResourceExpanded struct {
+	// CreatedTime - READ-ONLY; The created time of the resource. This is only present if requested via the $expand query parameter.
+	CreatedTime *date.Time `json:"createdTime,omitempty"`
+	// ChangedTime - READ-ONLY; The changed time of the resource. This is only present if requested via the $expand query parameter.
+	ChangedTime *date.Time `json:"changedTime,omitempty"`
+	// ProvisioningState - READ-ONLY; The provisioning state of the resource. This is only present if requested via the $expand query parameter.
+	ProvisioningState *string `json:"provisioningState,omitempty"`
+	// Plan - Gets or sets the plan of the resource.
+	Plan *Plan `json:"plan,omitempty"`
+	// Properties - Gets or sets the resource properties.
+	Properties interface{} `json:"properties,omitempty"`
+	// ID - READ-ONLY; Resource Id
+	ID *string `json:"id,omitempty"`
+	// Name - READ-ONLY; Resource name
+	Name *string `json:"name,omitempty"`
+	// Type - READ-ONLY; Resource type
+	Type *string `json:"type,omitempty"`
+	// Location - Resource location
+	Location *string `json:"location,omitempty"`
+	// Tags - Resource tags
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for GenericResourceExpanded.
+func (gre GenericResourceExpanded) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if gre.Plan != nil {
+		objectMap["plan"] = gre.Plan
+	}
+	if gre.Properties != nil {
+		objectMap["properties"] = gre.Properties
+	}
+	if gre.Location != nil {
+		objectMap["location"] = gre.Location
+	}
+	if gre.Tags != nil {
+		objectMap["tags"] = gre.Tags
 	}
 	return json.Marshal(objectMap)
 }
@@ -569,7 +629,7 @@ type GenericResourceFilter struct {
 // Group resource group information.
 type Group struct {
 	autorest.Response `json:"-"`
-	// ID - Gets the ID of the resource group.
+	// ID - READ-ONLY; Gets the ID of the resource group.
 	ID *string `json:"id,omitempty"`
 	// Name - Gets or sets the Name of the resource group.
 	Name       *string          `json:"name,omitempty"`
@@ -583,9 +643,6 @@ type Group struct {
 // MarshalJSON is the custom marshaler for Group.
 func (g Group) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if g.ID != nil {
-		objectMap["id"] = g.ID
-	}
 	if g.Name != nil {
 		objectMap["name"] = g.Name
 	}
@@ -757,7 +814,7 @@ func NewGroupListResultPage(getNextPage func(context.Context, GroupListResult) (
 
 // GroupProperties the resource group properties.
 type GroupProperties struct {
-	// ProvisioningState - Gets resource group provisioning state.
+	// ProvisioningState - READ-ONLY; Gets resource group provisioning state.
 	ProvisioningState *string `json:"provisioningState,omitempty"`
 }
 
@@ -770,7 +827,7 @@ type GroupsDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *GroupsDeleteFuture) Result(client GroupsClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "resources.GroupsDeleteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -787,12 +844,12 @@ func (future *GroupsDeleteFuture) Result(client GroupsClient) (ar autorest.Respo
 type ListResult struct {
 	autorest.Response `json:"-"`
 	// Value - Gets or sets the list of resource groups.
-	Value *[]GenericResource `json:"value,omitempty"`
+	Value *[]GenericResourceExpanded `json:"value,omitempty"`
 	// NextLink - Gets or sets the URL to get the next set of results.
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// ListResultIterator provides access to a complete listing of GenericResource values.
+// ListResultIterator provides access to a complete listing of GenericResourceExpanded values.
 type ListResultIterator struct {
 	i    int
 	page ListResultPage
@@ -843,9 +900,9 @@ func (iter ListResultIterator) Response() ListResult {
 
 // Value returns the current value or a zero-initialized value if the
 // iterator has advanced beyond the end of the collection.
-func (iter ListResultIterator) Value() GenericResource {
+func (iter ListResultIterator) Value() GenericResourceExpanded {
 	if !iter.page.NotDone() {
-		return GenericResource{}
+		return GenericResourceExpanded{}
 	}
 	return iter.page.Values()[iter.i]
 }
@@ -872,7 +929,7 @@ func (lr ListResult) listResultPreparer(ctx context.Context) (*http.Request, err
 		autorest.WithBaseURL(to.String(lr.NextLink)))
 }
 
-// ListResultPage contains a page of GenericResource values.
+// ListResultPage contains a page of GenericResourceExpanded values.
 type ListResultPage struct {
 	fn func(context.Context, ListResult) (ListResult, error)
 	lr ListResult
@@ -917,7 +974,7 @@ func (page ListResultPage) Response() ListResult {
 }
 
 // Values returns the slice of values for the current page or nil if there are no values.
-func (page ListResultPage) Values() []GenericResource {
+func (page ListResultPage) Values() []GenericResourceExpanded {
 	if page.lr.IsEmpty() {
 		return nil
 	}
@@ -969,7 +1026,7 @@ type MoveResourcesFuture struct {
 // If the operation has not completed it will return an error.
 func (future *MoveResourcesFuture) Result(client Client) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "resources.MoveResourcesFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1007,7 +1064,7 @@ type PolicyAssignment struct {
 	autorest.Response `json:"-"`
 	// Properties - Gets or sets the policy assignment properties.
 	Properties *PolicyAssignmentProperties `json:"properties,omitempty"`
-	// Name - Gets or sets the policy assignment name.
+	// Name - READ-ONLY; Gets or sets the policy assignment name.
 	Name *string `json:"name,omitempty"`
 }
 
@@ -1546,11 +1603,11 @@ func (prt ProviderResourceType) MarshalJSON() ([]byte, error) {
 
 // Resource ...
 type Resource struct {
-	// ID - Resource Id
+	// ID - READ-ONLY; Resource Id
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name
+	// Name - READ-ONLY; Resource name
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type
+	// Type - READ-ONLY; Resource type
 	Type *string `json:"type,omitempty"`
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
@@ -1561,15 +1618,6 @@ type Resource struct {
 // MarshalJSON is the custom marshaler for Resource.
 func (r Resource) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if r.ID != nil {
-		objectMap["id"] = r.ID
-	}
-	if r.Name != nil {
-		objectMap["name"] = r.Name
-	}
-	if r.Type != nil {
-		objectMap["type"] = r.Type
-	}
 	if r.Location != nil {
 		objectMap["location"] = r.Location
 	}
@@ -1596,7 +1644,7 @@ type TagCount struct {
 // TagDetails tag details.
 type TagDetails struct {
 	autorest.Response `json:"-"`
-	// ID - Gets or sets the tag ID.
+	// ID - READ-ONLY; Gets or sets the tag ID.
 	ID *string `json:"id,omitempty"`
 	// TagName - Gets or sets the tag name.
 	TagName *string `json:"tagName,omitempty"`
@@ -1755,7 +1803,7 @@ func NewTagsListResultPage(getNextPage func(context.Context, TagsListResult) (Ta
 // TagValue tag information.
 type TagValue struct {
 	autorest.Response `json:"-"`
-	// ID - Gets or sets the tag ID.
+	// ID - READ-ONLY; Gets or sets the tag ID.
 	ID *string `json:"id,omitempty"`
 	// TagValue - Gets or sets the tag value.
 	TagValue *string `json:"tagValue,omitempty"`
@@ -1771,6 +1819,16 @@ type TargetResource struct {
 	ResourceName *string `json:"resourceName,omitempty"`
 	// ResourceType - Gets or sets the type of the resource.
 	ResourceType *string `json:"resourceType,omitempty"`
+}
+
+// TemplateHashResult result of the request to calculate template hash. It contains a string of minified
+// template and its hash.
+type TemplateHashResult struct {
+	autorest.Response `json:"-"`
+	// MinifiedTemplate - The minified template string.
+	MinifiedTemplate *string `json:"minifiedTemplate,omitempty"`
+	// TemplateHash - The template hash.
+	TemplateHash *string `json:"templateHash,omitempty"`
 }
 
 // TemplateLink entity representing the reference to the template.
@@ -1790,7 +1848,7 @@ type UpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *UpdateFuture) Result(client Client) (gr GenericResource, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "resources.UpdateFuture", "Result", future.Response(), "Polling failure")
 		return

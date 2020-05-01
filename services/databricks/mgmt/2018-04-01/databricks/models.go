@@ -31,6 +31,23 @@ import (
 // The package's fully qualified name.
 const fqdn = "github.com/Azure/azure-sdk-for-go/services/databricks/mgmt/2018-04-01/databricks"
 
+// CustomParameterType enumerates the values for custom parameter type.
+type CustomParameterType string
+
+const (
+	// Bool ...
+	Bool CustomParameterType = "Bool"
+	// Object ...
+	Object CustomParameterType = "Object"
+	// String ...
+	String CustomParameterType = "String"
+)
+
+// PossibleCustomParameterTypeValues returns an array of possible values for the CustomParameterType const type.
+func PossibleCustomParameterTypeValues() []CustomParameterType {
+	return []CustomParameterType{Bool, Object, String}
+}
+
 // ProvisioningState enumerates the values for provisioning state.
 type ProvisioningState string
 
@@ -259,11 +276,11 @@ func NewOperationListResultPage(getNextPage func(context.Context, OperationListR
 
 // Resource the core properties of ARM resources
 type Resource struct {
-	// ID - Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
+	// ID - READ-ONLY; Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource
+	// Name - READ-ONLY; The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
+	// Type - READ-ONLY; The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -281,11 +298,11 @@ type TrackedResource struct {
 	Tags map[string]*string `json:"tags"`
 	// Location - The geo-location where the resource lives
 	Location *string `json:"location,omitempty"`
-	// ID - Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
+	// ID - READ-ONLY; Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource
+	// Name - READ-ONLY; The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
+	// Type - READ-ONLY; The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -297,15 +314,6 @@ func (tr TrackedResource) MarshalJSON() ([]byte, error) {
 	}
 	if tr.Location != nil {
 		objectMap["location"] = tr.Location
-	}
-	if tr.ID != nil {
-		objectMap["id"] = tr.ID
-	}
-	if tr.Name != nil {
-		objectMap["name"] = tr.Name
-	}
-	if tr.Type != nil {
-		objectMap["type"] = tr.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -321,11 +329,11 @@ type Workspace struct {
 	Tags map[string]*string `json:"tags"`
 	// Location - The geo-location where the resource lives
 	Location *string `json:"location,omitempty"`
-	// ID - Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
+	// ID - READ-ONLY; Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource
+	// Name - READ-ONLY; The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
+	// Type - READ-ONLY; The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -343,15 +351,6 @@ func (w Workspace) MarshalJSON() ([]byte, error) {
 	}
 	if w.Location != nil {
 		objectMap["location"] = w.Location
-	}
-	if w.ID != nil {
-		objectMap["id"] = w.ID
-	}
-	if w.Name != nil {
-		objectMap["name"] = w.Name
-	}
-	if w.Type != nil {
-		objectMap["type"] = w.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -432,6 +431,58 @@ func (w *Workspace) UnmarshalJSON(body []byte) error {
 	}
 
 	return nil
+}
+
+// WorkspaceCustomBooleanParameter the value which should be used for this field.
+type WorkspaceCustomBooleanParameter struct {
+	// Type - The type of variable that this is. Possible values include: 'Bool', 'Object', 'String'
+	Type CustomParameterType `json:"type,omitempty"`
+	// Value - The value which should be used for this field.
+	Value *bool `json:"value,omitempty"`
+}
+
+// WorkspaceCustomObjectParameter the value which should be used for this field.
+type WorkspaceCustomObjectParameter struct {
+	// Type - The type of variable that this is. Possible values include: 'Bool', 'Object', 'String'
+	Type CustomParameterType `json:"type,omitempty"`
+	// Value - The value which should be used for this field.
+	Value interface{} `json:"value,omitempty"`
+}
+
+// WorkspaceCustomParameters custom Parameters used for Cluster Creation.
+type WorkspaceCustomParameters struct {
+	// AmlWorkspaceID - The Workspace ID of an Azure Machine Learning Workspace
+	AmlWorkspaceID *WorkspaceCustomStringParameter `json:"amlWorkspaceId,omitempty"`
+	// CustomVirtualNetworkID - The ID of a Virtual Network where this Databricks Cluster should be created
+	CustomVirtualNetworkID *WorkspaceCustomStringParameter `json:"customVirtualNetworkId,omitempty"`
+	// CustomPublicSubnetName - The name of a Public Subnet within the Virtual Network
+	CustomPublicSubnetName *WorkspaceCustomStringParameter `json:"customPublicSubnetName,omitempty"`
+	// CustomPrivateSubnetName - The name of the Private Subnet within the Virtual Network
+	CustomPrivateSubnetName *WorkspaceCustomStringParameter `json:"customPrivateSubnetName,omitempty"`
+	// EnableNoPublicIP - Should the Public IP be Disabled?
+	EnableNoPublicIP *WorkspaceCustomBooleanParameter `json:"enableNoPublicIp,omitempty"`
+	// LoadBalancerBackendPoolName - The name of a Backend Address Pool within an Azure Load Balancer
+	LoadBalancerBackendPoolName *WorkspaceCustomStringParameter `json:"loadBalancerBackendPoolName,omitempty"`
+	// LoadBalancerID - The Resource ID of an Azure Load Balancer
+	LoadBalancerID *WorkspaceCustomStringParameter `json:"loadBalancerId,omitempty"`
+	// RelayNamespaceName - The name of an Azure Relay Namespace
+	RelayNamespaceName *WorkspaceCustomStringParameter `json:"relayNamespaceName,omitempty"`
+	// StorageAccountName - The name which should be used for the Storage Account
+	StorageAccountName *WorkspaceCustomStringParameter `json:"storageAccountName,omitempty"`
+	// StorageAccountSkuName - The SKU which should be used for this Storage Account
+	StorageAccountSkuName *WorkspaceCustomStringParameter `json:"storageAccountSkuName,omitempty"`
+	// ResourceTags - A map of Tags which should be applied to the resources used by this Databricks Cluster.
+	ResourceTags *WorkspaceCustomObjectParameter `json:"resourceTags,omitempty"`
+	// VnetAddressPrefix - The first 2 octets of the virtual network /16 address range (e.g., '10.139' for the address range 10.139.0.0/16).
+	VnetAddressPrefix *WorkspaceCustomStringParameter `json:"vnetAddressPrefix,omitempty"`
+}
+
+// WorkspaceCustomStringParameter the Value.
+type WorkspaceCustomStringParameter struct {
+	// Type - The type of variable that this is. Possible values include: 'Bool', 'Object', 'String'
+	Type CustomParameterType `json:"type,omitempty"`
+	// Value - The value which should be used for this field.
+	Value *string `json:"value,omitempty"`
 }
 
 // WorkspaceListResult list of workspaces.
@@ -584,9 +635,9 @@ func NewWorkspaceListResultPage(getNextPage func(context.Context, WorkspaceListR
 type WorkspaceProperties struct {
 	// ManagedResourceGroupID - The managed resource group Id.
 	ManagedResourceGroupID *string `json:"managedResourceGroupId,omitempty"`
-	// Parameters - Name and value pairs that define the workspace parameters.
-	Parameters interface{} `json:"parameters,omitempty"`
-	// ProvisioningState - The workspace provisioning state. Possible values include: 'Accepted', 'Running', 'Ready', 'Creating', 'Created', 'Deleting', 'Deleted', 'Canceled', 'Failed', 'Succeeded', 'Updating'
+	// Parameters - The workspace's custom parameters.
+	Parameters *WorkspaceCustomParameters `json:"parameters,omitempty"`
+	// ProvisioningState - READ-ONLY; The workspace provisioning state. Possible values include: 'Accepted', 'Running', 'Ready', 'Creating', 'Created', 'Deleting', 'Deleted', 'Canceled', 'Failed', 'Succeeded', 'Updating'
 	ProvisioningState ProvisioningState `json:"provisioningState,omitempty"`
 	// UIDefinitionURI - The blob URI where the UI definition file is located.
 	UIDefinitionURI *string `json:"uiDefinitionUri,omitempty"`
@@ -612,7 +663,7 @@ type WorkspacesCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *WorkspacesCreateOrUpdateFuture) Result(client WorkspacesClient) (w Workspace, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "databricks.WorkspacesCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -641,7 +692,7 @@ type WorkspacesDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *WorkspacesDeleteFuture) Result(client WorkspacesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "databricks.WorkspacesDeleteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -664,7 +715,7 @@ type WorkspacesUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *WorkspacesUpdateFuture) Result(client WorkspacesClient) (w Workspace, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "databricks.WorkspacesUpdateFuture", "Result", future.Response(), "Polling failure")
 		return

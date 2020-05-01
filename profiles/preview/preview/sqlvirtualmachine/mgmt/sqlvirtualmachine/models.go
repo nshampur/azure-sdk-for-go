@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2020 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -106,10 +106,19 @@ const (
 	Web        SQLImageSku = original.Web
 )
 
+type SQLManagementMode = original.SQLManagementMode
+
+const (
+	Full        SQLManagementMode = original.Full
+	LightWeight SQLManagementMode = original.LightWeight
+	NoAgent     SQLManagementMode = original.NoAgent
+)
+
 type SQLServerLicenseType = original.SQLServerLicenseType
 
 const (
 	AHUB SQLServerLicenseType = original.AHUB
+	DR   SQLServerLicenseType = original.DR
 	PAYG SQLServerLicenseType = original.PAYG
 )
 
@@ -132,6 +141,14 @@ type ScaleType = original.ScaleType
 
 const (
 	HA ScaleType = original.HA
+)
+
+type StorageWorkloadType = original.StorageWorkloadType
+
+const (
+	StorageWorkloadTypeDW      StorageWorkloadType = original.StorageWorkloadTypeDW
+	StorageWorkloadTypeGENERAL StorageWorkloadType = original.StorageWorkloadTypeGENERAL
+	StorageWorkloadTypeOLTP    StorageWorkloadType = original.StorageWorkloadTypeOLTP
 )
 
 type AdditionalFeaturesServerConfigurations = original.AdditionalFeaturesServerConfigurations
@@ -173,6 +190,7 @@ type ProxyResource = original.ProxyResource
 type Resource = original.Resource
 type ResourceIdentity = original.ResourceIdentity
 type SQLConnectivityUpdateSettings = original.SQLConnectivityUpdateSettings
+type SQLStorageSettings = original.SQLStorageSettings
 type SQLStorageUpdateSettings = original.SQLStorageUpdateSettings
 type SQLVirtualMachine = original.SQLVirtualMachine
 type SQLVirtualMachinesClient = original.SQLVirtualMachinesClient
@@ -181,6 +199,7 @@ type SQLVirtualMachinesDeleteFutureType = original.SQLVirtualMachinesDeleteFutur
 type SQLVirtualMachinesUpdateFutureType = original.SQLVirtualMachinesUpdateFutureType
 type SQLWorkloadTypeUpdateSettings = original.SQLWorkloadTypeUpdateSettings
 type ServerConfigurationsManagementSettings = original.ServerConfigurationsManagementSettings
+type StorageConfigurationSettings = original.StorageConfigurationSettings
 type TrackedResource = original.TrackedResource
 type Update = original.Update
 type WsfcDomainCredentials = original.WsfcDomainCredentials
@@ -270,6 +289,9 @@ func PossibleOperationOriginValues() []OperationOrigin {
 func PossibleSQLImageSkuValues() []SQLImageSku {
 	return original.PossibleSQLImageSkuValues()
 }
+func PossibleSQLManagementModeValues() []SQLManagementMode {
+	return original.PossibleSQLManagementModeValues()
+}
 func PossibleSQLServerLicenseTypeValues() []SQLServerLicenseType {
 	return original.PossibleSQLServerLicenseTypeValues()
 }
@@ -281,6 +303,9 @@ func PossibleSQLWorkloadTypeValues() []SQLWorkloadType {
 }
 func PossibleScaleTypeValues() []ScaleType {
 	return original.PossibleScaleTypeValues()
+}
+func PossibleStorageWorkloadTypeValues() []StorageWorkloadType {
+	return original.PossibleStorageWorkloadTypeValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

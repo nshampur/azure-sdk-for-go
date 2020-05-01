@@ -26,6 +26,7 @@ import (
 // OperationsClientAPI contains the set of methods on the OperationsClient type.
 type OperationsClientAPI interface {
 	List(ctx context.Context) (result datafactory.OperationListResponsePage, err error)
+	ListComplete(ctx context.Context) (result datafactory.OperationListResponseIterator, err error)
 }
 
 var _ OperationsClientAPI = (*datafactory.OperationsClient)(nil)
@@ -39,11 +40,21 @@ type FactoriesClientAPI interface {
 	GetDataPlaneAccess(ctx context.Context, resourceGroupName string, factoryName string, policy datafactory.UserAccessPolicy) (result datafactory.AccessPolicyResponse, err error)
 	GetGitHubAccessToken(ctx context.Context, resourceGroupName string, factoryName string, gitHubAccessTokenRequest datafactory.GitHubAccessTokenRequest) (result datafactory.GitHubAccessTokenResponse, err error)
 	List(ctx context.Context) (result datafactory.FactoryListResponsePage, err error)
+	ListComplete(ctx context.Context) (result datafactory.FactoryListResponseIterator, err error)
 	ListByResourceGroup(ctx context.Context, resourceGroupName string) (result datafactory.FactoryListResponsePage, err error)
+	ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result datafactory.FactoryListResponseIterator, err error)
 	Update(ctx context.Context, resourceGroupName string, factoryName string, factoryUpdateParameters datafactory.FactoryUpdateParameters) (result datafactory.Factory, err error)
 }
 
 var _ FactoriesClientAPI = (*datafactory.FactoriesClient)(nil)
+
+// ExposureControlClientAPI contains the set of methods on the ExposureControlClient type.
+type ExposureControlClientAPI interface {
+	GetFeatureValue(ctx context.Context, locationID string, exposureControlRequest datafactory.ExposureControlRequest) (result datafactory.ExposureControlResponse, err error)
+	GetFeatureValueByFactory(ctx context.Context, resourceGroupName string, factoryName string, exposureControlRequest datafactory.ExposureControlRequest) (result datafactory.ExposureControlResponse, err error)
+}
+
+var _ ExposureControlClientAPI = (*datafactory.ExposureControlClient)(nil)
 
 // IntegrationRuntimesClientAPI contains the set of methods on the IntegrationRuntimesClient type.
 type IntegrationRuntimesClientAPI interface {
@@ -56,6 +67,7 @@ type IntegrationRuntimesClientAPI interface {
 	GetStatus(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (result datafactory.IntegrationRuntimeStatusResponse, err error)
 	ListAuthKeys(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (result datafactory.IntegrationRuntimeAuthKeys, err error)
 	ListByFactory(ctx context.Context, resourceGroupName string, factoryName string) (result datafactory.IntegrationRuntimeListResponsePage, err error)
+	ListByFactoryComplete(ctx context.Context, resourceGroupName string, factoryName string) (result datafactory.IntegrationRuntimeListResponseIterator, err error)
 	RegenerateAuthKey(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, regenerateKeyParameters datafactory.IntegrationRuntimeRegenerateKeyParameters) (result datafactory.IntegrationRuntimeAuthKeys, err error)
 	RemoveLinks(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, linkedIntegrationRuntimeRequest datafactory.LinkedIntegrationRuntimeRequest) (result autorest.Response, err error)
 	Start(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string) (result datafactory.IntegrationRuntimesStartFuture, err error)
@@ -91,6 +103,7 @@ type LinkedServicesClientAPI interface {
 	Delete(ctx context.Context, resourceGroupName string, factoryName string, linkedServiceName string) (result autorest.Response, err error)
 	Get(ctx context.Context, resourceGroupName string, factoryName string, linkedServiceName string, ifNoneMatch string) (result datafactory.LinkedServiceResource, err error)
 	ListByFactory(ctx context.Context, resourceGroupName string, factoryName string) (result datafactory.LinkedServiceListResponsePage, err error)
+	ListByFactoryComplete(ctx context.Context, resourceGroupName string, factoryName string) (result datafactory.LinkedServiceListResponseIterator, err error)
 }
 
 var _ LinkedServicesClientAPI = (*datafactory.LinkedServicesClient)(nil)
@@ -101,6 +114,7 @@ type DatasetsClientAPI interface {
 	Delete(ctx context.Context, resourceGroupName string, factoryName string, datasetName string) (result autorest.Response, err error)
 	Get(ctx context.Context, resourceGroupName string, factoryName string, datasetName string, ifNoneMatch string) (result datafactory.DatasetResource, err error)
 	ListByFactory(ctx context.Context, resourceGroupName string, factoryName string) (result datafactory.DatasetListResponsePage, err error)
+	ListByFactoryComplete(ctx context.Context, resourceGroupName string, factoryName string) (result datafactory.DatasetListResponseIterator, err error)
 }
 
 var _ DatasetsClientAPI = (*datafactory.DatasetsClient)(nil)
@@ -108,10 +122,11 @@ var _ DatasetsClientAPI = (*datafactory.DatasetsClient)(nil)
 // PipelinesClientAPI contains the set of methods on the PipelinesClient type.
 type PipelinesClientAPI interface {
 	CreateOrUpdate(ctx context.Context, resourceGroupName string, factoryName string, pipelineName string, pipeline datafactory.PipelineResource, ifMatch string) (result datafactory.PipelineResource, err error)
-	CreateRun(ctx context.Context, resourceGroupName string, factoryName string, pipelineName string, referencePipelineRunID string, parameters map[string]interface{}) (result datafactory.CreateRunResponse, err error)
+	CreateRun(ctx context.Context, resourceGroupName string, factoryName string, pipelineName string, referencePipelineRunID string, isRecovery *bool, startActivityName string, startFromFailure *bool, parameters map[string]interface{}) (result datafactory.CreateRunResponse, err error)
 	Delete(ctx context.Context, resourceGroupName string, factoryName string, pipelineName string) (result autorest.Response, err error)
 	Get(ctx context.Context, resourceGroupName string, factoryName string, pipelineName string, ifNoneMatch string) (result datafactory.PipelineResource, err error)
 	ListByFactory(ctx context.Context, resourceGroupName string, factoryName string) (result datafactory.PipelineListResponsePage, err error)
+	ListByFactoryComplete(ctx context.Context, resourceGroupName string, factoryName string) (result datafactory.PipelineListResponseIterator, err error)
 }
 
 var _ PipelinesClientAPI = (*datafactory.PipelinesClient)(nil)
@@ -137,27 +152,45 @@ type TriggersClientAPI interface {
 	CreateOrUpdate(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, trigger datafactory.TriggerResource, ifMatch string) (result datafactory.TriggerResource, err error)
 	Delete(ctx context.Context, resourceGroupName string, factoryName string, triggerName string) (result autorest.Response, err error)
 	Get(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, ifNoneMatch string) (result datafactory.TriggerResource, err error)
+	GetEventSubscriptionStatus(ctx context.Context, resourceGroupName string, factoryName string, triggerName string) (result datafactory.TriggerSubscriptionOperationStatus, err error)
 	ListByFactory(ctx context.Context, resourceGroupName string, factoryName string) (result datafactory.TriggerListResponsePage, err error)
+	ListByFactoryComplete(ctx context.Context, resourceGroupName string, factoryName string) (result datafactory.TriggerListResponseIterator, err error)
+	QueryByFactory(ctx context.Context, resourceGroupName string, factoryName string, filterParameters datafactory.TriggerFilterParameters) (result datafactory.TriggerQueryResponse, err error)
 	Start(ctx context.Context, resourceGroupName string, factoryName string, triggerName string) (result datafactory.TriggersStartFuture, err error)
 	Stop(ctx context.Context, resourceGroupName string, factoryName string, triggerName string) (result datafactory.TriggersStopFuture, err error)
+	SubscribeToEvents(ctx context.Context, resourceGroupName string, factoryName string, triggerName string) (result datafactory.TriggersSubscribeToEventsFuture, err error)
+	UnsubscribeFromEvents(ctx context.Context, resourceGroupName string, factoryName string, triggerName string) (result datafactory.TriggersUnsubscribeFromEventsFuture, err error)
 }
 
 var _ TriggersClientAPI = (*datafactory.TriggersClient)(nil)
 
-// RerunTriggersClientAPI contains the set of methods on the RerunTriggersClient type.
-type RerunTriggersClientAPI interface {
-	Cancel(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, rerunTriggerName string) (result datafactory.RerunTriggersCancelFuture, err error)
-	Create(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, rerunTriggerName string, rerunTumblingWindowTriggerActionParameters datafactory.RerunTumblingWindowTriggerActionParameters) (result datafactory.TriggerResource, err error)
-	ListByTrigger(ctx context.Context, resourceGroupName string, factoryName string, triggerName string) (result datafactory.RerunTriggerListResponsePage, err error)
-	Start(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, rerunTriggerName string) (result datafactory.RerunTriggersStartFuture, err error)
-	Stop(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, rerunTriggerName string) (result datafactory.RerunTriggersStopFuture, err error)
-}
-
-var _ RerunTriggersClientAPI = (*datafactory.RerunTriggersClient)(nil)
-
 // TriggerRunsClientAPI contains the set of methods on the TriggerRunsClient type.
 type TriggerRunsClientAPI interface {
 	QueryByFactory(ctx context.Context, resourceGroupName string, factoryName string, filterParameters datafactory.RunFilterParameters) (result datafactory.TriggerRunsQueryResponse, err error)
+	Rerun(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, runID string) (result autorest.Response, err error)
 }
 
 var _ TriggerRunsClientAPI = (*datafactory.TriggerRunsClient)(nil)
+
+// DataFlowsClientAPI contains the set of methods on the DataFlowsClient type.
+type DataFlowsClientAPI interface {
+	CreateOrUpdate(ctx context.Context, resourceGroupName string, factoryName string, dataFlowName string, dataFlow datafactory.DataFlowResource, ifMatch string) (result datafactory.DataFlowResource, err error)
+	Delete(ctx context.Context, resourceGroupName string, factoryName string, dataFlowName string) (result autorest.Response, err error)
+	Get(ctx context.Context, resourceGroupName string, factoryName string, dataFlowName string, ifNoneMatch string) (result datafactory.DataFlowResource, err error)
+	ListByFactory(ctx context.Context, resourceGroupName string, factoryName string) (result datafactory.DataFlowListResponsePage, err error)
+	ListByFactoryComplete(ctx context.Context, resourceGroupName string, factoryName string) (result datafactory.DataFlowListResponseIterator, err error)
+}
+
+var _ DataFlowsClientAPI = (*datafactory.DataFlowsClient)(nil)
+
+// DataFlowDebugSessionClientAPI contains the set of methods on the DataFlowDebugSessionClient type.
+type DataFlowDebugSessionClientAPI interface {
+	AddDataFlow(ctx context.Context, resourceGroupName string, factoryName string, request datafactory.DataFlowDebugPackage) (result datafactory.AddDataFlowToDebugSessionResponse, err error)
+	Create(ctx context.Context, resourceGroupName string, factoryName string, request datafactory.CreateDataFlowDebugSessionRequest) (result datafactory.DataFlowDebugSessionCreateFuture, err error)
+	Delete(ctx context.Context, resourceGroupName string, factoryName string, request datafactory.DeleteDataFlowDebugSessionRequest) (result autorest.Response, err error)
+	ExecuteCommand(ctx context.Context, resourceGroupName string, factoryName string, request datafactory.DataFlowDebugCommandRequest) (result datafactory.DataFlowDebugSessionExecuteCommandFuture, err error)
+	QueryByFactory(ctx context.Context, resourceGroupName string, factoryName string) (result datafactory.QueryDataFlowDebugSessionsResponsePage, err error)
+	QueryByFactoryComplete(ctx context.Context, resourceGroupName string, factoryName string) (result datafactory.QueryDataFlowDebugSessionsResponseIterator, err error)
+}
+
+var _ DataFlowDebugSessionClientAPI = (*datafactory.DataFlowDebugSessionClient)(nil)

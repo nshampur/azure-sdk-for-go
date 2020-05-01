@@ -25,8 +25,7 @@ import (
 	"net/http"
 )
 
-// EdgeNodesClient is the use these APIs to manage Azure CDN resources through the Azure Resource Manager. You must
-// make sure that requests made to these resources are secure.
+// EdgeNodesClient is the cdn Management Client
 type EdgeNodesClient struct {
 	BaseClient
 }
@@ -36,7 +35,8 @@ func NewEdgeNodesClient(subscriptionID string) EdgeNodesClient {
 	return NewEdgeNodesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewEdgeNodesClientWithBaseURI creates an instance of the EdgeNodesClient client.
+// NewEdgeNodesClientWithBaseURI creates an instance of the EdgeNodesClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewEdgeNodesClientWithBaseURI(baseURI string, subscriptionID string) EdgeNodesClient {
 	return EdgeNodesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -93,8 +93,7 @@ func (client EdgeNodesClient) ListPreparer(ctx context.Context) (*http.Request, 
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client EdgeNodesClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListResponder handles the response to the List request. The method always

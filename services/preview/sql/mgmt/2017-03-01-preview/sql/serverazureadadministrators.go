@@ -38,7 +38,9 @@ func NewServerAzureADAdministratorsClient(subscriptionID string) ServerAzureADAd
 	return NewServerAzureADAdministratorsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewServerAzureADAdministratorsClientWithBaseURI creates an instance of the ServerAzureADAdministratorsClient client.
+// NewServerAzureADAdministratorsClientWithBaseURI creates an instance of the ServerAzureADAdministratorsClient client
+// using a custom endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign
+// clouds, Azure stack).
 func NewServerAzureADAdministratorsClientWithBaseURI(baseURI string, subscriptionID string) ServerAzureADAdministratorsClient {
 	return ServerAzureADAdministratorsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -115,8 +117,7 @@ func (client ServerAzureADAdministratorsClient) CreateOrUpdatePreparer(ctx conte
 // http.Response Body if it receives an error.
 func (client ServerAzureADAdministratorsClient) CreateOrUpdateSender(req *http.Request) (future ServerAzureADAdministratorsCreateOrUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -194,8 +195,7 @@ func (client ServerAzureADAdministratorsClient) DeletePreparer(ctx context.Conte
 // http.Response Body if it receives an error.
 func (client ServerAzureADAdministratorsClient) DeleteSender(req *http.Request) (future ServerAzureADAdministratorsDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -278,8 +278,7 @@ func (client ServerAzureADAdministratorsClient) GetPreparer(ctx context.Context,
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServerAzureADAdministratorsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -356,8 +355,7 @@ func (client ServerAzureADAdministratorsClient) ListByServerPreparer(ctx context
 // ListByServerSender sends the ListByServer request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServerAzureADAdministratorsClient) ListByServerSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByServerResponder handles the response to the ListByServer request. The method always

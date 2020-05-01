@@ -36,7 +36,9 @@ func NewTenantConfigurationClient(subscriptionID string) TenantConfigurationClie
 	return NewTenantConfigurationClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewTenantConfigurationClientWithBaseURI creates an instance of the TenantConfigurationClient client.
+// NewTenantConfigurationClientWithBaseURI creates an instance of the TenantConfigurationClient client using a custom
+// endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure
+// stack).
 func NewTenantConfigurationClientWithBaseURI(baseURI string, subscriptionID string) TenantConfigurationClient {
 	return TenantConfigurationClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -110,9 +112,9 @@ func (client TenantConfigurationClient) DeployPreparer(ctx context.Context, reso
 // DeploySender sends the Deploy request. The method will close the
 // http.Response Body if it receives an error.
 func (client TenantConfigurationClient) DeploySender(req *http.Request) (future TenantConfigurationDeployFuture, err error) {
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = autorest.SendWithSender(client, req, sd...)
 	if err != nil {
 		return
 	}
@@ -203,8 +205,8 @@ func (client TenantConfigurationClient) GetSyncStatePreparer(ctx context.Context
 // GetSyncStateSender sends the GetSyncState request. The method will close the
 // http.Response Body if it receives an error.
 func (client TenantConfigurationClient) GetSyncStateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // GetSyncStateResponder handles the response to the GetSyncState request. The method always
@@ -289,9 +291,9 @@ func (client TenantConfigurationClient) SavePreparer(ctx context.Context, resour
 // SaveSender sends the Save request. The method will close the
 // http.Response Body if it receives an error.
 func (client TenantConfigurationClient) SaveSender(req *http.Request) (future TenantConfigurationSaveFuture, err error) {
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = autorest.SendWithSender(client, req, sd...)
 	if err != nil {
 		return
 	}
@@ -381,9 +383,9 @@ func (client TenantConfigurationClient) ValidatePreparer(ctx context.Context, re
 // ValidateSender sends the Validate request. The method will close the
 // http.Response Body if it receives an error.
 func (client TenantConfigurationClient) ValidateSender(req *http.Request) (future TenantConfigurationValidateFuture, err error) {
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = autorest.SendWithSender(client, req, sd...)
 	if err != nil {
 		return
 	}

@@ -26,9 +26,7 @@ import (
 	"net/http"
 )
 
-// NameAvailabilityClient is the use these APIs to manage Azure CDN resources through the Azure Resource Manager. You
-// must make sure that requests made to these resources are secure. For more information, see
-// https://msdn.microsoft.com/en-us/library/azure/dn790557.aspx.
+// NameAvailabilityClient is the cdn Management Client
 type NameAvailabilityClient struct {
 	BaseClient
 }
@@ -38,7 +36,9 @@ func NewNameAvailabilityClient(subscriptionID string) NameAvailabilityClient {
 	return NewNameAvailabilityClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewNameAvailabilityClientWithBaseURI creates an instance of the NameAvailabilityClient client.
+// NewNameAvailabilityClientWithBaseURI creates an instance of the NameAvailabilityClient client using a custom
+// endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure
+// stack).
 func NewNameAvailabilityClientWithBaseURI(baseURI string, subscriptionID string) NameAvailabilityClient {
 	return NameAvailabilityClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -105,8 +105,7 @@ func (client NameAvailabilityClient) CheckNameAvailabilityPreparer(ctx context.C
 // CheckNameAvailabilitySender sends the CheckNameAvailability request. The method will close the
 // http.Response Body if it receives an error.
 func (client NameAvailabilityClient) CheckNameAvailabilitySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // CheckNameAvailabilityResponder handles the response to the CheckNameAvailability request. The method always

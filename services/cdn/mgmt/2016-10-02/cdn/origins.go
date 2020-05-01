@@ -26,8 +26,7 @@ import (
 	"net/http"
 )
 
-// OriginsClient is the use these APIs to manage Azure CDN resources through the Azure Resource Manager. You must make
-// sure that requests made to these resources are secure.
+// OriginsClient is the cdn Management Client
 type OriginsClient struct {
 	BaseClient
 }
@@ -37,7 +36,8 @@ func NewOriginsClient(subscriptionID string) OriginsClient {
 	return NewOriginsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewOriginsClientWithBaseURI creates an instance of the OriginsClient client.
+// NewOriginsClientWithBaseURI creates an instance of the OriginsClient client using a custom endpoint.  Use this when
+// interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewOriginsClientWithBaseURI(baseURI string, subscriptionID string) OriginsClient {
 	return OriginsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -114,8 +114,7 @@ func (client OriginsClient) GetPreparer(ctx context.Context, resourceGroupName s
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client OriginsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -202,8 +201,7 @@ func (client OriginsClient) ListByEndpointPreparer(ctx context.Context, resource
 // ListByEndpointSender sends the ListByEndpoint request. The method will close the
 // http.Response Body if it receives an error.
 func (client OriginsClient) ListByEndpointSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByEndpointResponder handles the response to the ListByEndpoint request. The method always
@@ -326,8 +324,7 @@ func (client OriginsClient) UpdatePreparer(ctx context.Context, resourceGroupNam
 // http.Response Body if it receives an error.
 func (client OriginsClient) UpdateSender(req *http.Request) (future OriginsUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}

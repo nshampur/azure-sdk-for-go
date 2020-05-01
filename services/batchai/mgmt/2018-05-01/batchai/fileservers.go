@@ -36,7 +36,8 @@ func NewFileServersClient(subscriptionID string) FileServersClient {
 	return NewFileServersClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewFileServersClientWithBaseURI creates an instance of the FileServersClient client.
+// NewFileServersClientWithBaseURI creates an instance of the FileServersClient client using a custom endpoint.  Use
+// this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewFileServersClientWithBaseURI(baseURI string, subscriptionID string) FileServersClient {
 	return FileServersClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -132,8 +133,7 @@ func (client FileServersClient) CreatePreparer(ctx context.Context, resourceGrou
 // http.Response Body if it receives an error.
 func (client FileServersClient) CreateSender(req *http.Request) (future FileServersCreateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -228,8 +228,7 @@ func (client FileServersClient) DeletePreparer(ctx context.Context, resourceGrou
 // http.Response Body if it receives an error.
 func (client FileServersClient) DeleteSender(req *http.Request) (future FileServersDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -328,8 +327,7 @@ func (client FileServersClient) GetPreparer(ctx context.Context, resourceGroupNa
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client FileServersClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -372,7 +370,7 @@ func (client FileServersClient) ListByWorkspace(ctx context.Context, resourceGro
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("batchai.FileServersClient", "ListByWorkspace", err.Error())
 	}
@@ -428,8 +426,7 @@ func (client FileServersClient) ListByWorkspacePreparer(ctx context.Context, res
 // ListByWorkspaceSender sends the ListByWorkspace request. The method will close the
 // http.Response Body if it receives an error.
 func (client FileServersClient) ListByWorkspaceSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByWorkspaceResponder handles the response to the ListByWorkspace request. The method always

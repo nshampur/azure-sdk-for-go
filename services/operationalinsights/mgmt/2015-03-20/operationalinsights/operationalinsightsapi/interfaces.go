@@ -29,20 +29,21 @@ type StorageInsightsClientAPI interface {
 	Delete(ctx context.Context, resourceGroupName string, workspaceName string, storageInsightName string) (result autorest.Response, err error)
 	Get(ctx context.Context, resourceGroupName string, workspaceName string, storageInsightName string) (result operationalinsights.StorageInsight, err error)
 	ListByWorkspace(ctx context.Context, resourceGroupName string, workspaceName string) (result operationalinsights.StorageInsightListResultPage, err error)
+	ListByWorkspaceComplete(ctx context.Context, resourceGroupName string, workspaceName string) (result operationalinsights.StorageInsightListResultIterator, err error)
 }
 
 var _ StorageInsightsClientAPI = (*operationalinsights.StorageInsightsClient)(nil)
 
 // WorkspacesClientAPI contains the set of methods on the WorkspacesClient type.
 type WorkspacesClientAPI interface {
+	AvailableServiceTiers(ctx context.Context, resourceGroupName string, workspaceName string) (result operationalinsights.ListAvailableServiceTier, err error)
+	DeleteGateways(ctx context.Context, resourceGroupName string, workspaceName string, gatewayID string) (result autorest.Response, err error)
 	GetPurgeStatus(ctx context.Context, resourceGroupName string, workspaceName string) (result operationalinsights.WorkspacePurgeStatusResponse, err error)
 	GetSchema(ctx context.Context, resourceGroupName string, workspaceName string) (result operationalinsights.SearchGetSchemaResponse, err error)
-	GetSearchResults(ctx context.Context, resourceGroupName string, workspaceName string, parameters operationalinsights.SearchParameters) (result operationalinsights.WorkspacesGetSearchResultsFuture, err error)
 	ListKeys(ctx context.Context, resourceGroupName string, workspaceName string) (result operationalinsights.SharedKeys, err error)
 	ListLinkTargets(ctx context.Context) (result operationalinsights.ListLinkTarget, err error)
 	Purge(ctx context.Context, resourceGroupName string, workspaceName string, body operationalinsights.WorkspacePurgeBody) (result operationalinsights.WorkspacePurgeResponse, err error)
 	RegenerateSharedKeys(ctx context.Context, resourceGroupName string, workspaceName string) (result operationalinsights.SharedKeys, err error)
-	UpdateSearchResults(ctx context.Context, resourceGroupName string, workspaceName string, ID string) (result operationalinsights.SearchResultsResponse, err error)
 }
 
 var _ WorkspacesClientAPI = (*operationalinsights.WorkspacesClient)(nil)
@@ -52,7 +53,6 @@ type SavedSearchesClientAPI interface {
 	CreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, savedSearchID string, parameters operationalinsights.SavedSearch) (result operationalinsights.SavedSearch, err error)
 	Delete(ctx context.Context, resourceGroupName string, workspaceName string, savedSearchID string) (result autorest.Response, err error)
 	Get(ctx context.Context, resourceGroupName string, workspaceName string, savedSearchID string) (result operationalinsights.SavedSearch, err error)
-	GetResults(ctx context.Context, resourceGroupName string, workspaceName string, savedSearchID string) (result operationalinsights.SearchResultsResponse, err error)
 	ListByWorkspace(ctx context.Context, resourceGroupName string, workspaceName string) (result operationalinsights.SavedSearchesListResult, err error)
 }
 

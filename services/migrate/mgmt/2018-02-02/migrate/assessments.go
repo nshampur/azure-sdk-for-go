@@ -36,7 +36,8 @@ func NewAssessmentsClient(subscriptionID string, acceptLanguage string) Assessme
 	return NewAssessmentsClientWithBaseURI(DefaultBaseURI, subscriptionID, acceptLanguage)
 }
 
-// NewAssessmentsClientWithBaseURI creates an instance of the AssessmentsClient client.
+// NewAssessmentsClientWithBaseURI creates an instance of the AssessmentsClient client using a custom endpoint.  Use
+// this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewAssessmentsClientWithBaseURI(baseURI string, subscriptionID string, acceptLanguage string) AssessmentsClient {
 	return AssessmentsClient{NewWithBaseURI(baseURI, subscriptionID, acceptLanguage)}
 }
@@ -116,6 +117,9 @@ func (client AssessmentsClient) CreatePreparer(ctx context.Context, resourceGrou
 		"api-version": APIVersion,
 	}
 
+	assessment.ID = nil
+	assessment.Name = nil
+	assessment.Type = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
@@ -136,8 +140,7 @@ func (client AssessmentsClient) CreatePreparer(ctx context.Context, resourceGrou
 // CreateSender sends the Create request. The method will close the
 // http.Response Body if it receives an error.
 func (client AssessmentsClient) CreateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateResponder handles the response to the Create request. The method always
@@ -225,8 +228,7 @@ func (client AssessmentsClient) DeletePreparer(ctx context.Context, resourceGrou
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client AssessmentsClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -310,8 +312,7 @@ func (client AssessmentsClient) GetPreparer(ctx context.Context, resourceGroupNa
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client AssessmentsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -395,8 +396,7 @@ func (client AssessmentsClient) GetReportDownloadURLPreparer(ctx context.Context
 // GetReportDownloadURLSender sends the GetReportDownloadURL request. The method will close the
 // http.Response Body if it receives an error.
 func (client AssessmentsClient) GetReportDownloadURLSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetReportDownloadURLResponder handles the response to the GetReportDownloadURL request. The method always
@@ -480,8 +480,7 @@ func (client AssessmentsClient) ListByGroupPreparer(ctx context.Context, resourc
 // ListByGroupSender sends the ListByGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client AssessmentsClient) ListByGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByGroupResponder handles the response to the ListByGroup request. The method always
@@ -563,8 +562,7 @@ func (client AssessmentsClient) ListByProjectPreparer(ctx context.Context, resou
 // ListByProjectSender sends the ListByProject request. The method will close the
 // http.Response Body if it receives an error.
 func (client AssessmentsClient) ListByProjectSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByProjectResponder handles the response to the ListByProject request. The method always

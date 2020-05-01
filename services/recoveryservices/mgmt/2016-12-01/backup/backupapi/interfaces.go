@@ -23,18 +23,11 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
-// ResourceVaultConfigsClientAPI contains the set of methods on the ResourceVaultConfigsClient type.
-type ResourceVaultConfigsClientAPI interface {
-	Get(ctx context.Context, vaultName string, resourceGroupName string) (result backup.ResourceVaultConfigResource, err error)
-	Update(ctx context.Context, vaultName string, resourceGroupName string, parameters backup.ResourceVaultConfigResource) (result backup.ResourceVaultConfigResource, err error)
-}
-
-var _ ResourceVaultConfigsClientAPI = (*backup.ResourceVaultConfigsClient)(nil)
-
 // EnginesClientAPI contains the set of methods on the EnginesClient type.
 type EnginesClientAPI interface {
 	Get(ctx context.Context, vaultName string, resourceGroupName string, backupEngineName string, filter string, skipToken string) (result backup.EngineBaseResource, err error)
 	List(ctx context.Context, vaultName string, resourceGroupName string, filter string, skipToken string) (result backup.EngineBaseResourceListPage, err error)
+	ListComplete(ctx context.Context, vaultName string, resourceGroupName string, filter string, skipToken string) (result backup.EngineBaseResourceListIterator, err error)
 }
 
 var _ EnginesClientAPI = (*backup.EnginesClient)(nil)
@@ -49,6 +42,7 @@ var _ ProtectionContainerRefreshOperationResultsClientAPI = (*backup.ProtectionC
 // ProtectableContainersClientAPI contains the set of methods on the ProtectableContainersClient type.
 type ProtectableContainersClientAPI interface {
 	List(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, filter string) (result backup.ProtectableContainerResourceListPage, err error)
+	ListComplete(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, filter string) (result backup.ProtectableContainerResourceListIterator, err error)
 }
 
 var _ ProtectableContainersClientAPI = (*backup.ProtectableContainersClient)(nil)
@@ -67,6 +61,7 @@ var _ ProtectionContainersClientAPI = (*backup.ProtectionContainersClient)(nil)
 // WorkloadItemsClientAPI contains the set of methods on the WorkloadItemsClient type.
 type WorkloadItemsClientAPI interface {
 	List(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, filter string, skipToken string) (result backup.WorkloadItemResourceListPage, err error)
+	ListComplete(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, filter string, skipToken string) (result backup.WorkloadItemResourceListIterator, err error)
 }
 
 var _ WorkloadItemsClientAPI = (*backup.WorkloadItemsClient)(nil)
@@ -78,28 +73,12 @@ type ProtectionContainerOperationResultsClientAPI interface {
 
 var _ ProtectionContainerOperationResultsClientAPI = (*backup.ProtectionContainerOperationResultsClient)(nil)
 
-// ProtectedItemsClientAPI contains the set of methods on the ProtectedItemsClient type.
-type ProtectedItemsClientAPI interface {
-	CreateOrUpdate(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, protectedItemName string, parameters backup.ProtectedItemResource) (result backup.ProtectedItemResource, err error)
-	Delete(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, protectedItemName string) (result autorest.Response, err error)
-	Get(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, protectedItemName string, filter string) (result backup.ProtectedItemResource, err error)
-}
-
-var _ ProtectedItemsClientAPI = (*backup.ProtectedItemsClient)(nil)
-
 // BackupsClientAPI contains the set of methods on the BackupsClient type.
 type BackupsClientAPI interface {
 	Trigger(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, protectedItemName string, parameters backup.RequestResource) (result autorest.Response, err error)
 }
 
 var _ BackupsClientAPI = (*backup.BackupsClient)(nil)
-
-// ProtectedItemOperationResultsClientAPI contains the set of methods on the ProtectedItemOperationResultsClient type.
-type ProtectedItemOperationResultsClientAPI interface {
-	Get(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, protectedItemName string, operationID string) (result backup.ProtectedItemResource, err error)
-}
-
-var _ ProtectedItemOperationResultsClientAPI = (*backup.ProtectedItemOperationResultsClient)(nil)
 
 // ProtectedItemOperationStatusesClientAPI contains the set of methods on the ProtectedItemOperationStatusesClient type.
 type ProtectedItemOperationStatusesClientAPI interface {
@@ -108,14 +87,6 @@ type ProtectedItemOperationStatusesClientAPI interface {
 
 var _ ProtectedItemOperationStatusesClientAPI = (*backup.ProtectedItemOperationStatusesClient)(nil)
 
-// RecoveryPointsClientAPI contains the set of methods on the RecoveryPointsClient type.
-type RecoveryPointsClientAPI interface {
-	Get(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, protectedItemName string, recoveryPointID string) (result backup.RecoveryPointResource, err error)
-	List(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, protectedItemName string, filter string) (result backup.RecoveryPointResourceListPage, err error)
-}
-
-var _ RecoveryPointsClientAPI = (*backup.RecoveryPointsClient)(nil)
-
 // ItemLevelRecoveryConnectionsClientAPI contains the set of methods on the ItemLevelRecoveryConnectionsClient type.
 type ItemLevelRecoveryConnectionsClientAPI interface {
 	Provision(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, protectedItemName string, recoveryPointID string, parameters backup.ILRRequestResource) (result autorest.Response, err error)
@@ -123,27 +94,6 @@ type ItemLevelRecoveryConnectionsClientAPI interface {
 }
 
 var _ ItemLevelRecoveryConnectionsClientAPI = (*backup.ItemLevelRecoveryConnectionsClient)(nil)
-
-// RestoresClientAPI contains the set of methods on the RestoresClient type.
-type RestoresClientAPI interface {
-	Trigger(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, protectedItemName string, recoveryPointID string, parameters backup.RestoreRequestResource) (result autorest.Response, err error)
-}
-
-var _ RestoresClientAPI = (*backup.RestoresClient)(nil)
-
-// JobCancellationsClientAPI contains the set of methods on the JobCancellationsClient type.
-type JobCancellationsClientAPI interface {
-	Trigger(ctx context.Context, vaultName string, resourceGroupName string, jobName string) (result autorest.Response, err error)
-}
-
-var _ JobCancellationsClientAPI = (*backup.JobCancellationsClient)(nil)
-
-// JobOperationResultsClientAPI contains the set of methods on the JobOperationResultsClient type.
-type JobOperationResultsClientAPI interface {
-	Get(ctx context.Context, vaultName string, resourceGroupName string, jobName string, operationID string) (result autorest.Response, err error)
-}
-
-var _ JobOperationResultsClientAPI = (*backup.JobOperationResultsClient)(nil)
 
 // OperationResultsClientAPI contains the set of methods on the OperationResultsClient type.
 type OperationResultsClientAPI interface {
@@ -161,19 +111,10 @@ var _ OperationStatusesClientAPI = (*backup.OperationStatusesClient)(nil)
 
 // ProtectionPoliciesClientAPI contains the set of methods on the ProtectionPoliciesClient type.
 type ProtectionPoliciesClientAPI interface {
-	CreateOrUpdate(ctx context.Context, vaultName string, resourceGroupName string, policyName string, parameters backup.ProtectionPolicyResource) (result backup.ProtectionPolicyResource, err error)
 	Delete(ctx context.Context, vaultName string, resourceGroupName string, policyName string) (result autorest.Response, err error)
-	Get(ctx context.Context, vaultName string, resourceGroupName string, policyName string) (result backup.ProtectionPolicyResource, err error)
 }
 
 var _ ProtectionPoliciesClientAPI = (*backup.ProtectionPoliciesClient)(nil)
-
-// ProtectionPolicyOperationResultsClientAPI contains the set of methods on the ProtectionPolicyOperationResultsClient type.
-type ProtectionPolicyOperationResultsClientAPI interface {
-	Get(ctx context.Context, vaultName string, resourceGroupName string, policyName string, operationID string) (result backup.ProtectionPolicyResource, err error)
-}
-
-var _ ProtectionPolicyOperationResultsClientAPI = (*backup.ProtectionPolicyOperationResultsClient)(nil)
 
 // ProtectionPolicyOperationStatusesClientAPI contains the set of methods on the ProtectionPolicyOperationStatusesClient type.
 type ProtectionPolicyOperationStatusesClientAPI interface {
@@ -185,6 +126,7 @@ var _ ProtectionPolicyOperationStatusesClientAPI = (*backup.ProtectionPolicyOper
 // ProtectableItemsClientAPI contains the set of methods on the ProtectableItemsClient type.
 type ProtectableItemsClientAPI interface {
 	List(ctx context.Context, vaultName string, resourceGroupName string, filter string, skipToken string) (result backup.WorkloadProtectableItemResourceListPage, err error)
+	ListComplete(ctx context.Context, vaultName string, resourceGroupName string, filter string, skipToken string) (result backup.WorkloadProtectableItemResourceListIterator, err error)
 }
 
 var _ ProtectableItemsClientAPI = (*backup.ProtectableItemsClient)(nil)
@@ -192,6 +134,7 @@ var _ ProtectableItemsClientAPI = (*backup.ProtectableItemsClient)(nil)
 // ProtectionContainersGroupClientAPI contains the set of methods on the ProtectionContainersGroupClient type.
 type ProtectionContainersGroupClientAPI interface {
 	List(ctx context.Context, vaultName string, resourceGroupName string, filter string) (result backup.ProtectionContainerResourceListPage, err error)
+	ListComplete(ctx context.Context, vaultName string, resourceGroupName string, filter string) (result backup.ProtectionContainerResourceListIterator, err error)
 }
 
 var _ ProtectionContainersGroupClientAPI = (*backup.ProtectionContainersGroupClient)(nil)
@@ -206,7 +149,8 @@ var _ SecurityPINsClientAPI = (*backup.SecurityPINsClient)(nil)
 // ResourceStorageConfigsClientAPI contains the set of methods on the ResourceStorageConfigsClient type.
 type ResourceStorageConfigsClientAPI interface {
 	Get(ctx context.Context, vaultName string, resourceGroupName string) (result backup.ResourceConfigResource, err error)
-	Update(ctx context.Context, vaultName string, resourceGroupName string, parameters backup.ResourceConfigResource) (result autorest.Response, err error)
+	Patch(ctx context.Context, vaultName string, resourceGroupName string, parameters backup.ResourceConfigResource) (result autorest.Response, err error)
+	Update(ctx context.Context, vaultName string, resourceGroupName string, parameters backup.ResourceConfigResource) (result backup.ResourceConfigResource, err error)
 }
 
 var _ ResourceStorageConfigsClientAPI = (*backup.ResourceStorageConfigsClient)(nil)

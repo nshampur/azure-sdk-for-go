@@ -1,4 +1,4 @@
-// Package datamigration implements the Azure ARM Datamigration service API version .
+// Package datamigration implements the Azure ARM Datamigration service API version 2018-04-19.
 //
 // Data Migration Client
 package datamigration
@@ -41,7 +41,8 @@ func New(subscriptionID string) BaseClient {
 	return NewWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewWithBaseURI creates an instance of the BaseClient client.
+// NewWithBaseURI creates an instance of the BaseClient client using a custom endpoint.  Use this when interacting with
+// an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 	return BaseClient{
 		Client:         autorest.NewClientWithUserAgent(UserAgent()),

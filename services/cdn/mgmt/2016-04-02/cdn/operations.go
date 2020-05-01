@@ -25,9 +25,7 @@ import (
 	"net/http"
 )
 
-// OperationsClient is the use these APIs to manage Azure CDN resources through the Azure Resource Manager. You must
-// make sure that requests made to these resources are secure. For more information, see
-// https://msdn.microsoft.com/en-us/library/azure/dn790557.aspx.
+// OperationsClient is the cdn Management Client
 type OperationsClient struct {
 	BaseClient
 }
@@ -37,7 +35,8 @@ func NewOperationsClient(subscriptionID string) OperationsClient {
 	return NewOperationsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewOperationsClientWithBaseURI creates an instance of the OperationsClient client.
+// NewOperationsClientWithBaseURI creates an instance of the OperationsClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
 	return OperationsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -93,8 +92,7 @@ func (client OperationsClient) ListPreparer(ctx context.Context) (*http.Request,
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client OperationsClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListResponder handles the response to the List request. The method always

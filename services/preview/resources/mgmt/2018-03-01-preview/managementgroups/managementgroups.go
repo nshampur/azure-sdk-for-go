@@ -36,7 +36,8 @@ func NewClient() Client {
 	return NewClientWithBaseURI(DefaultBaseURI)
 }
 
-// NewClientWithBaseURI creates an instance of the Client client.
+// NewClientWithBaseURI creates an instance of the Client client using a custom endpoint.  Use this when interacting
+// with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewClientWithBaseURI(baseURI string) Client {
 	return Client{NewWithBaseURI(baseURI)}
 }
@@ -84,6 +85,8 @@ func (client Client) CreateOrUpdatePreparer(ctx context.Context, groupID string,
 		"api-version": APIVersion,
 	}
 
+	createManagementGroupRequest.ID = nil
+	createManagementGroupRequest.Type = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
@@ -105,8 +108,7 @@ func (client Client) CreateOrUpdatePreparer(ctx context.Context, groupID string,
 // http.Response Body if it receives an error.
 func (client Client) CreateOrUpdateSender(req *http.Request) (future CreateOrUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	resp, err = client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 	if err != nil {
 		return
 	}
@@ -187,8 +189,7 @@ func (client Client) DeletePreparer(ctx context.Context, groupID string, cacheCo
 // http.Response Body if it receives an error.
 func (client Client) DeleteSender(req *http.Request) (future DeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	resp, err = client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 	if err != nil {
 		return
 	}
@@ -289,8 +290,7 @@ func (client Client) GetPreparer(ctx context.Context, groupID string, expand str
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -303,6 +303,127 @@ func (client Client) GetResponder(resp *http.Response) (result ManagementGroup, 
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// GetDescendants list all entities that descend from a management group.
+// Parameters:
+// groupID - management Group ID.
+// skiptoken - page continuation token is only used if a previous operation returned a partial result. If a
+// previous response contains a nextLink element, the value of the nextLink element will include a token
+// parameter that specifies a starting point to use for subsequent calls.
+// top - number of elements to return when retrieving results. Passing this in will override $skipToken.
+func (client Client) GetDescendants(ctx context.Context, groupID string, skiptoken string, top *int32) (result DescendantListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.GetDescendants")
+		defer func() {
+			sc := -1
+			if result.dlr.Response.Response != nil {
+				sc = result.dlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	result.fn = client.getDescendantsNextResults
+	req, err := client.GetDescendantsPreparer(ctx, groupID, skiptoken, top)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "managementgroups.Client", "GetDescendants", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.GetDescendantsSender(req)
+	if err != nil {
+		result.dlr.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "managementgroups.Client", "GetDescendants", resp, "Failure sending request")
+		return
+	}
+
+	result.dlr, err = client.GetDescendantsResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "managementgroups.Client", "GetDescendants", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// GetDescendantsPreparer prepares the GetDescendants request.
+func (client Client) GetDescendantsPreparer(ctx context.Context, groupID string, skiptoken string, top *int32) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"groupId": autorest.Encode("path", groupID),
+	}
+
+	const APIVersion = "2018-03-01-preview"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+	if len(skiptoken) > 0 {
+		queryParameters["$skiptoken"] = autorest.Encode("query", skiptoken)
+	}
+	if top != nil {
+		queryParameters["$top"] = autorest.Encode("query", *top)
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsGet(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/providers/Microsoft.Management/managementGroups/{groupId}/descendants", pathParameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// GetDescendantsSender sends the GetDescendants request. The method will close the
+// http.Response Body if it receives an error.
+func (client Client) GetDescendantsSender(req *http.Request) (*http.Response, error) {
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+}
+
+// GetDescendantsResponder handles the response to the GetDescendants request. The method always
+// closes the http.Response Body.
+func (client Client) GetDescendantsResponder(resp *http.Response) (result DescendantListResult, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// getDescendantsNextResults retrieves the next set of results, if any.
+func (client Client) getDescendantsNextResults(ctx context.Context, lastResults DescendantListResult) (result DescendantListResult, err error) {
+	req, err := lastResults.descendantListResultPreparer(ctx)
+	if err != nil {
+		return result, autorest.NewErrorWithError(err, "managementgroups.Client", "getDescendantsNextResults", nil, "Failure preparing next results request")
+	}
+	if req == nil {
+		return
+	}
+	resp, err := client.GetDescendantsSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		return result, autorest.NewErrorWithError(err, "managementgroups.Client", "getDescendantsNextResults", resp, "Failure sending next results request")
+	}
+	result, err = client.GetDescendantsResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "managementgroups.Client", "getDescendantsNextResults", resp, "Failure responding to next results request")
+	}
+	return
+}
+
+// GetDescendantsComplete enumerates all values, automatically crossing page boundaries as required.
+func (client Client) GetDescendantsComplete(ctx context.Context, groupID string, skiptoken string, top *int32) (result DescendantListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.GetDescendants")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	result.page, err = client.GetDescendants(ctx, groupID, skiptoken, top)
 	return
 }
 
@@ -373,8 +494,7 @@ func (client Client) ListPreparer(ctx context.Context, cacheControl string, skip
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -495,8 +615,7 @@ func (client Client) UpdatePreparer(ctx context.Context, groupID string, patchGr
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) UpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // UpdateResponder handles the response to the Update request. The method always

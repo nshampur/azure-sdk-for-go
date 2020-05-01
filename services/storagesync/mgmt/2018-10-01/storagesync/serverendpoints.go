@@ -36,7 +36,8 @@ func NewServerEndpointsClient(subscriptionID string) ServerEndpointsClient {
 	return NewServerEndpointsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewServerEndpointsClientWithBaseURI creates an instance of the ServerEndpointsClient client.
+// NewServerEndpointsClientWithBaseURI creates an instance of the ServerEndpointsClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewServerEndpointsClientWithBaseURI(baseURI string, subscriptionID string) ServerEndpointsClient {
 	return ServerEndpointsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -70,11 +71,11 @@ func (client ServerEndpointsClient) Create(ctx context.Context, resourceGroupNam
 			Constraints: []validation.Constraint{{Target: "parameters.ServerEndpointCreateParametersProperties", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "parameters.ServerEndpointCreateParametersProperties.VolumeFreeSpacePercent", Name: validation.Null, Rule: false,
 					Chain: []validation.Constraint{{Target: "parameters.ServerEndpointCreateParametersProperties.VolumeFreeSpacePercent", Name: validation.InclusiveMaximum, Rule: int64(100), Chain: nil},
-						{Target: "parameters.ServerEndpointCreateParametersProperties.VolumeFreeSpacePercent", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
+						{Target: "parameters.ServerEndpointCreateParametersProperties.VolumeFreeSpacePercent", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil},
 					}},
 					{Target: "parameters.ServerEndpointCreateParametersProperties.TierFilesOlderThanDays", Name: validation.Null, Rule: false,
 						Chain: []validation.Constraint{{Target: "parameters.ServerEndpointCreateParametersProperties.TierFilesOlderThanDays", Name: validation.InclusiveMaximum, Rule: int64(2147483647), Chain: nil},
-							{Target: "parameters.ServerEndpointCreateParametersProperties.TierFilesOlderThanDays", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
+							{Target: "parameters.ServerEndpointCreateParametersProperties.TierFilesOlderThanDays", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil},
 						}},
 				}}}}}); err != nil {
 		return result, validation.NewError("storagesync.ServerEndpointsClient", "Create", err.Error())
@@ -124,8 +125,7 @@ func (client ServerEndpointsClient) CreatePreparer(ctx context.Context, resource
 // http.Response Body if it receives an error.
 func (client ServerEndpointsClient) CreateSender(req *http.Request) (future ServerEndpointsCreateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -215,8 +215,7 @@ func (client ServerEndpointsClient) DeletePreparer(ctx context.Context, resource
 // http.Response Body if it receives an error.
 func (client ServerEndpointsClient) DeleteSender(req *http.Request) (future ServerEndpointsDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -310,8 +309,7 @@ func (client ServerEndpointsClient) GetPreparer(ctx context.Context, resourceGro
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServerEndpointsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -399,8 +397,7 @@ func (client ServerEndpointsClient) ListBySyncGroupPreparer(ctx context.Context,
 // ListBySyncGroupSender sends the ListBySyncGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServerEndpointsClient) ListBySyncGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListBySyncGroupResponder handles the response to the ListBySyncGroup request. The method always
@@ -488,8 +485,7 @@ func (client ServerEndpointsClient) RecallActionPreparer(ctx context.Context, re
 // http.Response Body if it receives an error.
 func (client ServerEndpointsClient) RecallActionSender(req *http.Request) (future ServerEndpointsRecallActionFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -584,8 +580,7 @@ func (client ServerEndpointsClient) UpdatePreparer(ctx context.Context, resource
 // http.Response Body if it receives an error.
 func (client ServerEndpointsClient) UpdateSender(req *http.Request) (future ServerEndpointsUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}

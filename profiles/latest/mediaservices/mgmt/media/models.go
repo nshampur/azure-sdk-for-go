@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2020 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -37,6 +37,13 @@ const (
 	HeAacV2 AacAudioProfile = original.HeAacV2
 )
 
+type AnalysisResolution = original.AnalysisResolution
+
+const (
+	SourceResolution   AnalysisResolution = original.SourceResolution
+	StandardDefinition AnalysisResolution = original.StandardDefinition
+)
+
 type AssetContainerPermission = original.AssetContainerPermission
 
 const (
@@ -55,6 +62,7 @@ const (
 type ContentKeyPolicyFairPlayRentalAndLeaseKeyType = original.ContentKeyPolicyFairPlayRentalAndLeaseKeyType
 
 const (
+	DualExpiry          ContentKeyPolicyFairPlayRentalAndLeaseKeyType = original.DualExpiry
 	PersistentLimited   ContentKeyPolicyFairPlayRentalAndLeaseKeyType = original.PersistentLimited
 	PersistentUnlimited ContentKeyPolicyFairPlayRentalAndLeaseKeyType = original.PersistentUnlimited
 	Undefined           ContentKeyPolicyFairPlayRentalAndLeaseKeyType = original.Undefined
@@ -113,14 +121,16 @@ const (
 type EncoderNamedPreset = original.EncoderNamedPreset
 
 const (
-	AACGoodQualityAudio      EncoderNamedPreset = original.AACGoodQualityAudio
-	AdaptiveStreaming        EncoderNamedPreset = original.AdaptiveStreaming
-	H264MultipleBitrate1080p EncoderNamedPreset = original.H264MultipleBitrate1080p
-	H264MultipleBitrate720p  EncoderNamedPreset = original.H264MultipleBitrate720p
-	H264MultipleBitrateSD    EncoderNamedPreset = original.H264MultipleBitrateSD
-	H264SingleBitrate1080p   EncoderNamedPreset = original.H264SingleBitrate1080p
-	H264SingleBitrate720p    EncoderNamedPreset = original.H264SingleBitrate720p
-	H264SingleBitrateSD      EncoderNamedPreset = original.H264SingleBitrateSD
+	AACGoodQualityAudio              EncoderNamedPreset = original.AACGoodQualityAudio
+	AdaptiveStreaming                EncoderNamedPreset = original.AdaptiveStreaming
+	ContentAwareEncoding             EncoderNamedPreset = original.ContentAwareEncoding
+	ContentAwareEncodingExperimental EncoderNamedPreset = original.ContentAwareEncodingExperimental
+	H264MultipleBitrate1080p         EncoderNamedPreset = original.H264MultipleBitrate1080p
+	H264MultipleBitrate720p          EncoderNamedPreset = original.H264MultipleBitrate720p
+	H264MultipleBitrateSD            EncoderNamedPreset = original.H264MultipleBitrateSD
+	H264SingleBitrate1080p           EncoderNamedPreset = original.H264SingleBitrate1080p
+	H264SingleBitrate720p            EncoderNamedPreset = original.H264SingleBitrate720p
+	H264SingleBitrateSD              EncoderNamedPreset = original.H264SingleBitrateSD
 )
 
 type EncryptionScheme = original.EncryptionScheme
@@ -230,9 +240,10 @@ const (
 type LiveEventEncodingType = original.LiveEventEncodingType
 
 const (
-	LiveEventEncodingTypeBasic    LiveEventEncodingType = original.LiveEventEncodingTypeBasic
-	LiveEventEncodingTypeNone     LiveEventEncodingType = original.LiveEventEncodingTypeNone
-	LiveEventEncodingTypeStandard LiveEventEncodingType = original.LiveEventEncodingTypeStandard
+	LiveEventEncodingTypeBasic        LiveEventEncodingType = original.LiveEventEncodingTypeBasic
+	LiveEventEncodingTypeNone         LiveEventEncodingType = original.LiveEventEncodingTypeNone
+	LiveEventEncodingTypePremium1080p LiveEventEncodingType = original.LiveEventEncodingTypePremium1080p
+	LiveEventEncodingTypeStandard     LiveEventEncodingType = original.LiveEventEncodingTypeStandard
 )
 
 type LiveEventInputProtocol = original.LiveEventInputProtocol
@@ -282,6 +293,13 @@ const (
 	OdataTypeContentKeyPolicyPlayReadyContentKeyLocation                                  OdataType = original.OdataTypeContentKeyPolicyPlayReadyContentKeyLocation
 	OdataTypeMicrosoftMediaContentKeyPolicyPlayReadyContentEncryptionKeyFromHeader        OdataType = original.OdataTypeMicrosoftMediaContentKeyPolicyPlayReadyContentEncryptionKeyFromHeader
 	OdataTypeMicrosoftMediaContentKeyPolicyPlayReadyContentEncryptionKeyFromKeyIdentifier OdataType = original.OdataTypeMicrosoftMediaContentKeyPolicyPlayReadyContentEncryptionKeyFromKeyIdentifier
+)
+
+type OdataTypeBasicClipTime = original.OdataTypeBasicClipTime
+
+const (
+	OdataTypeClipTime                       OdataTypeBasicClipTime = original.OdataTypeClipTime
+	OdataTypeMicrosoftMediaAbsoluteClipTime OdataTypeBasicClipTime = original.OdataTypeMicrosoftMediaAbsoluteClipTime
 )
 
 type OdataTypeBasicCodec = original.OdataTypeBasicCodec
@@ -380,6 +398,7 @@ type OdataTypeBasicPreset = original.OdataTypeBasicPreset
 const (
 	OdataTypeMicrosoftMediaAudioAnalyzerPreset          OdataTypeBasicPreset = original.OdataTypeMicrosoftMediaAudioAnalyzerPreset
 	OdataTypeMicrosoftMediaBuiltInStandardEncoderPreset OdataTypeBasicPreset = original.OdataTypeMicrosoftMediaBuiltInStandardEncoderPreset
+	OdataTypeMicrosoftMediaFaceDetectorPreset           OdataTypeBasicPreset = original.OdataTypeMicrosoftMediaFaceDetectorPreset
 	OdataTypeMicrosoftMediaStandardEncoderPreset        OdataTypeBasicPreset = original.OdataTypeMicrosoftMediaStandardEncoderPreset
 	OdataTypeMicrosoftMediaVideoAnalyzerPreset          OdataTypeBasicPreset = original.OdataTypeMicrosoftMediaVideoAnalyzerPreset
 	OdataTypePreset                                     OdataTypeBasicPreset = original.OdataTypePreset
@@ -477,6 +496,7 @@ const (
 
 type APIError = original.APIError
 type AacAudio = original.AacAudio
+type AbsoluteClipTime = original.AbsoluteClipTime
 type AccountFilter = original.AccountFilter
 type AccountFilterCollection = original.AccountFilterCollection
 type AccountFilterCollectionIterator = original.AccountFilterCollectionIterator
@@ -504,6 +524,7 @@ type AudioOverlay = original.AudioOverlay
 type BaseClient = original.BaseClient
 type BasicAudio = original.BasicAudio
 type BasicAudioAnalyzerPreset = original.BasicAudioAnalyzerPreset
+type BasicClipTime = original.BasicClipTime
 type BasicCodec = original.BasicCodec
 type BasicContentKeyPolicyConfiguration = original.BasicContentKeyPolicyConfiguration
 type BasicContentKeyPolicyPlayReadyContentKeyLocation = original.BasicContentKeyPolicyPlayReadyContentKeyLocation
@@ -525,6 +546,7 @@ type BuiltInStandardEncoderPreset = original.BuiltInStandardEncoderPreset
 type CbcsDrmConfiguration = original.CbcsDrmConfiguration
 type CencDrmConfiguration = original.CencDrmConfiguration
 type CheckNameAvailabilityInput = original.CheckNameAvailabilityInput
+type ClipTime = original.ClipTime
 type Codec = original.Codec
 type CommonEncryptionCbcs = original.CommonEncryptionCbcs
 type CommonEncryptionCenc = original.CommonEncryptionCenc
@@ -536,6 +558,7 @@ type ContentKeyPolicyCollectionIterator = original.ContentKeyPolicyCollectionIte
 type ContentKeyPolicyCollectionPage = original.ContentKeyPolicyCollectionPage
 type ContentKeyPolicyConfiguration = original.ContentKeyPolicyConfiguration
 type ContentKeyPolicyFairPlayConfiguration = original.ContentKeyPolicyFairPlayConfiguration
+type ContentKeyPolicyFairPlayOfflineRentalConfiguration = original.ContentKeyPolicyFairPlayOfflineRentalConfiguration
 type ContentKeyPolicyOpenRestriction = original.ContentKeyPolicyOpenRestriction
 type ContentKeyPolicyOption = original.ContentKeyPolicyOption
 type ContentKeyPolicyPlayReadyConfiguration = original.ContentKeyPolicyPlayReadyConfiguration
@@ -564,6 +587,7 @@ type Deinterlace = original.Deinterlace
 type EnabledProtocols = original.EnabledProtocols
 type EntityNameAvailabilityCheckOutput = original.EntityNameAvailabilityCheckOutput
 type EnvelopeEncryption = original.EnvelopeEncryption
+type FaceDetectorPreset = original.FaceDetectorPreset
 type FilterProperties = original.FilterProperties
 type FilterTrackPropertyCondition = original.FilterTrackPropertyCondition
 type FilterTrackSelection = original.FilterTrackSelection
@@ -894,6 +918,9 @@ func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 func PossibleAacAudioProfileValues() []AacAudioProfile {
 	return original.PossibleAacAudioProfileValues()
 }
+func PossibleAnalysisResolutionValues() []AnalysisResolution {
+	return original.PossibleAnalysisResolutionValues()
+}
 func PossibleAssetContainerPermissionValues() []AssetContainerPermission {
 	return original.PossibleAssetContainerPermissionValues()
 }
@@ -974,6 +1001,9 @@ func PossibleMetricAggregationTypeValues() []MetricAggregationType {
 }
 func PossibleMetricUnitValues() []MetricUnit {
 	return original.PossibleMetricUnitValues()
+}
+func PossibleOdataTypeBasicClipTimeValues() []OdataTypeBasicClipTime {
+	return original.PossibleOdataTypeBasicClipTimeValues()
 }
 func PossibleOdataTypeBasicCodecValues() []OdataTypeBasicCodec {
 	return original.PossibleOdataTypeBasicCodecValues()

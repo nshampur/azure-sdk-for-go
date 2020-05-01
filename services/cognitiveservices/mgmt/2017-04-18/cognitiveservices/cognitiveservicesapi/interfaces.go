@@ -23,18 +23,28 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
+// BaseClientAPI contains the set of methods on the BaseClient type.
+type BaseClientAPI interface {
+	CheckDomainAvailability(ctx context.Context, parameters cognitiveservices.CheckDomainAvailabilityParameter) (result cognitiveservices.CheckDomainAvailabilityResult, err error)
+	CheckSkuAvailability(ctx context.Context, location string, parameters cognitiveservices.CheckSkuAvailabilityParameter) (result cognitiveservices.CheckSkuAvailabilityResultList, err error)
+}
+
+var _ BaseClientAPI = (*cognitiveservices.BaseClient)(nil)
+
 // AccountsClientAPI contains the set of methods on the AccountsClient type.
 type AccountsClientAPI interface {
-	Create(ctx context.Context, resourceGroupName string, accountName string, parameters cognitiveservices.AccountCreateParameters) (result cognitiveservices.Account, err error)
+	Create(ctx context.Context, resourceGroupName string, accountName string, account cognitiveservices.Account) (result cognitiveservices.Account, err error)
 	Delete(ctx context.Context, resourceGroupName string, accountName string) (result autorest.Response, err error)
 	GetProperties(ctx context.Context, resourceGroupName string, accountName string) (result cognitiveservices.Account, err error)
 	GetUsages(ctx context.Context, resourceGroupName string, accountName string, filter string) (result cognitiveservices.UsagesResult, err error)
 	List(ctx context.Context) (result cognitiveservices.AccountListResultPage, err error)
+	ListComplete(ctx context.Context) (result cognitiveservices.AccountListResultIterator, err error)
 	ListByResourceGroup(ctx context.Context, resourceGroupName string) (result cognitiveservices.AccountListResultPage, err error)
+	ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result cognitiveservices.AccountListResultIterator, err error)
 	ListKeys(ctx context.Context, resourceGroupName string, accountName string) (result cognitiveservices.AccountKeys, err error)
 	ListSkus(ctx context.Context, resourceGroupName string, accountName string) (result cognitiveservices.AccountEnumerateSkusResult, err error)
 	RegenerateKey(ctx context.Context, resourceGroupName string, accountName string, parameters cognitiveservices.RegenerateKeyParameters) (result cognitiveservices.AccountKeys, err error)
-	Update(ctx context.Context, resourceGroupName string, accountName string, parameters cognitiveservices.AccountUpdateParameters) (result cognitiveservices.Account, err error)
+	Update(ctx context.Context, resourceGroupName string, accountName string, account cognitiveservices.Account) (result cognitiveservices.Account, err error)
 }
 
 var _ AccountsClientAPI = (*cognitiveservices.AccountsClient)(nil)
@@ -42,6 +52,7 @@ var _ AccountsClientAPI = (*cognitiveservices.AccountsClient)(nil)
 // ResourceSkusClientAPI contains the set of methods on the ResourceSkusClient type.
 type ResourceSkusClientAPI interface {
 	List(ctx context.Context) (result cognitiveservices.ResourceSkusResultPage, err error)
+	ListComplete(ctx context.Context) (result cognitiveservices.ResourceSkusResultIterator, err error)
 }
 
 var _ ResourceSkusClientAPI = (*cognitiveservices.ResourceSkusClient)(nil)
@@ -49,13 +60,7 @@ var _ ResourceSkusClientAPI = (*cognitiveservices.ResourceSkusClient)(nil)
 // OperationsClientAPI contains the set of methods on the OperationsClient type.
 type OperationsClientAPI interface {
 	List(ctx context.Context) (result cognitiveservices.OperationEntityListResultPage, err error)
+	ListComplete(ctx context.Context) (result cognitiveservices.OperationEntityListResultIterator, err error)
 }
 
 var _ OperationsClientAPI = (*cognitiveservices.OperationsClient)(nil)
-
-// CheckSkuAvailabilityClientAPI contains the set of methods on the CheckSkuAvailabilityClient type.
-type CheckSkuAvailabilityClientAPI interface {
-	List(ctx context.Context, location string, parameters cognitiveservices.CheckSkuAvailabilityParameter) (result cognitiveservices.CheckSkuAvailabilityResultList, err error)
-}
-
-var _ CheckSkuAvailabilityClientAPI = (*cognitiveservices.CheckSkuAvailabilityClient)(nil)

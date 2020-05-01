@@ -46,7 +46,7 @@ const (
 
 	// DefaultAPIVersion is the Azure Storage API version string used when a
 	// basic client is created.
-	DefaultAPIVersion = "2016-05-31"
+	DefaultAPIVersion = "2018-03-28"
 
 	defaultUseHTTPS      = true
 	defaultRetryAttempts = 5
@@ -141,15 +141,16 @@ type Client struct {
 	// automatic retry strategy built in. The Sender can be customized.
 	Sender Sender
 
-	accountName      string
-	accountKey       []byte
-	useHTTPS         bool
-	UseSharedKeyLite bool
-	baseURL          string
-	apiVersion       string
-	userAgent        string
-	sasClient        bool
-	accountSASToken  url.Values
+	accountName       string
+	accountKey        []byte
+	useHTTPS          bool
+	UseSharedKeyLite  bool
+	baseURL           string
+	apiVersion        string
+	userAgent         string
+	sasClient         bool
+	accountSASToken   url.Values
+	additionalHeaders map[string]string
 }
 
 type odataResponse struct {
@@ -367,11 +368,14 @@ func newSASClient(accountName, baseURL string, sasToken url.Values) Client {
 		accountName:     accountName,
 		baseURL:         baseURL,
 		accountSASToken: sasToken,
+		useHTTPS:        defaultUseHTTPS,
 	}
 	c.userAgent = c.getDefaultUserAgent()
 	// Get API version and protocol from token
 	c.apiVersion = sasToken.Get("sv")
-	c.useHTTPS = sasToken.Get("spr") == "https"
+	if spr := sasToken.Get("spr"); spr != "" {
+		c.useHTTPS = spr == "https"
+	}
 	return c
 }
 
@@ -427,6 +431,16 @@ func (c *Client) AddToUserAgent(extension string) error {
 		return nil
 	}
 	return fmt.Errorf("Extension was empty, User Agent stayed as %s", c.userAgent)
+}
+
+// AddAdditionalHeaders adds additional standard headers
+func (c *Client) AddAdditionalHeaders(headers map[string]string) {
+	if headers != nil {
+		c.additionalHeaders = map[string]string{}
+		for k, v := range headers {
+			c.additionalHeaders[k] = v
+		}
+	}
 }
 
 // protectUserAgent is used in funcs that include extraheaders as a parameter.
@@ -592,15 +606,11 @@ func (c Client) GetAccountSASToken(options AccountSASTokenOptions) (url.Values, 
 	// build start time, if exists
 	start := ""
 	if options.Start != (time.Time{}) {
-		start = options.Start.Format(time.RFC3339)
-		// For some reason I don't understand, it fails when the rest of the string is included
-		start = start[:10]
+		start = options.Start.UTC().Format(time.RFC3339)
 	}
 
 	// build expiry time
-	expiry := options.Expiry.Format(time.RFC3339)
-	// For some reason I don't understand, it fails when the rest of the string is included
-	expiry = expiry[:10]
+	expiry := options.Expiry.UTC().Format(time.RFC3339)
 
 	protocol := "https,http"
 	if options.UseHTTPS {
@@ -697,11 +707,16 @@ func (c Client) GetFileService() FileServiceClient {
 }
 
 func (c Client) getStandardHeaders() map[string]string {
-	return map[string]string{
-		userAgentHeader: c.userAgent,
-		"x-ms-version":  c.apiVersion,
-		"x-ms-date":     currentTimeRfc1123Formatted(),
+	headers := map[string]string{}
+	for k, v := range c.additionalHeaders {
+		headers[k] = v
 	}
+
+	headers[userAgentHeader] = c.userAgent
+	headers["x-ms-version"] = c.apiVersion
+	headers["x-ms-date"] = currentTimeRfc1123Formatted()
+
+	return headers
 }
 
 func (c Client) exec(verb, url string, headers map[string]string, body io.Reader, auth authentication) (*http.Response, error) {

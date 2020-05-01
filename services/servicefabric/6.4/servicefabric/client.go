@@ -47,7 +47,8 @@ func New() BaseClient {
 	return NewWithBaseURI(DefaultBaseURI)
 }
 
-// NewWithBaseURI creates an instance of the BaseClient client.
+// NewWithBaseURI creates an instance of the BaseClient client using a custom endpoint.  Use this when interacting with
+// an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewWithBaseURI(baseURI string) BaseClient {
 	return BaseClient{
 		Client:  autorest.NewClientWithUserAgent(UserAgent()),
@@ -87,7 +88,7 @@ func (client BaseClient) BackupPartition(ctx context.Context, partitionID uuid.U
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "BackupPartition", err.Error())
 	}
@@ -150,8 +151,7 @@ func (client BaseClient) BackupPartitionPreparer(ctx context.Context, partitionI
 // BackupPartitionSender sends the BackupPartition request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) BackupPartitionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // BackupPartitionResponder handles the response to the BackupPartition request. The method always
@@ -205,7 +205,7 @@ func (client BaseClient) CancelOperation(ctx context.Context, operationID uuid.U
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "CancelOperation", err.Error())
 	}
@@ -256,8 +256,7 @@ func (client BaseClient) CancelOperationPreparer(ctx context.Context, operationI
 // CancelOperationSender sends the CancelOperation request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CancelOperationSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // CancelOperationResponder handles the response to the CancelOperation request. The method always
@@ -333,8 +332,7 @@ func (client BaseClient) CancelRepairTaskPreparer(ctx context.Context, repairTas
 // CancelRepairTaskSender sends the CancelRepairTask request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CancelRepairTaskSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // CancelRepairTaskResponder handles the response to the CancelRepairTask request. The method always
@@ -374,7 +372,7 @@ func (client BaseClient) CommitImageStoreUploadSession(ctx context.Context, sess
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "CommitImageStoreUploadSession", err.Error())
 	}
@@ -424,8 +422,7 @@ func (client BaseClient) CommitImageStoreUploadSessionPreparer(ctx context.Conte
 // CommitImageStoreUploadSessionSender sends the CommitImageStoreUploadSession request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CommitImageStoreUploadSessionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // CommitImageStoreUploadSessionResponder handles the response to the CommitImageStoreUploadSession request. The method always
@@ -465,7 +462,7 @@ func (client BaseClient) CopyImageStoreContent(ctx context.Context, imageStoreCo
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "CopyImageStoreContent", err.Error())
 	}
@@ -516,8 +513,7 @@ func (client BaseClient) CopyImageStoreContentPreparer(ctx context.Context, imag
 // CopyImageStoreContentSender sends the CopyImageStoreContent request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CopyImageStoreContentSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // CopyImageStoreContentResponder handles the response to the CopyImageStoreContent request. The method always
@@ -556,14 +552,14 @@ func (client BaseClient) CreateApplication(ctx context.Context, applicationDescr
 				{Target: "applicationDescription.TypeVersion", Name: validation.Null, Rule: true, Chain: nil},
 				{Target: "applicationDescription.ApplicationCapacity", Name: validation.Null, Rule: false,
 					Chain: []validation.Constraint{{Target: "applicationDescription.ApplicationCapacity.MinimumNodes", Name: validation.Null, Rule: false,
-						Chain: []validation.Constraint{{Target: "applicationDescription.ApplicationCapacity.MinimumNodes", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}},
+						Chain: []validation.Constraint{{Target: "applicationDescription.ApplicationCapacity.MinimumNodes", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}},
 						{Target: "applicationDescription.ApplicationCapacity.MaximumNodes", Name: validation.Null, Rule: false,
-							Chain: []validation.Constraint{{Target: "applicationDescription.ApplicationCapacity.MaximumNodes", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}},
+							Chain: []validation.Constraint{{Target: "applicationDescription.ApplicationCapacity.MaximumNodes", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}},
 					}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "CreateApplication", err.Error())
 	}
@@ -614,8 +610,7 @@ func (client BaseClient) CreateApplicationPreparer(ctx context.Context, applicat
 // CreateApplicationSender sends the CreateApplication request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CreateApplicationSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // CreateApplicationResponder handles the response to the CreateApplication request. The method always
@@ -654,14 +649,14 @@ func (client BaseClient) CreateBackupPolicy(ctx context.Context, backupPolicyDes
 				{Target: "backupPolicyDescription.AutoRestoreOnDataLoss", Name: validation.Null, Rule: true, Chain: nil},
 				{Target: "backupPolicyDescription.MaxIncrementalBackups", Name: validation.Null, Rule: true,
 					Chain: []validation.Constraint{{Target: "backupPolicyDescription.MaxIncrementalBackups", Name: validation.InclusiveMaximum, Rule: int64(255), Chain: nil},
-						{Target: "backupPolicyDescription.MaxIncrementalBackups", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
+						{Target: "backupPolicyDescription.MaxIncrementalBackups", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil},
 					}},
 				{Target: "backupPolicyDescription.Schedule", Name: validation.Null, Rule: true, Chain: nil},
 				{Target: "backupPolicyDescription.Storage", Name: validation.Null, Rule: true, Chain: nil}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "CreateBackupPolicy", err.Error())
 	}
@@ -712,8 +707,7 @@ func (client BaseClient) CreateBackupPolicyPreparer(ctx context.Context, backupP
 // CreateBackupPolicySender sends the CreateBackupPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CreateBackupPolicySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // CreateBackupPolicyResponder handles the response to the CreateBackupPolicy request. The method always
@@ -754,7 +748,7 @@ func (client BaseClient) CreateComposeDeployment(ctx context.Context, createComp
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "CreateComposeDeployment", err.Error())
 	}
@@ -805,8 +799,7 @@ func (client BaseClient) CreateComposeDeploymentPreparer(ctx context.Context, cr
 // CreateComposeDeploymentSender sends the CreateComposeDeployment request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CreateComposeDeploymentSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // CreateComposeDeploymentResponder handles the response to the CreateComposeDeployment request. The method always
@@ -844,7 +837,7 @@ func (client BaseClient) CreateName(ctx context.Context, nameDescription NameDes
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "CreateName", err.Error())
 	}
@@ -895,8 +888,7 @@ func (client BaseClient) CreateNamePreparer(ctx context.Context, nameDescription
 // CreateNameSender sends the CreateName request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CreateNameSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // CreateNameResponder handles the response to the CreateName request. The method always
@@ -983,8 +975,7 @@ func (client BaseClient) CreateRepairTaskPreparer(ctx context.Context, repairTas
 // CreateRepairTaskSender sends the CreateRepairTask request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CreateRepairTaskSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // CreateRepairTaskResponder handles the response to the CreateRepairTask request. The method always
@@ -1032,7 +1023,7 @@ func (client BaseClient) CreateService(ctx context.Context, applicationID string
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "CreateService", err.Error())
 	}
@@ -1087,8 +1078,7 @@ func (client BaseClient) CreateServicePreparer(ctx context.Context, applicationI
 // CreateServiceSender sends the CreateService request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CreateServiceSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // CreateServiceResponder handles the response to the CreateService request. The method always
@@ -1136,7 +1126,7 @@ func (client BaseClient) CreateServiceFromTemplate(ctx context.Context, applicat
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "CreateServiceFromTemplate", err.Error())
 	}
@@ -1191,8 +1181,7 @@ func (client BaseClient) CreateServiceFromTemplatePreparer(ctx context.Context, 
 // CreateServiceFromTemplateSender sends the CreateServiceFromTemplate request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CreateServiceFromTemplateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // CreateServiceFromTemplateResponder handles the response to the CreateServiceFromTemplate request. The method always
@@ -1239,7 +1228,7 @@ func (client BaseClient) DeleteApplication(ctx context.Context, applicationID st
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "DeleteApplication", err.Error())
 	}
@@ -1295,8 +1284,7 @@ func (client BaseClient) DeleteApplicationPreparer(ctx context.Context, applicat
 // DeleteApplicationSender sends the DeleteApplication request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DeleteApplicationSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // DeleteApplicationResponder handles the response to the DeleteApplication request. The method always
@@ -1334,7 +1322,7 @@ func (client BaseClient) DeleteBackupPolicy(ctx context.Context, backupPolicyNam
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "DeleteBackupPolicy", err.Error())
 	}
@@ -1387,8 +1375,7 @@ func (client BaseClient) DeleteBackupPolicyPreparer(ctx context.Context, backupP
 // DeleteBackupPolicySender sends the DeleteBackupPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DeleteBackupPolicySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // DeleteBackupPolicyResponder handles the response to the DeleteBackupPolicy request. The method always
@@ -1425,7 +1412,7 @@ func (client BaseClient) DeleteImageStoreContent(ctx context.Context, contentPat
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "DeleteImageStoreContent", err.Error())
 	}
@@ -1478,8 +1465,7 @@ func (client BaseClient) DeleteImageStoreContentPreparer(ctx context.Context, co
 // DeleteImageStoreContentSender sends the DeleteImageStoreContent request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DeleteImageStoreContentSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // DeleteImageStoreContentResponder handles the response to the DeleteImageStoreContent request. The method always
@@ -1517,7 +1503,7 @@ func (client BaseClient) DeleteImageStoreUploadSession(ctx context.Context, sess
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "DeleteImageStoreUploadSession", err.Error())
 	}
@@ -1567,8 +1553,7 @@ func (client BaseClient) DeleteImageStoreUploadSessionPreparer(ctx context.Conte
 // DeleteImageStoreUploadSessionSender sends the DeleteImageStoreUploadSession request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DeleteImageStoreUploadSessionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // DeleteImageStoreUploadSessionResponder handles the response to the DeleteImageStoreUploadSession request. The method always
@@ -1605,7 +1590,7 @@ func (client BaseClient) DeleteName(ctx context.Context, nameID string, timeout 
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "DeleteName", err.Error())
 	}
@@ -1658,8 +1643,7 @@ func (client BaseClient) DeleteNamePreparer(ctx context.Context, nameID string, 
 // DeleteNameSender sends the DeleteName request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DeleteNameSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // DeleteNameResponder handles the response to the DeleteName request. The method always
@@ -1697,7 +1681,7 @@ func (client BaseClient) DeleteProperty(ctx context.Context, nameID string, prop
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "DeleteProperty", err.Error())
 	}
@@ -1751,8 +1735,7 @@ func (client BaseClient) DeletePropertyPreparer(ctx context.Context, nameID stri
 // DeletePropertySender sends the DeleteProperty request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DeletePropertySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // DeletePropertyResponder handles the response to the DeleteProperty request. The method always
@@ -1828,8 +1811,7 @@ func (client BaseClient) DeleteRepairTaskPreparer(ctx context.Context, repairTas
 // DeleteRepairTaskSender sends the DeleteRepairTask request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DeleteRepairTaskSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // DeleteRepairTaskResponder handles the response to the DeleteRepairTask request. The method always
@@ -1875,7 +1857,7 @@ func (client BaseClient) DeleteService(ctx context.Context, serviceID string, fo
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "DeleteService", err.Error())
 	}
@@ -1931,8 +1913,7 @@ func (client BaseClient) DeleteServicePreparer(ctx context.Context, serviceID st
 // DeleteServiceSender sends the DeleteService request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DeleteServiceSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // DeleteServiceResponder handles the response to the DeleteService request. The method always
@@ -1978,7 +1959,7 @@ func (client BaseClient) DeployServicePackageToNode(ctx context.Context, nodeNam
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "DeployServicePackageToNode", err.Error())
 	}
@@ -2033,8 +2014,7 @@ func (client BaseClient) DeployServicePackageToNodePreparer(ctx context.Context,
 // DeployServicePackageToNodeSender sends the DeployServicePackageToNode request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DeployServicePackageToNodeSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // DeployServicePackageToNodeResponder handles the response to the DeployServicePackageToNode request. The method always
@@ -2075,7 +2055,7 @@ func (client BaseClient) DisableApplicationBackup(ctx context.Context, applicati
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}},
 		{TargetValue: disableBackupDescription,
 			Constraints: []validation.Constraint{{Target: "disableBackupDescription", Name: validation.Null, Rule: false,
@@ -2136,8 +2116,7 @@ func (client BaseClient) DisableApplicationBackupPreparer(ctx context.Context, a
 // DisableApplicationBackupSender sends the DisableApplicationBackup request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DisableApplicationBackupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // DisableApplicationBackupResponder handles the response to the DisableApplicationBackup request. The method always
@@ -2179,7 +2158,7 @@ func (client BaseClient) DisableNode(ctx context.Context, nodeName string, deact
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "DisableNode", err.Error())
 	}
@@ -2234,8 +2213,7 @@ func (client BaseClient) DisableNodePreparer(ctx context.Context, nodeName strin
 // DisableNodeSender sends the DisableNode request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DisableNodeSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // DisableNodeResponder handles the response to the DisableNode request. The method always
@@ -2278,7 +2256,7 @@ func (client BaseClient) DisablePartitionBackup(ctx context.Context, partitionID
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "DisablePartitionBackup", err.Error())
 	}
@@ -2336,8 +2314,7 @@ func (client BaseClient) DisablePartitionBackupPreparer(ctx context.Context, par
 // DisablePartitionBackupSender sends the DisablePartitionBackup request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DisablePartitionBackupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // DisablePartitionBackupResponder handles the response to the DisablePartitionBackup request. The method always
@@ -2384,7 +2361,7 @@ func (client BaseClient) DisableServiceBackup(ctx context.Context, serviceID str
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "DisableServiceBackup", err.Error())
 	}
@@ -2442,8 +2419,7 @@ func (client BaseClient) DisableServiceBackupPreparer(ctx context.Context, servi
 // DisableServiceBackupSender sends the DisableServiceBackup request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) DisableServiceBackupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // DisableServiceBackupResponder handles the response to the DisableServiceBackup request. The method always
@@ -2488,7 +2464,7 @@ func (client BaseClient) EnableApplicationBackup(ctx context.Context, applicatio
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "EnableApplicationBackup", err.Error())
 	}
@@ -2543,8 +2519,7 @@ func (client BaseClient) EnableApplicationBackupPreparer(ctx context.Context, ap
 // EnableApplicationBackupSender sends the EnableApplicationBackup request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) EnableApplicationBackupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // EnableApplicationBackupResponder handles the response to the EnableApplicationBackup request. The method always
@@ -2582,7 +2557,7 @@ func (client BaseClient) EnableNode(ctx context.Context, nodeName string, timeou
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "EnableNode", err.Error())
 	}
@@ -2635,8 +2610,7 @@ func (client BaseClient) EnableNodePreparer(ctx context.Context, nodeName string
 // EnableNodeSender sends the EnableNode request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) EnableNodeSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // EnableNodeResponder handles the response to the EnableNode request. The method always
@@ -2679,7 +2653,7 @@ func (client BaseClient) EnablePartitionBackup(ctx context.Context, partitionID 
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "EnablePartitionBackup", err.Error())
 	}
@@ -2734,8 +2708,7 @@ func (client BaseClient) EnablePartitionBackupPreparer(ctx context.Context, part
 // EnablePartitionBackupSender sends the EnablePartitionBackup request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) EnablePartitionBackupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // EnablePartitionBackupResponder handles the response to the EnablePartitionBackup request. The method always
@@ -2783,7 +2756,7 @@ func (client BaseClient) EnableServiceBackup(ctx context.Context, serviceID stri
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "EnableServiceBackup", err.Error())
 	}
@@ -2838,8 +2811,7 @@ func (client BaseClient) EnableServiceBackupPreparer(ctx context.Context, servic
 // EnableServiceBackupSender sends the EnableServiceBackup request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) EnableServiceBackupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // EnableServiceBackupResponder handles the response to the EnableServiceBackup request. The method always
@@ -2916,8 +2888,7 @@ func (client BaseClient) ForceApproveRepairTaskPreparer(ctx context.Context, rep
 // ForceApproveRepairTaskSender sends the ForceApproveRepairTask request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ForceApproveRepairTaskSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ForceApproveRepairTaskResponder handles the response to the ForceApproveRepairTask request. The method always
@@ -2955,7 +2926,7 @@ func (client BaseClient) GetAadMetadata(ctx context.Context, timeout *int64) (re
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetAadMetadata", err.Error())
 	}
@@ -3004,8 +2975,7 @@ func (client BaseClient) GetAadMetadataPreparer(ctx context.Context, timeout *in
 // GetAadMetadataSender sends the GetAadMetadata request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetAadMetadataSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetAadMetadataResponder handles the response to the GetAadMetadata request. The method always
@@ -3052,11 +3022,11 @@ func (client BaseClient) GetAllEntitiesBackedUpByPolicy(ctx context.Context, bac
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetAllEntitiesBackedUpByPolicy", err.Error())
 	}
@@ -3117,8 +3087,7 @@ func (client BaseClient) GetAllEntitiesBackedUpByPolicyPreparer(ctx context.Cont
 // GetAllEntitiesBackedUpByPolicySender sends the GetAllEntitiesBackedUpByPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetAllEntitiesBackedUpByPolicySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetAllEntitiesBackedUpByPolicyResponder handles the response to the GetAllEntitiesBackedUpByPolicy request. The method always
@@ -3169,11 +3138,11 @@ func (client BaseClient) GetApplicationBackupConfigurationInfo(ctx context.Conte
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetApplicationBackupConfigurationInfo", err.Error())
 	}
@@ -3234,8 +3203,7 @@ func (client BaseClient) GetApplicationBackupConfigurationInfoPreparer(ctx conte
 // GetApplicationBackupConfigurationInfoSender sends the GetApplicationBackupConfigurationInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationBackupConfigurationInfoSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetApplicationBackupConfigurationInfoResponder handles the response to the GetApplicationBackupConfigurationInfo request. The method always
@@ -3297,11 +3265,11 @@ func (client BaseClient) GetApplicationBackupList(ctx context.Context, applicati
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}},
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetApplicationBackupList", err.Error())
 	}
 
@@ -3372,8 +3340,7 @@ func (client BaseClient) GetApplicationBackupListPreparer(ctx context.Context, a
 // GetApplicationBackupListSender sends the GetApplicationBackupList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationBackupListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetApplicationBackupListResponder handles the response to the GetApplicationBackupList request. The method always
@@ -3422,7 +3389,7 @@ func (client BaseClient) GetApplicationEventList(ctx context.Context, applicatio
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetApplicationEventList", err.Error())
 	}
@@ -3486,8 +3453,7 @@ func (client BaseClient) GetApplicationEventListPreparer(ctx context.Context, ap
 // GetApplicationEventListSender sends the GetApplicationEventList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationEventListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetApplicationEventListResponder handles the response to the GetApplicationEventList request. The method always
@@ -3582,7 +3548,7 @@ func (client BaseClient) GetApplicationHealth(ctx context.Context, applicationID
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetApplicationHealth", err.Error())
 	}
@@ -3655,8 +3621,7 @@ func (client BaseClient) GetApplicationHealthPreparer(ctx context.Context, appli
 // GetApplicationHealthSender sends the GetApplicationHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationHealthSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetApplicationHealthResponder handles the response to the GetApplicationHealth request. The method always
@@ -3756,7 +3721,7 @@ func (client BaseClient) GetApplicationHealthUsingPolicy(ctx context.Context, ap
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetApplicationHealthUsingPolicy", err.Error())
 	}
@@ -3834,8 +3799,7 @@ func (client BaseClient) GetApplicationHealthUsingPolicyPreparer(ctx context.Con
 // GetApplicationHealthUsingPolicySender sends the GetApplicationHealthUsingPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationHealthUsingPolicySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetApplicationHealthUsingPolicyResponder handles the response to the GetApplicationHealthUsingPolicy request. The method always
@@ -3880,7 +3844,7 @@ func (client BaseClient) GetApplicationInfo(ctx context.Context, applicationID s
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetApplicationInfo", err.Error())
 	}
@@ -3938,8 +3902,7 @@ func (client BaseClient) GetApplicationInfoPreparer(ctx context.Context, applica
 // GetApplicationInfoSender sends the GetApplicationInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationInfoSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetApplicationInfoResponder handles the response to the GetApplicationInfo request. The method always
@@ -3999,11 +3962,11 @@ func (client BaseClient) GetApplicationInfoList(ctx context.Context, application
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetApplicationInfoList", err.Error())
 	}
@@ -4073,8 +4036,7 @@ func (client BaseClient) GetApplicationInfoListPreparer(ctx context.Context, app
 // GetApplicationInfoListSender sends the GetApplicationInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationInfoListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetApplicationInfoListResponder handles the response to the GetApplicationInfoList request. The method always
@@ -4118,7 +4080,7 @@ func (client BaseClient) GetApplicationLoadInfo(ctx context.Context, application
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetApplicationLoadInfo", err.Error())
 	}
@@ -4171,8 +4133,7 @@ func (client BaseClient) GetApplicationLoadInfoPreparer(ctx context.Context, app
 // GetApplicationLoadInfoSender sends the GetApplicationLoadInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationLoadInfoSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetApplicationLoadInfoResponder handles the response to the GetApplicationLoadInfo request. The method always
@@ -4210,7 +4171,7 @@ func (client BaseClient) GetApplicationManifest(ctx context.Context, application
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetApplicationManifest", err.Error())
 	}
@@ -4264,8 +4225,7 @@ func (client BaseClient) GetApplicationManifestPreparer(ctx context.Context, app
 // GetApplicationManifestSender sends the GetApplicationManifest request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationManifestSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetApplicationManifestResponder handles the response to the GetApplicationManifest request. The method always
@@ -4307,7 +4267,7 @@ func (client BaseClient) GetApplicationNameInfo(ctx context.Context, serviceID s
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetApplicationNameInfo", err.Error())
 	}
@@ -4360,8 +4320,7 @@ func (client BaseClient) GetApplicationNameInfoPreparer(ctx context.Context, ser
 // GetApplicationNameInfoSender sends the GetApplicationNameInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationNameInfoSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetApplicationNameInfoResponder handles the response to the GetApplicationNameInfo request. The method always
@@ -4405,7 +4364,7 @@ func (client BaseClient) GetApplicationsEventList(ctx context.Context, startTime
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetApplicationsEventList", err.Error())
 	}
@@ -4465,8 +4424,7 @@ func (client BaseClient) GetApplicationsEventListPreparer(ctx context.Context, s
 // GetApplicationsEventListSender sends the GetApplicationsEventList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationsEventListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetApplicationsEventListResponder handles the response to the GetApplicationsEventList request. The method always
@@ -4527,11 +4485,11 @@ func (client BaseClient) GetApplicationTypeInfoList(ctx context.Context, applica
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetApplicationTypeInfoList", err.Error())
 	}
@@ -4598,8 +4556,7 @@ func (client BaseClient) GetApplicationTypeInfoListPreparer(ctx context.Context,
 // GetApplicationTypeInfoListSender sends the GetApplicationTypeInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationTypeInfoListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetApplicationTypeInfoListResponder handles the response to the GetApplicationTypeInfoList request. The method always
@@ -4657,11 +4614,11 @@ func (client BaseClient) GetApplicationTypeInfoListByName(ctx context.Context, a
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetApplicationTypeInfoListByName", err.Error())
 	}
@@ -4730,8 +4687,7 @@ func (client BaseClient) GetApplicationTypeInfoListByNamePreparer(ctx context.Co
 // GetApplicationTypeInfoListByNameSender sends the GetApplicationTypeInfoListByName request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationTypeInfoListByNameSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetApplicationTypeInfoListByNameResponder handles the response to the GetApplicationTypeInfoListByName request. The method always
@@ -4773,7 +4729,7 @@ func (client BaseClient) GetApplicationUpgrade(ctx context.Context, applicationI
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetApplicationUpgrade", err.Error())
 	}
@@ -4826,8 +4782,7 @@ func (client BaseClient) GetApplicationUpgradePreparer(ctx context.Context, appl
 // GetApplicationUpgradeSender sends the GetApplicationUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetApplicationUpgradeSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetApplicationUpgradeResponder handles the response to the GetApplicationUpgrade request. The method always
@@ -4864,7 +4819,7 @@ func (client BaseClient) GetBackupPolicyByName(ctx context.Context, backupPolicy
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetBackupPolicyByName", err.Error())
 	}
@@ -4917,8 +4872,7 @@ func (client BaseClient) GetBackupPolicyByNamePreparer(ctx context.Context, back
 // GetBackupPolicyByNameSender sends the GetBackupPolicyByName request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetBackupPolicyByNameSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetBackupPolicyByNameResponder handles the response to the GetBackupPolicyByName request. The method always
@@ -4963,11 +4917,11 @@ func (client BaseClient) GetBackupPolicyList(ctx context.Context, continuationTo
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetBackupPolicyList", err.Error())
 	}
@@ -5024,8 +4978,7 @@ func (client BaseClient) GetBackupPolicyListPreparer(ctx context.Context, contin
 // GetBackupPolicyListSender sends the GetBackupPolicyList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetBackupPolicyListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetBackupPolicyListResponder handles the response to the GetBackupPolicyList request. The method always
@@ -5074,11 +5027,11 @@ func (client BaseClient) GetBackupsFromBackupLocation(ctx context.Context, getBa
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}},
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}},
 		{TargetValue: getBackupByStorageQueryDescription,
 			Constraints: []validation.Constraint{{Target: "getBackupByStorageQueryDescription.Storage", Name: validation.Null, Rule: true, Chain: nil},
 				{Target: "getBackupByStorageQueryDescription.BackupEntity", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -5139,8 +5092,7 @@ func (client BaseClient) GetBackupsFromBackupLocationPreparer(ctx context.Contex
 // GetBackupsFromBackupLocationSender sends the GetBackupsFromBackupLocation request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetBackupsFromBackupLocationSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetBackupsFromBackupLocationResponder handles the response to the GetBackupsFromBackupLocation request. The method always
@@ -5177,7 +5129,7 @@ func (client BaseClient) GetChaos(ctx context.Context, timeout *int64) (result C
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetChaos", err.Error())
 	}
@@ -5226,8 +5178,7 @@ func (client BaseClient) GetChaosPreparer(ctx context.Context, timeout *int64) (
 // GetChaosSender sends the GetChaos request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetChaosSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetChaosResponder handles the response to the GetChaos request. The method always
@@ -5284,11 +5235,11 @@ func (client BaseClient) GetChaosEvents(ctx context.Context, continuationToken s
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetChaosEvents", err.Error())
 	}
@@ -5351,8 +5302,7 @@ func (client BaseClient) GetChaosEventsPreparer(ctx context.Context, continuatio
 // GetChaosEventsSender sends the GetChaosEvents request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetChaosEventsSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetChaosEventsResponder handles the response to the GetChaosEvents request. The method always
@@ -5389,7 +5339,7 @@ func (client BaseClient) GetChaosSchedule(ctx context.Context, timeout *int64) (
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetChaosSchedule", err.Error())
 	}
@@ -5438,8 +5388,7 @@ func (client BaseClient) GetChaosSchedulePreparer(ctx context.Context, timeout *
 // GetChaosScheduleSender sends the GetChaosSchedule request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetChaosScheduleSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetChaosScheduleResponder handles the response to the GetChaosSchedule request. The method always
@@ -5478,7 +5427,7 @@ func (client BaseClient) GetClusterConfiguration(ctx context.Context, configurat
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetClusterConfiguration", err.Error())
 	}
@@ -5528,8 +5477,7 @@ func (client BaseClient) GetClusterConfigurationPreparer(ctx context.Context, co
 // GetClusterConfigurationSender sends the GetClusterConfiguration request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetClusterConfigurationSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetClusterConfigurationResponder handles the response to the GetClusterConfiguration request. The method always
@@ -5566,7 +5514,7 @@ func (client BaseClient) GetClusterConfigurationUpgradeStatus(ctx context.Contex
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetClusterConfigurationUpgradeStatus", err.Error())
 	}
@@ -5615,8 +5563,7 @@ func (client BaseClient) GetClusterConfigurationUpgradeStatusPreparer(ctx contex
 // GetClusterConfigurationUpgradeStatusSender sends the GetClusterConfigurationUpgradeStatus request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetClusterConfigurationUpgradeStatusSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetClusterConfigurationUpgradeStatusResponder handles the response to the GetClusterConfigurationUpgradeStatus request. The method always
@@ -5660,7 +5607,7 @@ func (client BaseClient) GetClusterEventList(ctx context.Context, startTimeUtc s
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetClusterEventList", err.Error())
 	}
@@ -5720,8 +5667,7 @@ func (client BaseClient) GetClusterEventListPreparer(ctx context.Context, startT
 // GetClusterEventListSender sends the GetClusterEventList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetClusterEventListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetClusterEventListResponder handles the response to the GetClusterEventList request. The method always
@@ -5821,7 +5767,7 @@ func (client BaseClient) GetClusterHealth(ctx context.Context, nodesHealthStateF
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetClusterHealth", err.Error())
 	}
@@ -5895,8 +5841,7 @@ func (client BaseClient) GetClusterHealthPreparer(ctx context.Context, nodesHeal
 // GetClusterHealthSender sends the GetClusterHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetClusterHealthSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetClusterHealthResponder handles the response to the GetClusterHealth request. The method always
@@ -5935,7 +5880,7 @@ func (client BaseClient) GetClusterHealthChunk(ctx context.Context, timeout *int
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetClusterHealthChunk", err.Error())
 	}
@@ -5984,8 +5929,7 @@ func (client BaseClient) GetClusterHealthChunkPreparer(ctx context.Context, time
 // GetClusterHealthChunkSender sends the GetClusterHealthChunk request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetClusterHealthChunkSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetClusterHealthChunkResponder handles the response to the GetClusterHealthChunk request. The method always
@@ -6043,7 +5987,7 @@ func (client BaseClient) GetClusterHealthChunkUsingPolicyAndAdvancedFilters(ctx 
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetClusterHealthChunkUsingPolicyAndAdvancedFilters", err.Error())
 	}
@@ -6097,8 +6041,7 @@ func (client BaseClient) GetClusterHealthChunkUsingPolicyAndAdvancedFiltersPrepa
 // GetClusterHealthChunkUsingPolicyAndAdvancedFiltersSender sends the GetClusterHealthChunkUsingPolicyAndAdvancedFilters request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetClusterHealthChunkUsingPolicyAndAdvancedFiltersSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetClusterHealthChunkUsingPolicyAndAdvancedFiltersResponder handles the response to the GetClusterHealthChunkUsingPolicyAndAdvancedFilters request. The method always
@@ -6207,7 +6150,7 @@ func (client BaseClient) GetClusterHealthUsingPolicy(ctx context.Context, nodesH
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetClusterHealthUsingPolicy", err.Error())
 	}
@@ -6286,8 +6229,7 @@ func (client BaseClient) GetClusterHealthUsingPolicyPreparer(ctx context.Context
 // GetClusterHealthUsingPolicySender sends the GetClusterHealthUsingPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetClusterHealthUsingPolicySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetClusterHealthUsingPolicyResponder handles the response to the GetClusterHealthUsingPolicy request. The method always
@@ -6333,7 +6275,7 @@ func (client BaseClient) GetClusterManifest(ctx context.Context, timeout *int64)
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetClusterManifest", err.Error())
 	}
@@ -6382,8 +6324,7 @@ func (client BaseClient) GetClusterManifestPreparer(ctx context.Context, timeout
 // GetClusterManifestSender sends the GetClusterManifest request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetClusterManifestSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetClusterManifestResponder handles the response to the GetClusterManifest request. The method always
@@ -6420,7 +6361,7 @@ func (client BaseClient) GetClusterUpgradeProgress(ctx context.Context, timeout 
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetClusterUpgradeProgress", err.Error())
 	}
@@ -6469,8 +6410,7 @@ func (client BaseClient) GetClusterUpgradeProgressPreparer(ctx context.Context, 
 // GetClusterUpgradeProgressSender sends the GetClusterUpgradeProgress request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetClusterUpgradeProgressSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetClusterUpgradeProgressResponder handles the response to the GetClusterUpgradeProgress request. The method always
@@ -6507,7 +6447,7 @@ func (client BaseClient) GetClusterVersion(ctx context.Context, timeout *int64) 
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetClusterVersion", err.Error())
 	}
@@ -6556,8 +6496,7 @@ func (client BaseClient) GetClusterVersionPreparer(ctx context.Context, timeout 
 // GetClusterVersionSender sends the GetClusterVersion request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetClusterVersionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetClusterVersionResponder handles the response to the GetClusterVersion request. The method always
@@ -6596,7 +6535,7 @@ func (client BaseClient) GetComposeDeploymentStatus(ctx context.Context, deploym
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetComposeDeploymentStatus", err.Error())
 	}
@@ -6649,8 +6588,7 @@ func (client BaseClient) GetComposeDeploymentStatusPreparer(ctx context.Context,
 // GetComposeDeploymentStatusSender sends the GetComposeDeploymentStatus request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetComposeDeploymentStatusSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetComposeDeploymentStatusResponder handles the response to the GetComposeDeploymentStatus request. The method always
@@ -6698,11 +6636,11 @@ func (client BaseClient) GetComposeDeploymentStatusList(ctx context.Context, con
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetComposeDeploymentStatusList", err.Error())
 	}
@@ -6759,8 +6697,7 @@ func (client BaseClient) GetComposeDeploymentStatusListPreparer(ctx context.Cont
 // GetComposeDeploymentStatusListSender sends the GetComposeDeploymentStatusList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetComposeDeploymentStatusListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetComposeDeploymentStatusListResponder handles the response to the GetComposeDeploymentStatusList request. The method always
@@ -6798,7 +6735,7 @@ func (client BaseClient) GetComposeDeploymentUpgradeProgress(ctx context.Context
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetComposeDeploymentUpgradeProgress", err.Error())
 	}
@@ -6851,8 +6788,7 @@ func (client BaseClient) GetComposeDeploymentUpgradeProgressPreparer(ctx context
 // GetComposeDeploymentUpgradeProgressSender sends the GetComposeDeploymentUpgradeProgress request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetComposeDeploymentUpgradeProgressSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetComposeDeploymentUpgradeProgressResponder handles the response to the GetComposeDeploymentUpgradeProgress request. The method always
@@ -6901,7 +6837,7 @@ func (client BaseClient) GetContainerLogsDeployedOnNode(ctx context.Context, nod
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetContainerLogsDeployedOnNode", err.Error())
 	}
@@ -6965,8 +6901,7 @@ func (client BaseClient) GetContainerLogsDeployedOnNodePreparer(ctx context.Cont
 // GetContainerLogsDeployedOnNodeSender sends the GetContainerLogsDeployedOnNode request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetContainerLogsDeployedOnNodeSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetContainerLogsDeployedOnNodeResponder handles the response to the GetContainerLogsDeployedOnNode request. The method always
@@ -7010,7 +6945,7 @@ func (client BaseClient) GetContainersEventList(ctx context.Context, startTimeUt
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetContainersEventList", err.Error())
 	}
@@ -7070,8 +7005,7 @@ func (client BaseClient) GetContainersEventListPreparer(ctx context.Context, sta
 // GetContainersEventListSender sends the GetContainersEventList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetContainersEventListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetContainersEventListResponder handles the response to the GetContainersEventList request. The method always
@@ -7108,7 +7042,7 @@ func (client BaseClient) GetCorrelatedEventList(ctx context.Context, eventInstan
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetCorrelatedEventList", err.Error())
 	}
@@ -7161,8 +7095,7 @@ func (client BaseClient) GetCorrelatedEventListPreparer(ctx context.Context, eve
 // GetCorrelatedEventListSender sends the GetCorrelatedEventList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetCorrelatedEventListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetCorrelatedEventListResponder handles the response to the GetCorrelatedEventList request. The method always
@@ -7206,7 +7139,7 @@ func (client BaseClient) GetDataLossProgress(ctx context.Context, serviceID stri
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetDataLossProgress", err.Error())
 	}
@@ -7261,8 +7194,7 @@ func (client BaseClient) GetDataLossProgressPreparer(ctx context.Context, servic
 // GetDataLossProgressSender sends the GetDataLossProgress request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDataLossProgressSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetDataLossProgressResponder handles the response to the GetDataLossProgress request. The method always
@@ -7343,7 +7275,7 @@ func (client BaseClient) GetDeployedApplicationHealth(ctx context.Context, nodeN
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetDeployedApplicationHealth", err.Error())
 	}
@@ -7412,8 +7344,7 @@ func (client BaseClient) GetDeployedApplicationHealthPreparer(ctx context.Contex
 // GetDeployedApplicationHealthSender sends the GetDeployedApplicationHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedApplicationHealthSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetDeployedApplicationHealthResponder handles the response to the GetDeployedApplicationHealth request. The method always
@@ -7501,7 +7432,7 @@ func (client BaseClient) GetDeployedApplicationHealthUsingPolicy(ctx context.Con
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetDeployedApplicationHealthUsingPolicy", err.Error())
 	}
@@ -7575,8 +7506,7 @@ func (client BaseClient) GetDeployedApplicationHealthUsingPolicyPreparer(ctx con
 // GetDeployedApplicationHealthUsingPolicySender sends the GetDeployedApplicationHealthUsingPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedApplicationHealthUsingPolicySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetDeployedApplicationHealthUsingPolicyResponder handles the response to the GetDeployedApplicationHealthUsingPolicy request. The method always
@@ -7626,7 +7556,7 @@ func (client BaseClient) GetDeployedApplicationInfo(ctx context.Context, nodeNam
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetDeployedApplicationInfo", err.Error())
 	}
@@ -7685,8 +7615,7 @@ func (client BaseClient) GetDeployedApplicationInfoPreparer(ctx context.Context,
 // GetDeployedApplicationInfoSender sends the GetDeployedApplicationInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedApplicationInfoSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetDeployedApplicationInfoResponder handles the response to the GetDeployedApplicationInfo request. The method always
@@ -7742,11 +7671,11 @@ func (client BaseClient) GetDeployedApplicationInfoList(ctx context.Context, nod
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}},
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetDeployedApplicationInfoList", err.Error())
 	}
 
@@ -7811,8 +7740,7 @@ func (client BaseClient) GetDeployedApplicationInfoListPreparer(ctx context.Cont
 // GetDeployedApplicationInfoListSender sends the GetDeployedApplicationInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedApplicationInfoListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetDeployedApplicationInfoListResponder handles the response to the GetDeployedApplicationInfoList request. The method always
@@ -7859,7 +7787,7 @@ func (client BaseClient) GetDeployedCodePackageInfoList(ctx context.Context, nod
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetDeployedCodePackageInfoList", err.Error())
 	}
@@ -7919,8 +7847,7 @@ func (client BaseClient) GetDeployedCodePackageInfoListPreparer(ctx context.Cont
 // GetDeployedCodePackageInfoListSender sends the GetDeployedCodePackageInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedCodePackageInfoListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetDeployedCodePackageInfoListResponder handles the response to the GetDeployedCodePackageInfoList request. The method always
@@ -7980,7 +7907,7 @@ func (client BaseClient) GetDeployedServicePackageHealth(ctx context.Context, no
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetDeployedServicePackageHealth", err.Error())
 	}
@@ -8040,8 +7967,7 @@ func (client BaseClient) GetDeployedServicePackageHealthPreparer(ctx context.Con
 // GetDeployedServicePackageHealthSender sends the GetDeployedServicePackageHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedServicePackageHealthSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetDeployedServicePackageHealthResponder handles the response to the GetDeployedServicePackageHealth request. The method always
@@ -8108,7 +8034,7 @@ func (client BaseClient) GetDeployedServicePackageHealthUsingPolicy(ctx context.
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetDeployedServicePackageHealthUsingPolicy", err.Error())
 	}
@@ -8173,8 +8099,7 @@ func (client BaseClient) GetDeployedServicePackageHealthUsingPolicyPreparer(ctx 
 // GetDeployedServicePackageHealthUsingPolicySender sends the GetDeployedServicePackageHealthUsingPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedServicePackageHealthUsingPolicySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetDeployedServicePackageHealthUsingPolicyResponder handles the response to the GetDeployedServicePackageHealthUsingPolicy request. The method always
@@ -8217,7 +8142,7 @@ func (client BaseClient) GetDeployedServicePackageInfoList(ctx context.Context, 
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetDeployedServicePackageInfoList", err.Error())
 	}
@@ -8271,8 +8196,7 @@ func (client BaseClient) GetDeployedServicePackageInfoListPreparer(ctx context.C
 // GetDeployedServicePackageInfoListSender sends the GetDeployedServicePackageInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedServicePackageInfoListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetDeployedServicePackageInfoListResponder handles the response to the GetDeployedServicePackageInfoList request. The method always
@@ -8317,7 +8241,7 @@ func (client BaseClient) GetDeployedServicePackageInfoListByName(ctx context.Con
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetDeployedServicePackageInfoListByName", err.Error())
 	}
@@ -8372,8 +8296,7 @@ func (client BaseClient) GetDeployedServicePackageInfoListByNamePreparer(ctx con
 // GetDeployedServicePackageInfoListByNameSender sends the GetDeployedServicePackageInfoListByName request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedServicePackageInfoListByNameSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetDeployedServicePackageInfoListByNameResponder handles the response to the GetDeployedServicePackageInfoListByName request. The method always
@@ -8414,7 +8337,7 @@ func (client BaseClient) GetDeployedServiceReplicaDetailInfo(ctx context.Context
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetDeployedServiceReplicaDetailInfo", err.Error())
 	}
@@ -8469,8 +8392,7 @@ func (client BaseClient) GetDeployedServiceReplicaDetailInfoPreparer(ctx context
 // GetDeployedServiceReplicaDetailInfoSender sends the GetDeployedServiceReplicaDetailInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedServiceReplicaDetailInfoSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetDeployedServiceReplicaDetailInfoResponder handles the response to the GetDeployedServiceReplicaDetailInfo request. The method always
@@ -8510,7 +8432,7 @@ func (client BaseClient) GetDeployedServiceReplicaDetailInfoByPartitionID(ctx co
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetDeployedServiceReplicaDetailInfoByPartitionID", err.Error())
 	}
@@ -8564,8 +8486,7 @@ func (client BaseClient) GetDeployedServiceReplicaDetailInfoByPartitionIDPrepare
 // GetDeployedServiceReplicaDetailInfoByPartitionIDSender sends the GetDeployedServiceReplicaDetailInfoByPartitionID request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedServiceReplicaDetailInfoByPartitionIDSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetDeployedServiceReplicaDetailInfoByPartitionIDResponder handles the response to the GetDeployedServiceReplicaDetailInfoByPartitionID request. The method always
@@ -8613,7 +8534,7 @@ func (client BaseClient) GetDeployedServiceReplicaInfoList(ctx context.Context, 
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetDeployedServiceReplicaInfoList", err.Error())
 	}
@@ -8673,8 +8594,7 @@ func (client BaseClient) GetDeployedServiceReplicaInfoListPreparer(ctx context.C
 // GetDeployedServiceReplicaInfoListSender sends the GetDeployedServiceReplicaInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedServiceReplicaInfoListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetDeployedServiceReplicaInfoListResponder handles the response to the GetDeployedServiceReplicaInfoList request. The method always
@@ -8723,7 +8643,7 @@ func (client BaseClient) GetDeployedServiceTypeInfoByName(ctx context.Context, n
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetDeployedServiceTypeInfoByName", err.Error())
 	}
@@ -8781,8 +8701,7 @@ func (client BaseClient) GetDeployedServiceTypeInfoByNamePreparer(ctx context.Co
 // GetDeployedServiceTypeInfoByNameSender sends the GetDeployedServiceTypeInfoByName request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedServiceTypeInfoByNameSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetDeployedServiceTypeInfoByNameResponder handles the response to the GetDeployedServiceTypeInfoByName request. The method always
@@ -8829,7 +8748,7 @@ func (client BaseClient) GetDeployedServiceTypeInfoList(ctx context.Context, nod
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetDeployedServiceTypeInfoList", err.Error())
 	}
@@ -8886,8 +8805,7 @@ func (client BaseClient) GetDeployedServiceTypeInfoListPreparer(ctx context.Cont
 // GetDeployedServiceTypeInfoListSender sends the GetDeployedServiceTypeInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetDeployedServiceTypeInfoListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetDeployedServiceTypeInfoListResponder handles the response to the GetDeployedServiceTypeInfoList request. The method always
@@ -8939,7 +8857,7 @@ func (client BaseClient) GetFaultOperationList(ctx context.Context, typeFilter i
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetFaultOperationList", err.Error())
 	}
@@ -8990,8 +8908,7 @@ func (client BaseClient) GetFaultOperationListPreparer(ctx context.Context, type
 // GetFaultOperationListSender sends the GetFaultOperationList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetFaultOperationListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetFaultOperationListResponder handles the response to the GetFaultOperationList request. The method always
@@ -9029,7 +8946,7 @@ func (client BaseClient) GetImageStoreContent(ctx context.Context, contentPath s
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetImageStoreContent", err.Error())
 	}
@@ -9082,8 +8999,7 @@ func (client BaseClient) GetImageStoreContentPreparer(ctx context.Context, conte
 // GetImageStoreContentSender sends the GetImageStoreContent request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetImageStoreContentSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetImageStoreContentResponder handles the response to the GetImageStoreContent request. The method always
@@ -9119,7 +9035,7 @@ func (client BaseClient) GetImageStoreRootContent(ctx context.Context, timeout *
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetImageStoreRootContent", err.Error())
 	}
@@ -9168,8 +9084,7 @@ func (client BaseClient) GetImageStoreRootContentPreparer(ctx context.Context, t
 // GetImageStoreRootContentSender sends the GetImageStoreRootContent request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetImageStoreRootContentSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetImageStoreRootContentResponder handles the response to the GetImageStoreRootContent request. The method always
@@ -9208,7 +9123,7 @@ func (client BaseClient) GetImageStoreUploadSessionByID(ctx context.Context, ses
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetImageStoreUploadSessionByID", err.Error())
 	}
@@ -9258,8 +9173,7 @@ func (client BaseClient) GetImageStoreUploadSessionByIDPreparer(ctx context.Cont
 // GetImageStoreUploadSessionByIDSender sends the GetImageStoreUploadSessionByID request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetImageStoreUploadSessionByIDSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetImageStoreUploadSessionByIDResponder handles the response to the GetImageStoreUploadSessionByID request. The method always
@@ -9297,7 +9211,7 @@ func (client BaseClient) GetImageStoreUploadSessionByPath(ctx context.Context, c
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetImageStoreUploadSessionByPath", err.Error())
 	}
@@ -9350,8 +9264,7 @@ func (client BaseClient) GetImageStoreUploadSessionByPathPreparer(ctx context.Co
 // GetImageStoreUploadSessionByPathSender sends the GetImageStoreUploadSessionByPath request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetImageStoreUploadSessionByPathSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetImageStoreUploadSessionByPathResponder handles the response to the GetImageStoreUploadSessionByPath request. The method always
@@ -9388,7 +9301,7 @@ func (client BaseClient) GetNameExistsInfo(ctx context.Context, nameID string, t
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetNameExistsInfo", err.Error())
 	}
@@ -9441,8 +9354,7 @@ func (client BaseClient) GetNameExistsInfoPreparer(ctx context.Context, nameID s
 // GetNameExistsInfoSender sends the GetNameExistsInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetNameExistsInfoSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetNameExistsInfoResponder handles the response to the GetNameExistsInfo request. The method always
@@ -9486,7 +9398,7 @@ func (client BaseClient) GetNodeEventList(ctx context.Context, nodeName string, 
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetNodeEventList", err.Error())
 	}
@@ -9550,8 +9462,7 @@ func (client BaseClient) GetNodeEventListPreparer(ctx context.Context, nodeName 
 // GetNodeEventListSender sends the GetNodeEventList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetNodeEventListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetNodeEventListResponder handles the response to the GetNodeEventList request. The method always
@@ -9605,7 +9516,7 @@ func (client BaseClient) GetNodeHealth(ctx context.Context, nodeName string, eve
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetNodeHealth", err.Error())
 	}
@@ -9663,8 +9574,7 @@ func (client BaseClient) GetNodeHealthPreparer(ctx context.Context, nodeName str
 // GetNodeHealthSender sends the GetNodeHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetNodeHealthSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetNodeHealthResponder handles the response to the GetNodeHealth request. The method always
@@ -9721,7 +9631,7 @@ func (client BaseClient) GetNodeHealthUsingPolicy(ctx context.Context, nodeName 
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetNodeHealthUsingPolicy", err.Error())
 	}
@@ -9784,8 +9694,7 @@ func (client BaseClient) GetNodeHealthUsingPolicyPreparer(ctx context.Context, n
 // GetNodeHealthUsingPolicySender sends the GetNodeHealthUsingPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetNodeHealthUsingPolicySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetNodeHealthUsingPolicyResponder handles the response to the GetNodeHealthUsingPolicy request. The method always
@@ -9822,7 +9731,7 @@ func (client BaseClient) GetNodeInfo(ctx context.Context, nodeName string, timeo
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetNodeInfo", err.Error())
 	}
@@ -9875,8 +9784,7 @@ func (client BaseClient) GetNodeInfoPreparer(ctx context.Context, nodeName strin
 // GetNodeInfoSender sends the GetNodeInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetNodeInfoSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetNodeInfoResponder handles the response to the GetNodeInfo request. The method always
@@ -9923,11 +9831,11 @@ func (client BaseClient) GetNodeInfoList(ctx context.Context, continuationToken 
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetNodeInfoList", err.Error())
 	}
@@ -9989,8 +9897,7 @@ func (client BaseClient) GetNodeInfoListPreparer(ctx context.Context, continuati
 // GetNodeInfoListSender sends the GetNodeInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetNodeInfoListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetNodeInfoListResponder handles the response to the GetNodeInfoList request. The method always
@@ -10028,7 +9935,7 @@ func (client BaseClient) GetNodeLoadInfo(ctx context.Context, nodeName string, t
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetNodeLoadInfo", err.Error())
 	}
@@ -10081,8 +9988,7 @@ func (client BaseClient) GetNodeLoadInfoPreparer(ctx context.Context, nodeName s
 // GetNodeLoadInfoSender sends the GetNodeLoadInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetNodeLoadInfoSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetNodeLoadInfoResponder handles the response to the GetNodeLoadInfo request. The method always
@@ -10126,7 +10032,7 @@ func (client BaseClient) GetNodesEventList(ctx context.Context, startTimeUtc str
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetNodesEventList", err.Error())
 	}
@@ -10186,8 +10092,7 @@ func (client BaseClient) GetNodesEventListPreparer(ctx context.Context, startTim
 // GetNodesEventListSender sends the GetNodesEventList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetNodesEventListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetNodesEventListResponder handles the response to the GetNodesEventList request. The method always
@@ -10227,7 +10132,7 @@ func (client BaseClient) GetNodeTransitionProgress(ctx context.Context, nodeName
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetNodeTransitionProgress", err.Error())
 	}
@@ -10281,8 +10186,7 @@ func (client BaseClient) GetNodeTransitionProgressPreparer(ctx context.Context, 
 // GetNodeTransitionProgressSender sends the GetNodeTransitionProgress request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetNodeTransitionProgressSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetNodeTransitionProgressResponder handles the response to the GetNodeTransitionProgress request. The method always
@@ -10320,7 +10224,7 @@ func (client BaseClient) GetPartitionBackupConfigurationInfo(ctx context.Context
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetPartitionBackupConfigurationInfo", err.Error())
 	}
@@ -10373,8 +10277,7 @@ func (client BaseClient) GetPartitionBackupConfigurationInfoPreparer(ctx context
 // GetPartitionBackupConfigurationInfoSender sends the GetPartitionBackupConfigurationInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPartitionBackupConfigurationInfoSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetPartitionBackupConfigurationInfoResponder handles the response to the GetPartitionBackupConfigurationInfo request. The method always
@@ -10421,7 +10324,7 @@ func (client BaseClient) GetPartitionBackupList(ctx context.Context, partitionID
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetPartitionBackupList", err.Error())
 	}
@@ -10485,8 +10388,7 @@ func (client BaseClient) GetPartitionBackupListPreparer(ctx context.Context, par
 // GetPartitionBackupListSender sends the GetPartitionBackupList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPartitionBackupListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetPartitionBackupListResponder handles the response to the GetPartitionBackupList request. The method always
@@ -10524,7 +10426,7 @@ func (client BaseClient) GetPartitionBackupProgress(ctx context.Context, partiti
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetPartitionBackupProgress", err.Error())
 	}
@@ -10577,8 +10479,7 @@ func (client BaseClient) GetPartitionBackupProgressPreparer(ctx context.Context,
 // GetPartitionBackupProgressSender sends the GetPartitionBackupProgress request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPartitionBackupProgressSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetPartitionBackupProgressResponder handles the response to the GetPartitionBackupProgress request. The method always
@@ -10623,7 +10524,7 @@ func (client BaseClient) GetPartitionEventList(ctx context.Context, partitionID 
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetPartitionEventList", err.Error())
 	}
@@ -10687,8 +10588,7 @@ func (client BaseClient) GetPartitionEventListPreparer(ctx context.Context, part
 // GetPartitionEventListSender sends the GetPartitionEventList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPartitionEventListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetPartitionEventListResponder handles the response to the GetPartitionEventList request. The method always
@@ -10761,7 +10661,7 @@ func (client BaseClient) GetPartitionHealth(ctx context.Context, partitionID uui
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetPartitionHealth", err.Error())
 	}
@@ -10829,8 +10729,7 @@ func (client BaseClient) GetPartitionHealthPreparer(ctx context.Context, partiti
 // GetPartitionHealthSender sends the GetPartitionHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPartitionHealthSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetPartitionHealthResponder handles the response to the GetPartitionHealth request. The method always
@@ -10912,7 +10811,7 @@ func (client BaseClient) GetPartitionHealthUsingPolicy(ctx context.Context, part
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetPartitionHealthUsingPolicy", err.Error())
 	}
@@ -10985,8 +10884,7 @@ func (client BaseClient) GetPartitionHealthUsingPolicyPreparer(ctx context.Conte
 // GetPartitionHealthUsingPolicySender sends the GetPartitionHealthUsingPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPartitionHealthUsingPolicySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetPartitionHealthUsingPolicyResponder handles the response to the GetPartitionHealthUsingPolicy request. The method always
@@ -11025,7 +10923,7 @@ func (client BaseClient) GetPartitionInfo(ctx context.Context, partitionID uuid.
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetPartitionInfo", err.Error())
 	}
@@ -11078,8 +10976,7 @@ func (client BaseClient) GetPartitionInfoPreparer(ctx context.Context, partition
 // GetPartitionInfoSender sends the GetPartitionInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPartitionInfoSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetPartitionInfoResponder handles the response to the GetPartitionInfo request. The method always
@@ -11126,7 +11023,7 @@ func (client BaseClient) GetPartitionInfoList(ctx context.Context, serviceID str
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetPartitionInfoList", err.Error())
 	}
@@ -11182,8 +11079,7 @@ func (client BaseClient) GetPartitionInfoListPreparer(ctx context.Context, servi
 // GetPartitionInfoListSender sends the GetPartitionInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPartitionInfoListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetPartitionInfoListResponder handles the response to the GetPartitionInfoList request. The method always
@@ -11222,7 +11118,7 @@ func (client BaseClient) GetPartitionLoadInformation(ctx context.Context, partit
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetPartitionLoadInformation", err.Error())
 	}
@@ -11275,8 +11171,7 @@ func (client BaseClient) GetPartitionLoadInformationPreparer(ctx context.Context
 // GetPartitionLoadInformationSender sends the GetPartitionLoadInformation request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPartitionLoadInformationSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetPartitionLoadInformationResponder handles the response to the GetPartitionLoadInformation request. The method always
@@ -11322,7 +11217,7 @@ func (client BaseClient) GetPartitionReplicaEventList(ctx context.Context, parti
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetPartitionReplicaEventList", err.Error())
 	}
@@ -11387,8 +11282,7 @@ func (client BaseClient) GetPartitionReplicaEventListPreparer(ctx context.Contex
 // GetPartitionReplicaEventListSender sends the GetPartitionReplicaEventList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPartitionReplicaEventListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetPartitionReplicaEventListResponder handles the response to the GetPartitionReplicaEventList request. The method always
@@ -11433,7 +11327,7 @@ func (client BaseClient) GetPartitionReplicasEventList(ctx context.Context, part
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetPartitionReplicasEventList", err.Error())
 	}
@@ -11497,8 +11391,7 @@ func (client BaseClient) GetPartitionReplicasEventListPreparer(ctx context.Conte
 // GetPartitionReplicasEventListSender sends the GetPartitionReplicasEventList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPartitionReplicasEventListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetPartitionReplicasEventListResponder handles the response to the GetPartitionReplicasEventList request. The method always
@@ -11543,7 +11436,7 @@ func (client BaseClient) GetPartitionRestartProgress(ctx context.Context, servic
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetPartitionRestartProgress", err.Error())
 	}
@@ -11598,8 +11491,7 @@ func (client BaseClient) GetPartitionRestartProgressPreparer(ctx context.Context
 // GetPartitionRestartProgressSender sends the GetPartitionRestartProgress request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPartitionRestartProgressSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetPartitionRestartProgressResponder handles the response to the GetPartitionRestartProgress request. The method always
@@ -11637,7 +11529,7 @@ func (client BaseClient) GetPartitionRestoreProgress(ctx context.Context, partit
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetPartitionRestoreProgress", err.Error())
 	}
@@ -11690,8 +11582,7 @@ func (client BaseClient) GetPartitionRestoreProgressPreparer(ctx context.Context
 // GetPartitionRestoreProgressSender sends the GetPartitionRestoreProgress request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPartitionRestoreProgressSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetPartitionRestoreProgressResponder handles the response to the GetPartitionRestoreProgress request. The method always
@@ -11735,7 +11626,7 @@ func (client BaseClient) GetPartitionsEventList(ctx context.Context, startTimeUt
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetPartitionsEventList", err.Error())
 	}
@@ -11795,8 +11686,7 @@ func (client BaseClient) GetPartitionsEventListPreparer(ctx context.Context, sta
 // GetPartitionsEventListSender sends the GetPartitionsEventList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPartitionsEventListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetPartitionsEventListResponder handles the response to the GetPartitionsEventList request. The method always
@@ -11835,7 +11725,7 @@ func (client BaseClient) GetPropertyInfo(ctx context.Context, nameID string, pro
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetPropertyInfo", err.Error())
 	}
@@ -11889,8 +11779,7 @@ func (client BaseClient) GetPropertyInfoPreparer(ctx context.Context, nameID str
 // GetPropertyInfoSender sends the GetPropertyInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPropertyInfoSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetPropertyInfoResponder handles the response to the GetPropertyInfo request. The method always
@@ -11936,7 +11825,7 @@ func (client BaseClient) GetPropertyInfoList(ctx context.Context, nameID string,
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetPropertyInfoList", err.Error())
 	}
@@ -11997,8 +11886,7 @@ func (client BaseClient) GetPropertyInfoListPreparer(ctx context.Context, nameID
 // GetPropertyInfoListSender sends the GetPropertyInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetPropertyInfoListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetPropertyInfoListResponder handles the response to the GetPropertyInfoList request. The method always
@@ -12037,7 +11925,7 @@ func (client BaseClient) GetProvisionedFabricCodeVersionInfoList(ctx context.Con
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetProvisionedFabricCodeVersionInfoList", err.Error())
 	}
@@ -12089,8 +11977,7 @@ func (client BaseClient) GetProvisionedFabricCodeVersionInfoListPreparer(ctx con
 // GetProvisionedFabricCodeVersionInfoListSender sends the GetProvisionedFabricCodeVersionInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetProvisionedFabricCodeVersionInfoListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetProvisionedFabricCodeVersionInfoListResponder handles the response to the GetProvisionedFabricCodeVersionInfoList request. The method always
@@ -12129,7 +12016,7 @@ func (client BaseClient) GetProvisionedFabricConfigVersionInfoList(ctx context.C
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetProvisionedFabricConfigVersionInfoList", err.Error())
 	}
@@ -12181,8 +12068,7 @@ func (client BaseClient) GetProvisionedFabricConfigVersionInfoListPreparer(ctx c
 // GetProvisionedFabricConfigVersionInfoListSender sends the GetProvisionedFabricConfigVersionInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetProvisionedFabricConfigVersionInfoListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetProvisionedFabricConfigVersionInfoListResponder handles the response to the GetProvisionedFabricConfigVersionInfoList request. The method always
@@ -12227,7 +12113,7 @@ func (client BaseClient) GetQuorumLossProgress(ctx context.Context, serviceID st
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetQuorumLossProgress", err.Error())
 	}
@@ -12282,8 +12168,7 @@ func (client BaseClient) GetQuorumLossProgressPreparer(ctx context.Context, serv
 // GetQuorumLossProgressSender sends the GetQuorumLossProgress request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetQuorumLossProgressSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetQuorumLossProgressResponder handles the response to the GetQuorumLossProgress request. The method always
@@ -12372,8 +12257,7 @@ func (client BaseClient) GetRepairTaskListPreparer(ctx context.Context, taskIDFi
 // GetRepairTaskListSender sends the GetRepairTaskList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetRepairTaskListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetRepairTaskListResponder handles the response to the GetRepairTaskList request. The method always
@@ -12428,7 +12312,7 @@ func (client BaseClient) GetReplicaHealth(ctx context.Context, partitionID uuid.
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetReplicaHealth", err.Error())
 	}
@@ -12487,8 +12371,7 @@ func (client BaseClient) GetReplicaHealthPreparer(ctx context.Context, partition
 // GetReplicaHealthSender sends the GetReplicaHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetReplicaHealthSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetReplicaHealthResponder handles the response to the GetReplicaHealth request. The method always
@@ -12551,7 +12434,7 @@ func (client BaseClient) GetReplicaHealthUsingPolicy(ctx context.Context, partit
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetReplicaHealthUsingPolicy", err.Error())
 	}
@@ -12615,8 +12498,7 @@ func (client BaseClient) GetReplicaHealthUsingPolicyPreparer(ctx context.Context
 // GetReplicaHealthUsingPolicySender sends the GetReplicaHealthUsingPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetReplicaHealthUsingPolicySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetReplicaHealthUsingPolicyResponder handles the response to the GetReplicaHealthUsingPolicy request. The method always
@@ -12655,7 +12537,7 @@ func (client BaseClient) GetReplicaInfo(ctx context.Context, partitionID uuid.UU
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetReplicaInfo", err.Error())
 	}
@@ -12709,8 +12591,7 @@ func (client BaseClient) GetReplicaInfoPreparer(ctx context.Context, partitionID
 // GetReplicaInfoSender sends the GetReplicaInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetReplicaInfoSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetReplicaInfoResponder handles the response to the GetReplicaInfo request. The method always
@@ -12753,7 +12634,7 @@ func (client BaseClient) GetReplicaInfoList(ctx context.Context, partitionID uui
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetReplicaInfoList", err.Error())
 	}
@@ -12809,8 +12690,7 @@ func (client BaseClient) GetReplicaInfoListPreparer(ctx context.Context, partiti
 // GetReplicaInfoListSender sends the GetReplicaInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetReplicaInfoListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetReplicaInfoListResponder handles the response to the GetReplicaInfoList request. The method always
@@ -12861,11 +12741,11 @@ func (client BaseClient) GetServiceBackupConfigurationInfo(ctx context.Context, 
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetServiceBackupConfigurationInfo", err.Error())
 	}
@@ -12926,8 +12806,7 @@ func (client BaseClient) GetServiceBackupConfigurationInfoPreparer(ctx context.C
 // GetServiceBackupConfigurationInfoSender sends the GetServiceBackupConfigurationInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServiceBackupConfigurationInfoSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetServiceBackupConfigurationInfoResponder handles the response to the GetServiceBackupConfigurationInfo request. The method always
@@ -12989,11 +12868,11 @@ func (client BaseClient) GetServiceBackupList(ctx context.Context, serviceID str
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}},
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetServiceBackupList", err.Error())
 	}
 
@@ -13064,8 +12943,7 @@ func (client BaseClient) GetServiceBackupListPreparer(ctx context.Context, servi
 // GetServiceBackupListSender sends the GetServiceBackupList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServiceBackupListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetServiceBackupListResponder handles the response to the GetServiceBackupList request. The method always
@@ -13107,7 +12985,7 @@ func (client BaseClient) GetServiceDescription(ctx context.Context, serviceID st
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetServiceDescription", err.Error())
 	}
@@ -13160,8 +13038,7 @@ func (client BaseClient) GetServiceDescriptionPreparer(ctx context.Context, serv
 // GetServiceDescriptionSender sends the GetServiceDescription request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServiceDescriptionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetServiceDescriptionResponder handles the response to the GetServiceDescription request. The method always
@@ -13210,7 +13087,7 @@ func (client BaseClient) GetServiceEventList(ctx context.Context, serviceID stri
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetServiceEventList", err.Error())
 	}
@@ -13274,8 +13151,7 @@ func (client BaseClient) GetServiceEventListPreparer(ctx context.Context, servic
 // GetServiceEventListSender sends the GetServiceEventList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServiceEventListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetServiceEventListResponder handles the response to the GetServiceEventList request. The method always
@@ -13355,7 +13231,7 @@ func (client BaseClient) GetServiceHealth(ctx context.Context, serviceID string,
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetServiceHealth", err.Error())
 	}
@@ -13423,8 +13299,7 @@ func (client BaseClient) GetServiceHealthPreparer(ctx context.Context, serviceID
 // GetServiceHealthSender sends the GetServiceHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServiceHealthSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetServiceHealthResponder handles the response to the GetServiceHealth request. The method always
@@ -13511,7 +13386,7 @@ func (client BaseClient) GetServiceHealthUsingPolicy(ctx context.Context, servic
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetServiceHealthUsingPolicy", err.Error())
 	}
@@ -13584,8 +13459,7 @@ func (client BaseClient) GetServiceHealthUsingPolicyPreparer(ctx context.Context
 // GetServiceHealthUsingPolicySender sends the GetServiceHealthUsingPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServiceHealthUsingPolicySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetServiceHealthUsingPolicyResponder handles the response to the GetServiceHealthUsingPolicy request. The method always
@@ -13632,7 +13506,7 @@ func (client BaseClient) GetServiceInfo(ctx context.Context, applicationID strin
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetServiceInfo", err.Error())
 	}
@@ -13686,8 +13560,7 @@ func (client BaseClient) GetServiceInfoPreparer(ctx context.Context, application
 // GetServiceInfoSender sends the GetServiceInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServiceInfoSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetServiceInfoResponder handles the response to the GetServiceInfo request. The method always
@@ -13735,7 +13608,7 @@ func (client BaseClient) GetServiceInfoList(ctx context.Context, applicationID s
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetServiceInfoList", err.Error())
 	}
@@ -13794,8 +13667,7 @@ func (client BaseClient) GetServiceInfoListPreparer(ctx context.Context, applica
 // GetServiceInfoListSender sends the GetServiceInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServiceInfoListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetServiceInfoListResponder handles the response to the GetServiceInfoList request. The method always
@@ -13836,7 +13708,7 @@ func (client BaseClient) GetServiceManifest(ctx context.Context, applicationType
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetServiceManifest", err.Error())
 	}
@@ -13891,8 +13763,7 @@ func (client BaseClient) GetServiceManifestPreparer(ctx context.Context, applica
 // GetServiceManifestSender sends the GetServiceManifest request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServiceManifestSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetServiceManifestResponder handles the response to the GetServiceManifest request. The method always
@@ -13930,7 +13801,7 @@ func (client BaseClient) GetServiceNameInfo(ctx context.Context, partitionID uui
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetServiceNameInfo", err.Error())
 	}
@@ -13983,8 +13854,7 @@ func (client BaseClient) GetServiceNameInfoPreparer(ctx context.Context, partiti
 // GetServiceNameInfoSender sends the GetServiceNameInfo request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServiceNameInfoSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetServiceNameInfoResponder handles the response to the GetServiceNameInfo request. The method always
@@ -14028,7 +13898,7 @@ func (client BaseClient) GetServicesEventList(ctx context.Context, startTimeUtc 
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetServicesEventList", err.Error())
 	}
@@ -14088,8 +13958,7 @@ func (client BaseClient) GetServicesEventListPreparer(ctx context.Context, start
 // GetServicesEventListSender sends the GetServicesEventList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServicesEventListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetServicesEventListResponder handles the response to the GetServicesEventList request. The method always
@@ -14130,7 +13999,7 @@ func (client BaseClient) GetServiceTypeInfoByName(ctx context.Context, applicati
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetServiceTypeInfoByName", err.Error())
 	}
@@ -14185,8 +14054,7 @@ func (client BaseClient) GetServiceTypeInfoByNamePreparer(ctx context.Context, a
 // GetServiceTypeInfoByNameSender sends the GetServiceTypeInfoByName request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServiceTypeInfoByNameSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetServiceTypeInfoByNameResponder handles the response to the GetServiceTypeInfoByName request. The method always
@@ -14226,7 +14094,7 @@ func (client BaseClient) GetServiceTypeInfoList(ctx context.Context, application
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetServiceTypeInfoList", err.Error())
 	}
@@ -14280,8 +14148,7 @@ func (client BaseClient) GetServiceTypeInfoListPreparer(ctx context.Context, app
 // GetServiceTypeInfoListSender sends the GetServiceTypeInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetServiceTypeInfoListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetServiceTypeInfoListResponder handles the response to the GetServiceTypeInfoList request. The method always
@@ -14326,7 +14193,7 @@ func (client BaseClient) GetSubNameInfoList(ctx context.Context, nameID string, 
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetSubNameInfoList", err.Error())
 	}
@@ -14387,8 +14254,7 @@ func (client BaseClient) GetSubNameInfoListPreparer(ctx context.Context, nameID 
 // GetSubNameInfoListSender sends the GetSubNameInfoList request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetSubNameInfoListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetSubNameInfoListResponder handles the response to the GetSubNameInfoList request. The method always
@@ -14425,7 +14291,7 @@ func (client BaseClient) GetUpgradeOrchestrationServiceState(ctx context.Context
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "GetUpgradeOrchestrationServiceState", err.Error())
 	}
@@ -14474,8 +14340,7 @@ func (client BaseClient) GetUpgradeOrchestrationServiceStatePreparer(ctx context
 // GetUpgradeOrchestrationServiceStateSender sends the GetUpgradeOrchestrationServiceState request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) GetUpgradeOrchestrationServiceStateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetUpgradeOrchestrationServiceStateResponder handles the response to the GetUpgradeOrchestrationServiceState request. The method always
@@ -14524,7 +14389,7 @@ func (client BaseClient) InvokeContainerAPI(ctx context.Context, nodeName string
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}},
 		{TargetValue: containerAPIRequestBody,
 			Constraints: []validation.Constraint{{Target: "containerAPIRequestBody.URIPath", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -14585,8 +14450,7 @@ func (client BaseClient) InvokeContainerAPIPreparer(ctx context.Context, nodeNam
 // InvokeContainerAPISender sends the InvokeContainerAPI request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) InvokeContainerAPISender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // InvokeContainerAPIResponder handles the response to the InvokeContainerAPI request. The method always
@@ -14633,7 +14497,7 @@ func (client BaseClient) InvokeInfrastructureCommand(ctx context.Context, comman
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "InvokeInfrastructureCommand", err.Error())
 	}
@@ -14686,8 +14550,7 @@ func (client BaseClient) InvokeInfrastructureCommandPreparer(ctx context.Context
 // InvokeInfrastructureCommandSender sends the InvokeInfrastructureCommand request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) InvokeInfrastructureCommandSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // InvokeInfrastructureCommandResponder handles the response to the InvokeInfrastructureCommand request. The method always
@@ -14734,7 +14597,7 @@ func (client BaseClient) InvokeInfrastructureQuery(ctx context.Context, command 
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "InvokeInfrastructureQuery", err.Error())
 	}
@@ -14787,8 +14650,7 @@ func (client BaseClient) InvokeInfrastructureQueryPreparer(ctx context.Context, 
 // InvokeInfrastructureQuerySender sends the InvokeInfrastructureQuery request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) InvokeInfrastructureQuerySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // InvokeInfrastructureQueryResponder handles the response to the InvokeInfrastructureQuery request. The method always
@@ -14829,11 +14691,11 @@ func (client BaseClient) PostChaosSchedule(ctx context.Context, chaosSchedule Ch
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}},
 		{TargetValue: chaosSchedule,
 			Constraints: []validation.Constraint{{Target: "chaosSchedule.Version", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "chaosSchedule.Version", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "chaosSchedule.Version", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "PostChaosSchedule", err.Error())
 	}
 
@@ -14883,8 +14745,7 @@ func (client BaseClient) PostChaosSchedulePreparer(ctx context.Context, chaosSch
 // PostChaosScheduleSender sends the PostChaosSchedule request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) PostChaosScheduleSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // PostChaosScheduleResponder handles the response to the PostChaosSchedule request. The method always
@@ -14926,7 +14787,7 @@ func (client BaseClient) ProvisionApplicationType(ctx context.Context, provision
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "ProvisionApplicationType", err.Error())
 	}
@@ -14977,8 +14838,7 @@ func (client BaseClient) ProvisionApplicationTypePreparer(ctx context.Context, p
 // ProvisionApplicationTypeSender sends the ProvisionApplicationType request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ProvisionApplicationTypeSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ProvisionApplicationTypeResponder handles the response to the ProvisionApplicationType request. The method always
@@ -15014,7 +14874,7 @@ func (client BaseClient) ProvisionCluster(ctx context.Context, provisionFabricDe
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "ProvisionCluster", err.Error())
 	}
@@ -15065,8 +14925,7 @@ func (client BaseClient) ProvisionClusterPreparer(ctx context.Context, provision
 // ProvisionClusterSender sends the ProvisionCluster request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ProvisionClusterSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ProvisionClusterResponder handles the response to the ProvisionCluster request. The method always
@@ -15106,7 +14965,7 @@ func (client BaseClient) PutProperty(ctx context.Context, nameID string, propert
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "PutProperty", err.Error())
 	}
@@ -15161,8 +15020,7 @@ func (client BaseClient) PutPropertyPreparer(ctx context.Context, nameID string,
 // PutPropertySender sends the PutProperty request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) PutPropertySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // PutPropertyResponder handles the response to the PutProperty request. The method always
@@ -15198,7 +15056,7 @@ func (client BaseClient) RecoverAllPartitions(ctx context.Context, timeout *int6
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "RecoverAllPartitions", err.Error())
 	}
@@ -15247,8 +15105,7 @@ func (client BaseClient) RecoverAllPartitionsPreparer(ctx context.Context, timeo
 // RecoverAllPartitionsSender sends the RecoverAllPartitions request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RecoverAllPartitionsSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // RecoverAllPartitionsResponder handles the response to the RecoverAllPartitions request. The method always
@@ -15285,7 +15142,7 @@ func (client BaseClient) RecoverPartition(ctx context.Context, partitionID uuid.
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "RecoverPartition", err.Error())
 	}
@@ -15338,8 +15195,7 @@ func (client BaseClient) RecoverPartitionPreparer(ctx context.Context, partition
 // RecoverPartitionSender sends the RecoverPartition request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RecoverPartitionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // RecoverPartitionResponder handles the response to the RecoverPartition request. The method always
@@ -15381,7 +15237,7 @@ func (client BaseClient) RecoverServicePartitions(ctx context.Context, serviceID
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "RecoverServicePartitions", err.Error())
 	}
@@ -15434,8 +15290,7 @@ func (client BaseClient) RecoverServicePartitionsPreparer(ctx context.Context, s
 // RecoverServicePartitionsSender sends the RecoverServicePartitions request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RecoverServicePartitionsSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // RecoverServicePartitionsResponder handles the response to the RecoverServicePartitions request. The method always
@@ -15472,7 +15327,7 @@ func (client BaseClient) RecoverSystemPartitions(ctx context.Context, timeout *i
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "RecoverSystemPartitions", err.Error())
 	}
@@ -15521,8 +15376,7 @@ func (client BaseClient) RecoverSystemPartitionsPreparer(ctx context.Context, ti
 // RecoverSystemPartitionsSender sends the RecoverSystemPartitions request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RecoverSystemPartitionsSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // RecoverSystemPartitionsResponder handles the response to the RecoverSystemPartitions request. The method always
@@ -15558,7 +15412,7 @@ func (client BaseClient) RemoveComposeDeployment(ctx context.Context, deployment
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "RemoveComposeDeployment", err.Error())
 	}
@@ -15611,8 +15465,7 @@ func (client BaseClient) RemoveComposeDeploymentPreparer(ctx context.Context, de
 // RemoveComposeDeploymentSender sends the RemoveComposeDeployment request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RemoveComposeDeploymentSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // RemoveComposeDeploymentResponder handles the response to the RemoveComposeDeployment request. The method always
@@ -15652,7 +15505,7 @@ func (client BaseClient) RemoveNodeState(ctx context.Context, nodeName string, t
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "RemoveNodeState", err.Error())
 	}
@@ -15705,8 +15558,7 @@ func (client BaseClient) RemoveNodeStatePreparer(ctx context.Context, nodeName s
 // RemoveNodeStateSender sends the RemoveNodeState request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RemoveNodeStateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // RemoveNodeStateResponder handles the response to the RemoveNodeState request. The method always
@@ -15752,7 +15604,7 @@ func (client BaseClient) RemoveReplica(ctx context.Context, nodeName string, par
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "RemoveReplica", err.Error())
 	}
@@ -15810,8 +15662,7 @@ func (client BaseClient) RemoveReplicaPreparer(ctx context.Context, nodeName str
 // RemoveReplicaSender sends the RemoveReplica request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RemoveReplicaSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // RemoveReplicaResponder handles the response to the RemoveReplica request. The method always
@@ -15874,7 +15725,7 @@ func (client BaseClient) ReportApplicationHealth(ctx context.Context, applicatio
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "ReportApplicationHealth", err.Error())
 	}
@@ -15934,8 +15785,7 @@ func (client BaseClient) ReportApplicationHealthPreparer(ctx context.Context, ap
 // ReportApplicationHealthSender sends the ReportApplicationHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ReportApplicationHealthSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ReportApplicationHealthResponder handles the response to the ReportApplicationHealth request. The method always
@@ -15993,7 +15843,7 @@ func (client BaseClient) ReportClusterHealth(ctx context.Context, healthInformat
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "ReportClusterHealth", err.Error())
 	}
@@ -16049,8 +15899,7 @@ func (client BaseClient) ReportClusterHealthPreparer(ctx context.Context, health
 // ReportClusterHealthSender sends the ReportClusterHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ReportClusterHealthSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ReportClusterHealthResponder handles the response to the ReportClusterHealth request. The method always
@@ -16114,7 +15963,7 @@ func (client BaseClient) ReportDeployedApplicationHealth(ctx context.Context, no
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "ReportDeployedApplicationHealth", err.Error())
 	}
@@ -16175,8 +16024,7 @@ func (client BaseClient) ReportDeployedApplicationHealthPreparer(ctx context.Con
 // ReportDeployedApplicationHealthSender sends the ReportDeployedApplicationHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ReportDeployedApplicationHealthSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ReportDeployedApplicationHealthResponder handles the response to the ReportDeployedApplicationHealth request. The method always
@@ -16242,7 +16090,7 @@ func (client BaseClient) ReportDeployedServicePackageHealth(ctx context.Context,
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "ReportDeployedServicePackageHealth", err.Error())
 	}
@@ -16304,8 +16152,7 @@ func (client BaseClient) ReportDeployedServicePackageHealthPreparer(ctx context.
 // ReportDeployedServicePackageHealthSender sends the ReportDeployedServicePackageHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ReportDeployedServicePackageHealthSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ReportDeployedServicePackageHealthResponder handles the response to the ReportDeployedServicePackageHealth request. The method always
@@ -16364,7 +16211,7 @@ func (client BaseClient) ReportNodeHealth(ctx context.Context, nodeName string, 
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "ReportNodeHealth", err.Error())
 	}
@@ -16424,8 +16271,7 @@ func (client BaseClient) ReportNodeHealthPreparer(ctx context.Context, nodeName 
 // ReportNodeHealthSender sends the ReportNodeHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ReportNodeHealthSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ReportNodeHealthResponder handles the response to the ReportNodeHealth request. The method always
@@ -16484,7 +16330,7 @@ func (client BaseClient) ReportPartitionHealth(ctx context.Context, partitionID 
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "ReportPartitionHealth", err.Error())
 	}
@@ -16544,8 +16390,7 @@ func (client BaseClient) ReportPartitionHealthPreparer(ctx context.Context, part
 // ReportPartitionHealthSender sends the ReportPartitionHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ReportPartitionHealthSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ReportPartitionHealthResponder handles the response to the ReportPartitionHealth request. The method always
@@ -16607,7 +16452,7 @@ func (client BaseClient) ReportReplicaHealth(ctx context.Context, partitionID uu
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "ReportReplicaHealth", err.Error())
 	}
@@ -16669,8 +16514,7 @@ func (client BaseClient) ReportReplicaHealthPreparer(ctx context.Context, partit
 // ReportReplicaHealthSender sends the ReportReplicaHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ReportReplicaHealthSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ReportReplicaHealthResponder handles the response to the ReportReplicaHealth request. The method always
@@ -16733,7 +16577,7 @@ func (client BaseClient) ReportServiceHealth(ctx context.Context, serviceID stri
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "ReportServiceHealth", err.Error())
 	}
@@ -16793,8 +16637,7 @@ func (client BaseClient) ReportServiceHealthPreparer(ctx context.Context, servic
 // ReportServiceHealthSender sends the ReportServiceHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ReportServiceHealthSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ReportServiceHealthResponder handles the response to the ReportServiceHealth request. The method always
@@ -16830,7 +16673,7 @@ func (client BaseClient) ResetPartitionLoad(ctx context.Context, partitionID uui
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "ResetPartitionLoad", err.Error())
 	}
@@ -16883,8 +16726,7 @@ func (client BaseClient) ResetPartitionLoadPreparer(ctx context.Context, partiti
 // ResetPartitionLoadSender sends the ResetPartitionLoad request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ResetPartitionLoadSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ResetPartitionLoadResponder handles the response to the ResetPartitionLoad request. The method always
@@ -16940,7 +16782,7 @@ func (client BaseClient) ResolveService(ctx context.Context, serviceID string, p
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "ResolveService", err.Error())
 	}
@@ -17002,8 +16844,7 @@ func (client BaseClient) ResolveServicePreparer(ctx context.Context, serviceID s
 // ResolveServiceSender sends the ResolveService request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ResolveServiceSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ResolveServiceResponder handles the response to the ResolveService request. The method always
@@ -17052,7 +16893,7 @@ func (client BaseClient) RestartDeployedCodePackage(ctx context.Context, nodeNam
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "RestartDeployedCodePackage", err.Error())
 	}
@@ -17108,8 +16949,7 @@ func (client BaseClient) RestartDeployedCodePackagePreparer(ctx context.Context,
 // RestartDeployedCodePackageSender sends the RestartDeployedCodePackage request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RestartDeployedCodePackageSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // RestartDeployedCodePackageResponder handles the response to the RestartDeployedCodePackage request. The method always
@@ -17149,7 +16989,7 @@ func (client BaseClient) RestartNode(ctx context.Context, nodeName string, resta
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "RestartNode", err.Error())
 	}
@@ -17204,8 +17044,7 @@ func (client BaseClient) RestartNodePreparer(ctx context.Context, nodeName strin
 // RestartNodeSender sends the RestartNode request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RestartNodeSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // RestartNodeResponder handles the response to the RestartNode request. The method always
@@ -17245,7 +17084,7 @@ func (client BaseClient) RestartReplica(ctx context.Context, nodeName string, pa
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "RestartReplica", err.Error())
 	}
@@ -17300,8 +17139,7 @@ func (client BaseClient) RestartReplicaPreparer(ctx context.Context, nodeName st
 // RestartReplicaSender sends the RestartReplica request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RestartReplicaSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // RestartReplicaResponder handles the response to the RestartReplica request. The method always
@@ -17351,7 +17189,7 @@ func (client BaseClient) RestorePartition(ctx context.Context, partitionID uuid.
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "RestorePartition", err.Error())
 	}
@@ -17411,8 +17249,7 @@ func (client BaseClient) RestorePartitionPreparer(ctx context.Context, partition
 // RestorePartitionSender sends the RestorePartition request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RestorePartitionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // RestorePartitionResponder handles the response to the RestorePartition request. The method always
@@ -17453,7 +17290,7 @@ func (client BaseClient) ResumeApplicationBackup(ctx context.Context, applicatio
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "ResumeApplicationBackup", err.Error())
 	}
@@ -17506,8 +17343,7 @@ func (client BaseClient) ResumeApplicationBackupPreparer(ctx context.Context, ap
 // ResumeApplicationBackupSender sends the ResumeApplicationBackup request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ResumeApplicationBackupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ResumeApplicationBackupResponder handles the response to the ResumeApplicationBackup request. The method always
@@ -17552,7 +17388,7 @@ func (client BaseClient) ResumeApplicationUpgrade(ctx context.Context, applicati
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "ResumeApplicationUpgrade", err.Error())
 	}
@@ -17607,8 +17443,7 @@ func (client BaseClient) ResumeApplicationUpgradePreparer(ctx context.Context, a
 // ResumeApplicationUpgradeSender sends the ResumeApplicationUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ResumeApplicationUpgradeSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ResumeApplicationUpgradeResponder handles the response to the ResumeApplicationUpgrade request. The method always
@@ -17647,7 +17482,7 @@ func (client BaseClient) ResumeClusterUpgrade(ctx context.Context, resumeCluster
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "ResumeClusterUpgrade", err.Error())
 	}
@@ -17698,8 +17533,7 @@ func (client BaseClient) ResumeClusterUpgradePreparer(ctx context.Context, resum
 // ResumeClusterUpgradeSender sends the ResumeClusterUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ResumeClusterUpgradeSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ResumeClusterUpgradeResponder handles the response to the ResumeClusterUpgrade request. The method always
@@ -17736,7 +17570,7 @@ func (client BaseClient) ResumePartitionBackup(ctx context.Context, partitionID 
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "ResumePartitionBackup", err.Error())
 	}
@@ -17789,8 +17623,7 @@ func (client BaseClient) ResumePartitionBackupPreparer(ctx context.Context, part
 // ResumePartitionBackupSender sends the ResumePartitionBackup request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ResumePartitionBackupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ResumePartitionBackupResponder handles the response to the ResumePartitionBackup request. The method always
@@ -17831,7 +17664,7 @@ func (client BaseClient) ResumeServiceBackup(ctx context.Context, serviceID stri
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "ResumeServiceBackup", err.Error())
 	}
@@ -17884,8 +17717,7 @@ func (client BaseClient) ResumeServiceBackupPreparer(ctx context.Context, servic
 // ResumeServiceBackupSender sends the ResumeServiceBackup request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ResumeServiceBackupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ResumeServiceBackupResponder handles the response to the ResumeServiceBackup request. The method always
@@ -17928,7 +17760,7 @@ func (client BaseClient) RollbackApplicationUpgrade(ctx context.Context, applica
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "RollbackApplicationUpgrade", err.Error())
 	}
@@ -17981,8 +17813,7 @@ func (client BaseClient) RollbackApplicationUpgradePreparer(ctx context.Context,
 // RollbackApplicationUpgradeSender sends the RollbackApplicationUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RollbackApplicationUpgradeSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // RollbackApplicationUpgradeResponder handles the response to the RollbackApplicationUpgrade request. The method always
@@ -18017,7 +17848,7 @@ func (client BaseClient) RollbackClusterUpgrade(ctx context.Context, timeout *in
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "RollbackClusterUpgrade", err.Error())
 	}
@@ -18066,8 +17897,7 @@ func (client BaseClient) RollbackClusterUpgradePreparer(ctx context.Context, tim
 // RollbackClusterUpgradeSender sends the RollbackClusterUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) RollbackClusterUpgradeSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // RollbackClusterUpgradeResponder handles the response to the RollbackClusterUpgrade request. The method always
@@ -18104,7 +17934,7 @@ func (client BaseClient) SetUpgradeOrchestrationServiceState(ctx context.Context
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "SetUpgradeOrchestrationServiceState", err.Error())
 	}
@@ -18155,8 +17985,7 @@ func (client BaseClient) SetUpgradeOrchestrationServiceStatePreparer(ctx context
 // SetUpgradeOrchestrationServiceStateSender sends the SetUpgradeOrchestrationServiceState request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) SetUpgradeOrchestrationServiceStateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // SetUpgradeOrchestrationServiceStateResponder handles the response to the SetUpgradeOrchestrationServiceState request. The method always
@@ -18203,7 +18032,7 @@ func (client BaseClient) StartApplicationUpgrade(ctx context.Context, applicatio
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "StartApplicationUpgrade", err.Error())
 	}
@@ -18258,8 +18087,7 @@ func (client BaseClient) StartApplicationUpgradePreparer(ctx context.Context, ap
 // StartApplicationUpgradeSender sends the StartApplicationUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StartApplicationUpgradeSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // StartApplicationUpgradeResponder handles the response to the StartApplicationUpgrade request. The method always
@@ -18299,24 +18127,24 @@ func (client BaseClient) StartChaos(ctx context.Context, chaosParameters ChaosPa
 		{TargetValue: chaosParameters,
 			Constraints: []validation.Constraint{{Target: "chaosParameters.MaxClusterStabilizationTimeoutInSeconds", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "chaosParameters.MaxClusterStabilizationTimeoutInSeconds", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "chaosParameters.MaxClusterStabilizationTimeoutInSeconds", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
+					{Target: "chaosParameters.MaxClusterStabilizationTimeoutInSeconds", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil},
 				}},
 				{Target: "chaosParameters.MaxConcurrentFaults", Name: validation.Null, Rule: false,
 					Chain: []validation.Constraint{{Target: "chaosParameters.MaxConcurrentFaults", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-						{Target: "chaosParameters.MaxConcurrentFaults", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
+						{Target: "chaosParameters.MaxConcurrentFaults", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil},
 					}},
 				{Target: "chaosParameters.WaitTimeBetweenFaultsInSeconds", Name: validation.Null, Rule: false,
 					Chain: []validation.Constraint{{Target: "chaosParameters.WaitTimeBetweenFaultsInSeconds", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-						{Target: "chaosParameters.WaitTimeBetweenFaultsInSeconds", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
+						{Target: "chaosParameters.WaitTimeBetweenFaultsInSeconds", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil},
 					}},
 				{Target: "chaosParameters.WaitTimeBetweenIterationsInSeconds", Name: validation.Null, Rule: false,
 					Chain: []validation.Constraint{{Target: "chaosParameters.WaitTimeBetweenIterationsInSeconds", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-						{Target: "chaosParameters.WaitTimeBetweenIterationsInSeconds", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
+						{Target: "chaosParameters.WaitTimeBetweenIterationsInSeconds", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil},
 					}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "StartChaos", err.Error())
 	}
@@ -18367,8 +18195,7 @@ func (client BaseClient) StartChaosPreparer(ctx context.Context, chaosParameters
 // StartChaosSender sends the StartChaos request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StartChaosSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // StartChaosResponder handles the response to the StartChaos request. The method always
@@ -18407,7 +18234,7 @@ func (client BaseClient) StartClusterConfigurationUpgrade(ctx context.Context, c
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "StartClusterConfigurationUpgrade", err.Error())
 	}
@@ -18458,8 +18285,7 @@ func (client BaseClient) StartClusterConfigurationUpgradePreparer(ctx context.Co
 // StartClusterConfigurationUpgradeSender sends the StartClusterConfigurationUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StartClusterConfigurationUpgradeSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // StartClusterConfigurationUpgradeResponder handles the response to the StartClusterConfigurationUpgrade request. The method always
@@ -18497,17 +18323,17 @@ func (client BaseClient) StartClusterUpgrade(ctx context.Context, startClusterUp
 			Constraints: []validation.Constraint{{Target: "startClusterUpgradeDescription.ClusterUpgradeHealthPolicy", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "startClusterUpgradeDescription.ClusterUpgradeHealthPolicy.MaxPercentDeltaUnhealthyNodes", Name: validation.Null, Rule: false,
 					Chain: []validation.Constraint{{Target: "startClusterUpgradeDescription.ClusterUpgradeHealthPolicy.MaxPercentDeltaUnhealthyNodes", Name: validation.InclusiveMaximum, Rule: int64(100), Chain: nil},
-						{Target: "startClusterUpgradeDescription.ClusterUpgradeHealthPolicy.MaxPercentDeltaUnhealthyNodes", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
+						{Target: "startClusterUpgradeDescription.ClusterUpgradeHealthPolicy.MaxPercentDeltaUnhealthyNodes", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil},
 					}},
 					{Target: "startClusterUpgradeDescription.ClusterUpgradeHealthPolicy.MaxPercentUpgradeDomainDeltaUnhealthyNodes", Name: validation.Null, Rule: false,
 						Chain: []validation.Constraint{{Target: "startClusterUpgradeDescription.ClusterUpgradeHealthPolicy.MaxPercentUpgradeDomainDeltaUnhealthyNodes", Name: validation.InclusiveMaximum, Rule: int64(100), Chain: nil},
-							{Target: "startClusterUpgradeDescription.ClusterUpgradeHealthPolicy.MaxPercentUpgradeDomainDeltaUnhealthyNodes", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
+							{Target: "startClusterUpgradeDescription.ClusterUpgradeHealthPolicy.MaxPercentUpgradeDomainDeltaUnhealthyNodes", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil},
 						}},
 				}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "StartClusterUpgrade", err.Error())
 	}
@@ -18558,8 +18384,7 @@ func (client BaseClient) StartClusterUpgradePreparer(ctx context.Context, startC
 // StartClusterUpgradeSender sends the StartClusterUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StartClusterUpgradeSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // StartClusterUpgradeResponder handles the response to the StartClusterUpgrade request. The method always
@@ -18600,7 +18425,7 @@ func (client BaseClient) StartComposeDeploymentUpgrade(ctx context.Context, depl
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "StartComposeDeploymentUpgrade", err.Error())
 	}
@@ -18655,8 +18480,7 @@ func (client BaseClient) StartComposeDeploymentUpgradePreparer(ctx context.Conte
 // StartComposeDeploymentUpgradeSender sends the StartComposeDeploymentUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StartComposeDeploymentUpgradeSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // StartComposeDeploymentUpgradeResponder handles the response to the StartComposeDeploymentUpgrade request. The method always
@@ -18717,7 +18541,7 @@ func (client BaseClient) StartDataLoss(ctx context.Context, serviceID string, pa
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "StartDataLoss", err.Error())
 	}
@@ -18773,8 +18597,7 @@ func (client BaseClient) StartDataLossPreparer(ctx context.Context, serviceID st
 // StartDataLossSender sends the StartDataLoss request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StartDataLossSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // StartDataLossResponder handles the response to the StartDataLoss request. The method always
@@ -18819,11 +18642,11 @@ func (client BaseClient) StartNodeTransition(ctx context.Context, nodeName strin
 	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: stopDurationInSeconds,
-			Constraints: []validation.Constraint{{Target: "stopDurationInSeconds", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}},
+			Constraints: []validation.Constraint{{Target: "stopDurationInSeconds", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "StartNodeTransition", err.Error())
 	}
@@ -18880,8 +18703,7 @@ func (client BaseClient) StartNodeTransitionPreparer(ctx context.Context, nodeNa
 // StartNodeTransitionSender sends the StartNodeTransition request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StartNodeTransitionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // StartNodeTransitionResponder handles the response to the StartNodeTransition request. The method always
@@ -18929,7 +18751,7 @@ func (client BaseClient) StartPartitionRestart(ctx context.Context, serviceID st
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "StartPartitionRestart", err.Error())
 	}
@@ -18985,8 +18807,7 @@ func (client BaseClient) StartPartitionRestartPreparer(ctx context.Context, serv
 // StartPartitionRestartSender sends the StartPartitionRestart request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StartPartitionRestartSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // StartPartitionRestartResponder handles the response to the StartPartitionRestart request. The method always
@@ -19039,7 +18860,7 @@ func (client BaseClient) StartQuorumLoss(ctx context.Context, serviceID string, 
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "StartQuorumLoss", err.Error())
 	}
@@ -19096,8 +18917,7 @@ func (client BaseClient) StartQuorumLossPreparer(ctx context.Context, serviceID 
 // StartQuorumLossSender sends the StartQuorumLoss request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StartQuorumLossSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // StartQuorumLossResponder handles the response to the StartQuorumLoss request. The method always
@@ -19133,7 +18953,7 @@ func (client BaseClient) StartRollbackComposeDeploymentUpgrade(ctx context.Conte
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "StartRollbackComposeDeploymentUpgrade", err.Error())
 	}
@@ -19186,8 +19006,7 @@ func (client BaseClient) StartRollbackComposeDeploymentUpgradePreparer(ctx conte
 // StartRollbackComposeDeploymentUpgradeSender sends the StartRollbackComposeDeploymentUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StartRollbackComposeDeploymentUpgradeSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // StartRollbackComposeDeploymentUpgradeResponder handles the response to the StartRollbackComposeDeploymentUpgrade request. The method always
@@ -19225,7 +19044,7 @@ func (client BaseClient) StopChaos(ctx context.Context, timeout *int64) (result 
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "StopChaos", err.Error())
 	}
@@ -19274,8 +19093,7 @@ func (client BaseClient) StopChaosPreparer(ctx context.Context, timeout *int64) 
 // StopChaosSender sends the StopChaos request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) StopChaosSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // StopChaosResponder handles the response to the StopChaos request. The method always
@@ -19312,7 +19130,7 @@ func (client BaseClient) SubmitPropertyBatch(ctx context.Context, nameID string,
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "SubmitPropertyBatch", err.Error())
 	}
@@ -19367,8 +19185,7 @@ func (client BaseClient) SubmitPropertyBatchPreparer(ctx context.Context, nameID
 // SubmitPropertyBatchSender sends the SubmitPropertyBatch request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) SubmitPropertyBatchSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // SubmitPropertyBatchResponder handles the response to the SubmitPropertyBatch request. The method always
@@ -19411,7 +19228,7 @@ func (client BaseClient) SuspendApplicationBackup(ctx context.Context, applicati
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "SuspendApplicationBackup", err.Error())
 	}
@@ -19464,8 +19281,7 @@ func (client BaseClient) SuspendApplicationBackupPreparer(ctx context.Context, a
 // SuspendApplicationBackupSender sends the SuspendApplicationBackup request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) SuspendApplicationBackupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // SuspendApplicationBackupResponder handles the response to the SuspendApplicationBackup request. The method always
@@ -19502,7 +19318,7 @@ func (client BaseClient) SuspendPartitionBackup(ctx context.Context, partitionID
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "SuspendPartitionBackup", err.Error())
 	}
@@ -19555,8 +19371,7 @@ func (client BaseClient) SuspendPartitionBackupPreparer(ctx context.Context, par
 // SuspendPartitionBackupSender sends the SuspendPartitionBackup request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) SuspendPartitionBackupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // SuspendPartitionBackupResponder handles the response to the SuspendPartitionBackup request. The method always
@@ -19598,7 +19413,7 @@ func (client BaseClient) SuspendServiceBackup(ctx context.Context, serviceID str
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "SuspendServiceBackup", err.Error())
 	}
@@ -19651,8 +19466,7 @@ func (client BaseClient) SuspendServiceBackupPreparer(ctx context.Context, servi
 // SuspendServiceBackupSender sends the SuspendServiceBackup request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) SuspendServiceBackupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // SuspendServiceBackupResponder handles the response to the SuspendServiceBackup request. The method always
@@ -19694,7 +19508,7 @@ func (client BaseClient) UnprovisionApplicationType(ctx context.Context, applica
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "UnprovisionApplicationType", err.Error())
 	}
@@ -19749,8 +19563,7 @@ func (client BaseClient) UnprovisionApplicationTypePreparer(ctx context.Context,
 // UnprovisionApplicationTypeSender sends the UnprovisionApplicationType request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) UnprovisionApplicationTypeSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // UnprovisionApplicationTypeResponder handles the response to the UnprovisionApplicationType request. The method always
@@ -19786,7 +19599,7 @@ func (client BaseClient) UnprovisionCluster(ctx context.Context, unprovisionFabr
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "UnprovisionCluster", err.Error())
 	}
@@ -19837,8 +19650,7 @@ func (client BaseClient) UnprovisionClusterPreparer(ctx context.Context, unprovi
 // UnprovisionClusterSender sends the UnprovisionCluster request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) UnprovisionClusterSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // UnprovisionClusterResponder handles the response to the UnprovisionCluster request. The method always
@@ -19883,7 +19695,7 @@ func (client BaseClient) UpdateApplicationUpgrade(ctx context.Context, applicati
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "UpdateApplicationUpgrade", err.Error())
 	}
@@ -19938,8 +19750,7 @@ func (client BaseClient) UpdateApplicationUpgradePreparer(ctx context.Context, a
 // UpdateApplicationUpgradeSender sends the UpdateApplicationUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) UpdateApplicationUpgradeSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // UpdateApplicationUpgradeResponder handles the response to the UpdateApplicationUpgrade request. The method always
@@ -19978,14 +19789,14 @@ func (client BaseClient) UpdateBackupPolicy(ctx context.Context, backupPolicyDes
 				{Target: "backupPolicyDescription.AutoRestoreOnDataLoss", Name: validation.Null, Rule: true, Chain: nil},
 				{Target: "backupPolicyDescription.MaxIncrementalBackups", Name: validation.Null, Rule: true,
 					Chain: []validation.Constraint{{Target: "backupPolicyDescription.MaxIncrementalBackups", Name: validation.InclusiveMaximum, Rule: int64(255), Chain: nil},
-						{Target: "backupPolicyDescription.MaxIncrementalBackups", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
+						{Target: "backupPolicyDescription.MaxIncrementalBackups", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil},
 					}},
 				{Target: "backupPolicyDescription.Schedule", Name: validation.Null, Rule: true, Chain: nil},
 				{Target: "backupPolicyDescription.Storage", Name: validation.Null, Rule: true, Chain: nil}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "UpdateBackupPolicy", err.Error())
 	}
@@ -20040,8 +19851,7 @@ func (client BaseClient) UpdateBackupPolicyPreparer(ctx context.Context, backupP
 // UpdateBackupPolicySender sends the UpdateBackupPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) UpdateBackupPolicySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // UpdateBackupPolicyResponder handles the response to the UpdateBackupPolicy request. The method always
@@ -20078,17 +19888,17 @@ func (client BaseClient) UpdateClusterUpgrade(ctx context.Context, updateCluster
 			Constraints: []validation.Constraint{{Target: "updateClusterUpgradeDescription.ClusterUpgradeHealthPolicy", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "updateClusterUpgradeDescription.ClusterUpgradeHealthPolicy.MaxPercentDeltaUnhealthyNodes", Name: validation.Null, Rule: false,
 					Chain: []validation.Constraint{{Target: "updateClusterUpgradeDescription.ClusterUpgradeHealthPolicy.MaxPercentDeltaUnhealthyNodes", Name: validation.InclusiveMaximum, Rule: int64(100), Chain: nil},
-						{Target: "updateClusterUpgradeDescription.ClusterUpgradeHealthPolicy.MaxPercentDeltaUnhealthyNodes", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
+						{Target: "updateClusterUpgradeDescription.ClusterUpgradeHealthPolicy.MaxPercentDeltaUnhealthyNodes", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil},
 					}},
 					{Target: "updateClusterUpgradeDescription.ClusterUpgradeHealthPolicy.MaxPercentUpgradeDomainDeltaUnhealthyNodes", Name: validation.Null, Rule: false,
 						Chain: []validation.Constraint{{Target: "updateClusterUpgradeDescription.ClusterUpgradeHealthPolicy.MaxPercentUpgradeDomainDeltaUnhealthyNodes", Name: validation.InclusiveMaximum, Rule: int64(100), Chain: nil},
-							{Target: "updateClusterUpgradeDescription.ClusterUpgradeHealthPolicy.MaxPercentUpgradeDomainDeltaUnhealthyNodes", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
+							{Target: "updateClusterUpgradeDescription.ClusterUpgradeHealthPolicy.MaxPercentUpgradeDomainDeltaUnhealthyNodes", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil},
 						}},
 				}}}},
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "UpdateClusterUpgrade", err.Error())
 	}
@@ -20139,8 +19949,7 @@ func (client BaseClient) UpdateClusterUpgradePreparer(ctx context.Context, updat
 // UpdateClusterUpgradeSender sends the UpdateClusterUpgrade request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) UpdateClusterUpgradeSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // UpdateClusterUpgradeResponder handles the response to the UpdateClusterUpgrade request. The method always
@@ -20218,8 +20027,7 @@ func (client BaseClient) UpdateRepairExecutionStatePreparer(ctx context.Context,
 // UpdateRepairExecutionStateSender sends the UpdateRepairExecutionState request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) UpdateRepairExecutionStateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // UpdateRepairExecutionStateResponder handles the response to the UpdateRepairExecutionState request. The method always
@@ -20297,8 +20105,7 @@ func (client BaseClient) UpdateRepairTaskHealthPolicyPreparer(ctx context.Contex
 // UpdateRepairTaskHealthPolicySender sends the UpdateRepairTaskHealthPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) UpdateRepairTaskHealthPolicySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // UpdateRepairTaskHealthPolicyResponder handles the response to the UpdateRepairTaskHealthPolicy request. The method always
@@ -20345,7 +20152,7 @@ func (client BaseClient) UpdateService(ctx context.Context, serviceID string, se
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "UpdateService", err.Error())
 	}
@@ -20400,8 +20207,7 @@ func (client BaseClient) UpdateServicePreparer(ctx context.Context, serviceID st
 // UpdateServiceSender sends the UpdateService request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) UpdateServiceSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // UpdateServiceResponder handles the response to the UpdateService request. The method always
@@ -20443,7 +20249,7 @@ func (client BaseClient) UploadFile(ctx context.Context, contentPath string, tim
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "UploadFile", err.Error())
 	}
@@ -20496,8 +20302,7 @@ func (client BaseClient) UploadFilePreparer(ctx context.Context, contentPath str
 // UploadFileSender sends the UploadFile request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) UploadFileSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // UploadFileResponder handles the response to the UploadFile request. The method always
@@ -20545,7 +20350,7 @@ func (client BaseClient) UploadFileChunk(ctx context.Context, contentPath string
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "timeout", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "timeout", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("servicefabric.BaseClient", "UploadFileChunk", err.Error())
 	}
@@ -20600,8 +20405,7 @@ func (client BaseClient) UploadFileChunkPreparer(ctx context.Context, contentPat
 // UploadFileChunkSender sends the UploadFileChunk request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) UploadFileChunkSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // UploadFileChunkResponder handles the response to the UploadFileChunk request. The method always

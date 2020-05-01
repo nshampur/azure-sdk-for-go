@@ -39,7 +39,8 @@ func NewBackupLongTermRetentionVaultsClient(subscriptionID string) BackupLongTer
 }
 
 // NewBackupLongTermRetentionVaultsClientWithBaseURI creates an instance of the BackupLongTermRetentionVaultsClient
-// client.
+// client using a custom endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI
+// (sovereign clouds, Azure stack).
 func NewBackupLongTermRetentionVaultsClientWithBaseURI(baseURI string, subscriptionID string) BackupLongTermRetentionVaultsClient {
 	return BackupLongTermRetentionVaultsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -97,6 +98,7 @@ func (client BackupLongTermRetentionVaultsClient) CreateOrUpdatePreparer(ctx con
 		"api-version": APIVersion,
 	}
 
+	parameters.Location = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
@@ -111,8 +113,7 @@ func (client BackupLongTermRetentionVaultsClient) CreateOrUpdatePreparer(ctx con
 // http.Response Body if it receives an error.
 func (client BackupLongTermRetentionVaultsClient) CreateOrUpdateSender(req *http.Request) (future BackupLongTermRetentionVaultsCreateOrUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -195,8 +196,7 @@ func (client BackupLongTermRetentionVaultsClient) GetPreparer(ctx context.Contex
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client BackupLongTermRetentionVaultsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -273,8 +273,7 @@ func (client BackupLongTermRetentionVaultsClient) ListByServerPreparer(ctx conte
 // ListByServerSender sends the ListByServer request. The method will close the
 // http.Response Body if it receives an error.
 func (client BackupLongTermRetentionVaultsClient) ListByServerSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByServerResponder handles the response to the ListByServer request. The method always

@@ -38,7 +38,8 @@ func NewActivityRunsClient(subscriptionID string) ActivityRunsClient {
 	return NewActivityRunsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewActivityRunsClientWithBaseURI creates an instance of the ActivityRunsClient client.
+// NewActivityRunsClientWithBaseURI creates an instance of the ActivityRunsClient client using a custom endpoint.  Use
+// this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewActivityRunsClientWithBaseURI(baseURI string, subscriptionID string) ActivityRunsClient {
 	return ActivityRunsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -74,9 +75,11 @@ func (client ActivityRunsClient) ListByPipelineRun(ctx context.Context, resource
 				{Target: "factoryName", Name: validation.MinLength, Rule: 3, Chain: nil},
 				{Target: "factoryName", Name: validation.Pattern, Rule: `^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$`, Chain: nil}}},
 		{TargetValue: linkedServiceName,
-			Constraints: []validation.Constraint{{Target: "linkedServiceName", Name: validation.MaxLength, Rule: 260, Chain: nil},
-				{Target: "linkedServiceName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "linkedServiceName", Name: validation.Pattern, Rule: `^[A-Za-z0-9_][^<>*#.%&:\\+?/]*$`, Chain: nil}}}}); err != nil {
+			Constraints: []validation.Constraint{{Target: "linkedServiceName", Name: validation.Empty, Rule: false,
+				Chain: []validation.Constraint{{Target: "linkedServiceName", Name: validation.MaxLength, Rule: 260, Chain: nil},
+					{Target: "linkedServiceName", Name: validation.MinLength, Rule: 1, Chain: nil},
+					{Target: "linkedServiceName", Name: validation.Pattern, Rule: `^[A-Za-z0-9_][^<>*#.%&:\\+?/]*$`, Chain: nil},
+				}}}}}); err != nil {
 		return result, validation.NewError("datafactory.ActivityRunsClient", "ListByPipelineRun", err.Error())
 	}
 
@@ -138,8 +141,7 @@ func (client ActivityRunsClient) ListByPipelineRunPreparer(ctx context.Context, 
 // ListByPipelineRunSender sends the ListByPipelineRun request. The method will close the
 // http.Response Body if it receives an error.
 func (client ActivityRunsClient) ListByPipelineRunSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByPipelineRunResponder handles the response to the ListByPipelineRun request. The method always

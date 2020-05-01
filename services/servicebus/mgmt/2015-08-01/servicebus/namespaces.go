@@ -36,7 +36,8 @@ func NewNamespacesClient(subscriptionID string) NamespacesClient {
 	return NewNamespacesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewNamespacesClientWithBaseURI creates an instance of the NamespacesClient client.
+// NewNamespacesClientWithBaseURI creates an instance of the NamespacesClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewNamespacesClientWithBaseURI(baseURI string, subscriptionID string) NamespacesClient {
 	return NamespacesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -106,8 +107,7 @@ func (client NamespacesClient) CheckNameAvailabilityMethodPreparer(ctx context.C
 // CheckNameAvailabilityMethodSender sends the CheckNameAvailabilityMethod request. The method will close the
 // http.Response Body if it receives an error.
 func (client NamespacesClient) CheckNameAvailabilityMethodSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CheckNameAvailabilityMethodResponder handles the response to the CheckNameAvailabilityMethod request. The method always
@@ -191,8 +191,7 @@ func (client NamespacesClient) CreateOrUpdatePreparer(ctx context.Context, resou
 // http.Response Body if it receives an error.
 func (client NamespacesClient) CreateOrUpdateSender(req *http.Request) (future NamespacesCreateOrUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -217,7 +216,7 @@ func (client NamespacesClient) CreateOrUpdateResponder(resp *http.Response) (res
 // Parameters:
 // resourceGroupName - name of the Resource group within the Azure subscription.
 // namespaceName - the namespace name
-// authorizationRuleName - the authorizationrule name.
+// authorizationRuleName - the authorization rule name.
 // parameters - the shared access authorization rule.
 func (client NamespacesClient) CreateOrUpdateAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, authorizationRuleName string, parameters SharedAccessAuthorizationRuleCreateOrUpdateParameters) (result SharedAccessAuthorizationRuleResource, err error) {
 	if tracing.IsEnabled() {
@@ -294,8 +293,7 @@ func (client NamespacesClient) CreateOrUpdateAuthorizationRulePreparer(ctx conte
 // CreateOrUpdateAuthorizationRuleSender sends the CreateOrUpdateAuthorizationRule request. The method will close the
 // http.Response Body if it receives an error.
 func (client NamespacesClient) CreateOrUpdateAuthorizationRuleSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateOrUpdateAuthorizationRuleResponder handles the response to the CreateOrUpdateAuthorizationRule request. The method always
@@ -376,8 +374,7 @@ func (client NamespacesClient) DeletePreparer(ctx context.Context, resourceGroup
 // http.Response Body if it receives an error.
 func (client NamespacesClient) DeleteSender(req *http.Request) (future NamespacesDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -401,7 +398,7 @@ func (client NamespacesClient) DeleteResponder(resp *http.Response) (result auto
 // Parameters:
 // resourceGroupName - name of the Resource group within the Azure subscription.
 // namespaceName - the namespace name
-// authorizationRuleName - the authorizationrule name.
+// authorizationRuleName - the authorization rule name.
 func (client NamespacesClient) DeleteAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, authorizationRuleName string) (result autorest.Response, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/NamespacesClient.DeleteAuthorizationRule")
@@ -472,8 +469,7 @@ func (client NamespacesClient) DeleteAuthorizationRulePreparer(ctx context.Conte
 // DeleteAuthorizationRuleSender sends the DeleteAuthorizationRule request. The method will close the
 // http.Response Body if it receives an error.
 func (client NamespacesClient) DeleteAuthorizationRuleSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteAuthorizationRuleResponder handles the response to the DeleteAuthorizationRule request. The method always
@@ -558,8 +554,7 @@ func (client NamespacesClient) GetPreparer(ctx context.Context, resourceGroupNam
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client NamespacesClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -579,7 +574,7 @@ func (client NamespacesClient) GetResponder(resp *http.Response) (result Namespa
 // Parameters:
 // resourceGroupName - name of the Resource group within the Azure subscription.
 // namespaceName - the namespace name
-// authorizationRuleName - the authorizationrule name.
+// authorizationRuleName - the authorization rule name.
 func (client NamespacesClient) GetAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, authorizationRuleName string) (result SharedAccessAuthorizationRuleResource, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/NamespacesClient.GetAuthorizationRule")
@@ -650,8 +645,7 @@ func (client NamespacesClient) GetAuthorizationRulePreparer(ctx context.Context,
 // GetAuthorizationRuleSender sends the GetAuthorizationRule request. The method will close the
 // http.Response Body if it receives an error.
 func (client NamespacesClient) GetAuthorizationRuleSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetAuthorizationRuleResponder handles the response to the GetAuthorizationRule request. The method always
@@ -738,8 +732,7 @@ func (client NamespacesClient) ListAuthorizationRulesPreparer(ctx context.Contex
 // ListAuthorizationRulesSender sends the ListAuthorizationRules request. The method will close the
 // http.Response Body if it receives an error.
 func (client NamespacesClient) ListAuthorizationRulesSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListAuthorizationRulesResponder handles the response to the ListAuthorizationRules request. The method always
@@ -858,8 +851,7 @@ func (client NamespacesClient) ListByResourceGroupPreparer(ctx context.Context, 
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client NamespacesClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -968,8 +960,7 @@ func (client NamespacesClient) ListBySubscriptionPreparer(ctx context.Context) (
 // ListBySubscriptionSender sends the ListBySubscription request. The method will close the
 // http.Response Body if it receives an error.
 func (client NamespacesClient) ListBySubscriptionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListBySubscriptionResponder handles the response to the ListBySubscription request. The method always
@@ -1026,7 +1017,7 @@ func (client NamespacesClient) ListBySubscriptionComplete(ctx context.Context) (
 // Parameters:
 // resourceGroupName - name of the Resource group within the Azure subscription.
 // namespaceName - the namespace name
-// authorizationRuleName - the authorizationrule name.
+// authorizationRuleName - the authorization rule name.
 func (client NamespacesClient) ListKeys(ctx context.Context, resourceGroupName string, namespaceName string, authorizationRuleName string) (result ResourceListKeys, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/NamespacesClient.ListKeys")
@@ -1097,8 +1088,7 @@ func (client NamespacesClient) ListKeysPreparer(ctx context.Context, resourceGro
 // ListKeysSender sends the ListKeys request. The method will close the
 // http.Response Body if it receives an error.
 func (client NamespacesClient) ListKeysSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListKeysResponder handles the response to the ListKeys request. The method always
@@ -1118,7 +1108,7 @@ func (client NamespacesClient) ListKeysResponder(resp *http.Response) (result Re
 // Parameters:
 // resourceGroupName - name of the Resource group within the Azure subscription.
 // namespaceName - the namespace name
-// authorizationRuleName - the authorizationrule name.
+// authorizationRuleName - the authorization rule name.
 // parameters - parameters supplied to regenerate the authorization rule.
 func (client NamespacesClient) RegenerateKeys(ctx context.Context, resourceGroupName string, namespaceName string, authorizationRuleName string, parameters RegenerateKeysParameters) (result ResourceListKeys, err error) {
 	if tracing.IsEnabled() {
@@ -1192,8 +1182,7 @@ func (client NamespacesClient) RegenerateKeysPreparer(ctx context.Context, resou
 // RegenerateKeysSender sends the RegenerateKeys request. The method will close the
 // http.Response Body if it receives an error.
 func (client NamespacesClient) RegenerateKeysSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // RegenerateKeysResponder handles the response to the RegenerateKeys request. The method always
@@ -1283,8 +1272,7 @@ func (client NamespacesClient) UpdatePreparer(ctx context.Context, resourceGroup
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client NamespacesClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateResponder handles the response to the Update request. The method always

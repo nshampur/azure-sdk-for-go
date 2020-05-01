@@ -36,7 +36,8 @@ func NewTagResourceClient(subscriptionID string) TagResourceClient {
 	return NewTagResourceClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewTagResourceClientWithBaseURI creates an instance of the TagResourceClient client.
+// NewTagResourceClientWithBaseURI creates an instance of the TagResourceClient client using a custom endpoint.  Use
+// this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewTagResourceClientWithBaseURI(baseURI string, subscriptionID string) TagResourceClient {
 	return TagResourceClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -45,21 +46,22 @@ func NewTagResourceClientWithBaseURI(baseURI string, subscriptionID string) TagR
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
-// filter - | Field       | Supported operators    | Supported functions                         |
-// |-------------|------------------------|---------------------------------------------|
-// | id          | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | name        | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | aid         | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | apiName     | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | apiRevision | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | path        | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | description | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | serviceUrl  | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | method      | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | urlTemplate | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | terms       | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | state       | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | isCurrent   | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
+// filter - | Field       | Supported operators    | Supported functions               |
+// |-------------|------------------------|-----------------------------------|
+//
+// |aid | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |name | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |displayName | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |apiName | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |apiRevision | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |path | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |description | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |serviceUrl | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |method | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |urlTemplate | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |terms | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |state | eq |    |
+// |isCurrent | eq |    |
 // top - number of records to return.
 // skip - number of records to skip.
 func (client TagResourceClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result TagResourceCollectionPage, err error) {
@@ -80,10 +82,10 @@ func (client TagResourceClient) ListByService(ctx context.Context, resourceGroup
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}},
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("apimanagement.TagResourceClient", "ListByService", err.Error())
 	}
 
@@ -142,8 +144,8 @@ func (client TagResourceClient) ListByServicePreparer(ctx context.Context, resou
 // ListByServiceSender sends the ListByService request. The method will close the
 // http.Response Body if it receives an error.
 func (client TagResourceClient) ListByServiceSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // ListByServiceResponder handles the response to the ListByService request. The method always

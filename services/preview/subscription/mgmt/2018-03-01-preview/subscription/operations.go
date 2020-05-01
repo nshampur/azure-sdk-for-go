@@ -35,12 +35,13 @@ func NewOperationsClient() OperationsClient {
 	return NewOperationsClientWithBaseURI(DefaultBaseURI)
 }
 
-// NewOperationsClientWithBaseURI creates an instance of the OperationsClient client.
+// NewOperationsClientWithBaseURI creates an instance of the OperationsClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewOperationsClientWithBaseURI(baseURI string) OperationsClient {
 	return OperationsClient{NewWithBaseURI(baseURI)}
 }
 
-// List lists all of the available Microsoft.Subscription API operations.
+// List lists all of the available pending Microsoft.Subscription API operations.
 func (client OperationsClient) List(ctx context.Context) (result OperationListResult, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/OperationsClient.List")
@@ -83,7 +84,7 @@ func (client OperationsClient) ListPreparer(ctx context.Context) (*http.Request,
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPath("/providers/Microsoft.Subscription/operations"),
+		autorest.WithPath("/providers/Microsoft.Subscription/subscriptionOperations"),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
@@ -91,8 +92,7 @@ func (client OperationsClient) ListPreparer(ctx context.Context) (*http.Request,
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client OperationsClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListResponder handles the response to the List request. The method always

@@ -35,7 +35,8 @@ func NewFactoryClient() FactoryClient {
 	return NewFactoryClientWithBaseURI(DefaultBaseURI)
 }
 
-// NewFactoryClientWithBaseURI creates an instance of the FactoryClient client.
+// NewFactoryClientWithBaseURI creates an instance of the FactoryClient client using a custom endpoint.  Use this when
+// interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewFactoryClientWithBaseURI(baseURI string) FactoryClient {
 	return FactoryClient{NewWithBaseURI(baseURI)}
 }
@@ -95,8 +96,7 @@ func (client FactoryClient) CreateSubscriptionInEnrollmentAccountPreparer(ctx co
 // http.Response Body if it receives an error.
 func (client FactoryClient) CreateSubscriptionInEnrollmentAccountSender(req *http.Request) (future FactoryCreateSubscriptionInEnrollmentAccountFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	resp, err = client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 	if err != nil {
 		return
 	}

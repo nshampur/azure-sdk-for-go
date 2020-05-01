@@ -36,7 +36,8 @@ func NewOperationClient(subscriptionID string) OperationClient {
 	return NewOperationClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewOperationClientWithBaseURI creates an instance of the OperationClient client.
+// NewOperationClientWithBaseURI creates an instance of the OperationClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewOperationClientWithBaseURI(baseURI string, subscriptionID string) OperationClient {
 	return OperationClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -47,17 +48,18 @@ func NewOperationClientWithBaseURI(baseURI string, subscriptionID string) Operat
 // serviceName - the name of the API Management service.
 // apiid - API revision identifier. Must be unique in the current API Management service instance. Non-current
 // revision has ;rev=n as a suffix where n is the revision number.
-// filter - | Field       | Supported operators    | Supported functions                         |
-// |-------------|------------------------|---------------------------------------------|
-// | id          | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | name        | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | apiName     | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | description | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | method      | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | urlTemplate | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
+// filter - | Field       | Supported operators    | Supported functions               |
+// |-------------|------------------------|-----------------------------------|
+//
+// |name | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |displayName | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |apiName | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |description | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |method | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |urlTemplate | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
 // top - number of records to return.
 // skip - number of records to skip.
-// includeNotTaggedOperations - include not tagged operations in response
+// includeNotTaggedOperations - include not tagged Operations.
 func (client OperationClient) ListByTags(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32, includeNotTaggedOperations *bool) (result TagResourceCollectionPage, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/OperationClient.ListByTags")
@@ -80,10 +82,10 @@ func (client OperationClient) ListByTags(ctx context.Context, resourceGroupName 
 				{Target: "apiid", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}},
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("apimanagement.OperationClient", "ListByTags", err.Error())
 	}
 
@@ -133,8 +135,6 @@ func (client OperationClient) ListByTagsPreparer(ctx context.Context, resourceGr
 	}
 	if includeNotTaggedOperations != nil {
 		queryParameters["includeNotTaggedOperations"] = autorest.Encode("query", *includeNotTaggedOperations)
-	} else {
-		queryParameters["includeNotTaggedOperations"] = autorest.Encode("query", false)
 	}
 
 	preparer := autorest.CreatePreparer(
@@ -148,8 +148,8 @@ func (client OperationClient) ListByTagsPreparer(ctx context.Context, resourceGr
 // ListByTagsSender sends the ListByTags request. The method will close the
 // http.Response Body if it receives an error.
 func (client OperationClient) ListByTagsSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // ListByTagsResponder handles the response to the ListByTags request. The method always

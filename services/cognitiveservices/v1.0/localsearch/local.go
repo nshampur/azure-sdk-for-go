@@ -37,7 +37,8 @@ func NewLocalClient() LocalClient {
 	return NewLocalClientWithBaseURI(DefaultBaseURI)
 }
 
-// NewLocalClientWithBaseURI creates an instance of the LocalClient client.
+// NewLocalClientWithBaseURI creates an instance of the LocalClient client using a custom endpoint.  Use this when
+// interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewLocalClientWithBaseURI(baseURI string) LocalClient {
 	return LocalClient{NewWithBaseURI(baseURI)}
 }
@@ -226,7 +227,7 @@ func (client LocalClient) SearchPreparer(ctx context.Context, query string, acce
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPath("/localbusinesses/v7.0/search"),
+		autorest.WithPath("/v7.0/localbusinesses/search"),
 		autorest.WithQueryParameters(queryParameters),
 		autorest.WithHeader("X-BingApis-SDK", "true"))
 	if len(acceptLanguage) > 0 {
@@ -259,8 +260,7 @@ func (client LocalClient) SearchPreparer(ctx context.Context, query string, acce
 // SearchSender sends the Search request. The method will close the
 // http.Response Body if it receives an error.
 func (client LocalClient) SearchSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // SearchResponder handles the response to the Search request. The method always

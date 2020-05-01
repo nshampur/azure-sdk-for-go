@@ -36,7 +36,8 @@ func NewAPIDiagnosticClient(subscriptionID string) APIDiagnosticClient {
 	return NewAPIDiagnosticClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewAPIDiagnosticClientWithBaseURI creates an instance of the APIDiagnosticClient client.
+// NewAPIDiagnosticClientWithBaseURI creates an instance of the APIDiagnosticClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewAPIDiagnosticClientWithBaseURI(baseURI string, subscriptionID string) APIDiagnosticClient {
 	return APIDiagnosticClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -68,18 +69,18 @@ func (client APIDiagnosticClient) CreateOrUpdate(ctx context.Context, resourceGr
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "apiid", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "apiid", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "apiid", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: diagnosticID,
 			Constraints: []validation.Constraint{{Target: "diagnosticID", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "diagnosticID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "diagnosticID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "diagnosticID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.DiagnosticContractProperties", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "parameters.DiagnosticContractProperties.LoggerID", Name: validation.Null, Rule: true, Chain: nil},
 					{Target: "parameters.DiagnosticContractProperties.Sampling", Name: validation.Null, Rule: false,
 						Chain: []validation.Constraint{{Target: "parameters.DiagnosticContractProperties.Sampling.Percentage", Name: validation.Null, Rule: false,
 							Chain: []validation.Constraint{{Target: "parameters.DiagnosticContractProperties.Sampling.Percentage", Name: validation.InclusiveMaximum, Rule: int64(100), Chain: nil},
-								{Target: "parameters.DiagnosticContractProperties.Sampling.Percentage", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
+								{Target: "parameters.DiagnosticContractProperties.Sampling.Percentage", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil},
 							}},
 						}},
 					{Target: "parameters.DiagnosticContractProperties.Frontend", Name: validation.Null, Rule: false,
@@ -167,8 +168,8 @@ func (client APIDiagnosticClient) CreateOrUpdatePreparer(ctx context.Context, re
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIDiagnosticClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -211,11 +212,11 @@ func (client APIDiagnosticClient) Delete(ctx context.Context, resourceGroupName 
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "apiid", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "apiid", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "apiid", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: diagnosticID,
 			Constraints: []validation.Constraint{{Target: "diagnosticID", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "diagnosticID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "diagnosticID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+				{Target: "diagnosticID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.APIDiagnosticClient", "Delete", err.Error())
 	}
 
@@ -267,8 +268,8 @@ func (client APIDiagnosticClient) DeletePreparer(ctx context.Context, resourceGr
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIDiagnosticClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -308,11 +309,11 @@ func (client APIDiagnosticClient) Get(ctx context.Context, resourceGroupName str
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "apiid", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "apiid", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "apiid", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: diagnosticID,
 			Constraints: []validation.Constraint{{Target: "diagnosticID", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "diagnosticID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "diagnosticID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+				{Target: "diagnosticID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.APIDiagnosticClient", "Get", err.Error())
 	}
 
@@ -363,8 +364,8 @@ func (client APIDiagnosticClient) GetPreparer(ctx context.Context, resourceGroup
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIDiagnosticClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -405,11 +406,11 @@ func (client APIDiagnosticClient) GetEntityTag(ctx context.Context, resourceGrou
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "apiid", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "apiid", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "apiid", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: diagnosticID,
 			Constraints: []validation.Constraint{{Target: "diagnosticID", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "diagnosticID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "diagnosticID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+				{Target: "diagnosticID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.APIDiagnosticClient", "GetEntityTag", err.Error())
 	}
 
@@ -460,8 +461,8 @@ func (client APIDiagnosticClient) GetEntityTagPreparer(ctx context.Context, reso
 // GetEntityTagSender sends the GetEntityTag request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIDiagnosticClient) GetEntityTagSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // GetEntityTagResponder handles the response to the GetEntityTag request. The method always
@@ -483,7 +484,8 @@ func (client APIDiagnosticClient) GetEntityTagResponder(resp *http.Response) (re
 // apiid - API identifier. Must be unique in the current API Management service instance.
 // filter - | Field       | Supported operators    | Supported functions               |
 // |-------------|------------------------|-----------------------------------|
-// | id          | ge, le, eq, ne, gt, lt | substringof, startswith, endswith |
+//
+// |name | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
 // top - number of records to return.
 // skip - number of records to skip.
 func (client APIDiagnosticClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (result DiagnosticCollectionPage, err error) {
@@ -505,13 +507,13 @@ func (client APIDiagnosticClient) ListByService(ctx context.Context, resourceGro
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "apiid", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "apiid", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "apiid", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}},
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("apimanagement.APIDiagnosticClient", "ListByService", err.Error())
 	}
 
@@ -571,8 +573,8 @@ func (client APIDiagnosticClient) ListByServicePreparer(ctx context.Context, res
 // ListByServiceSender sends the ListByService request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIDiagnosticClient) ListByServiceSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // ListByServiceResponder handles the response to the ListByService request. The method always
@@ -653,11 +655,11 @@ func (client APIDiagnosticClient) Update(ctx context.Context, resourceGroupName 
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "apiid", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "apiid", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "apiid", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: diagnosticID,
 			Constraints: []validation.Constraint{{Target: "diagnosticID", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "diagnosticID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "diagnosticID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+				{Target: "diagnosticID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.APIDiagnosticClient", "Update", err.Error())
 	}
 
@@ -711,8 +713,8 @@ func (client APIDiagnosticClient) UpdatePreparer(ctx context.Context, resourceGr
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client APIDiagnosticClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // UpdateResponder handles the response to the Update request. The method always

@@ -36,7 +36,8 @@ func NewFileServersClient(subscriptionID string) FileServersClient {
 	return NewFileServersClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewFileServersClientWithBaseURI creates an instance of the FileServersClient client.
+// NewFileServersClientWithBaseURI creates an instance of the FileServersClient client using a custom endpoint.  Use
+// this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewFileServersClientWithBaseURI(baseURI string, subscriptionID string) FileServersClient {
 	return FileServersClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -107,8 +108,7 @@ func (client FileServersClient) BackupNowPreparer(ctx context.Context, deviceNam
 // http.Response Body if it receives an error.
 func (client FileServersClient) BackupNowSender(req *http.Request) (future FileServersBackupNowFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -203,8 +203,7 @@ func (client FileServersClient) CreateOrUpdatePreparer(ctx context.Context, devi
 // http.Response Body if it receives an error.
 func (client FileServersClient) CreateOrUpdateSender(req *http.Request) (future FileServersCreateOrUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -291,8 +290,7 @@ func (client FileServersClient) DeletePreparer(ctx context.Context, deviceName s
 // http.Response Body if it receives an error.
 func (client FileServersClient) DeleteSender(req *http.Request) (future FileServersDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -383,8 +381,7 @@ func (client FileServersClient) GetPreparer(ctx context.Context, deviceName stri
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client FileServersClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -469,8 +466,7 @@ func (client FileServersClient) ListByDevicePreparer(ctx context.Context, device
 // ListByDeviceSender sends the ListByDevice request. The method will close the
 // http.Response Body if it receives an error.
 func (client FileServersClient) ListByDeviceSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByDeviceResponder handles the response to the ListByDevice request. The method always
@@ -553,8 +549,7 @@ func (client FileServersClient) ListByManagerPreparer(ctx context.Context, resou
 // ListByManagerSender sends the ListByManager request. The method will close the
 // http.Response Body if it receives an error.
 func (client FileServersClient) ListByManagerSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByManagerResponder handles the response to the ListByManager request. The method always
@@ -641,8 +636,7 @@ func (client FileServersClient) ListMetricDefinitionPreparer(ctx context.Context
 // ListMetricDefinitionSender sends the ListMetricDefinition request. The method will close the
 // http.Response Body if it receives an error.
 func (client FileServersClient) ListMetricDefinitionSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListMetricDefinitionResponder handles the response to the ListMetricDefinition request. The method always
@@ -733,8 +727,7 @@ func (client FileServersClient) ListMetricsPreparer(ctx context.Context, deviceN
 // ListMetricsSender sends the ListMetrics request. The method will close the
 // http.Response Body if it receives an error.
 func (client FileServersClient) ListMetricsSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListMetricsResponder handles the response to the ListMetrics request. The method always

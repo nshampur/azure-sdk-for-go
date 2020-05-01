@@ -38,7 +38,9 @@ func NewGeoBackupPoliciesClient(subscriptionID string) GeoBackupPoliciesClient {
 	return NewGeoBackupPoliciesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewGeoBackupPoliciesClientWithBaseURI creates an instance of the GeoBackupPoliciesClient client.
+// NewGeoBackupPoliciesClientWithBaseURI creates an instance of the GeoBackupPoliciesClient client using a custom
+// endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure
+// stack).
 func NewGeoBackupPoliciesClientWithBaseURI(baseURI string, subscriptionID string) GeoBackupPoliciesClient {
 	return GeoBackupPoliciesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -103,6 +105,8 @@ func (client GeoBackupPoliciesClient) CreateOrUpdatePreparer(ctx context.Context
 		"api-version": APIVersion,
 	}
 
+	parameters.Kind = nil
+	parameters.Location = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
@@ -116,8 +120,7 @@ func (client GeoBackupPoliciesClient) CreateOrUpdatePreparer(ctx context.Context
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client GeoBackupPoliciesClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -197,8 +200,7 @@ func (client GeoBackupPoliciesClient) GetPreparer(ctx context.Context, resourceG
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client GeoBackupPoliciesClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -277,8 +279,7 @@ func (client GeoBackupPoliciesClient) ListByDatabasePreparer(ctx context.Context
 // ListByDatabaseSender sends the ListByDatabase request. The method will close the
 // http.Response Body if it receives an error.
 func (client GeoBackupPoliciesClient) ListByDatabaseSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByDatabaseResponder handles the response to the ListByDatabase request. The method always

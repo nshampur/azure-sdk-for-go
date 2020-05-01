@@ -35,7 +35,8 @@ func NewSecurityGroupsClient(subscriptionID string) SecurityGroupsClient {
 	return NewSecurityGroupsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewSecurityGroupsClientWithBaseURI creates an instance of the SecurityGroupsClient client.
+// NewSecurityGroupsClientWithBaseURI creates an instance of the SecurityGroupsClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewSecurityGroupsClientWithBaseURI(baseURI string, subscriptionID string) SecurityGroupsClient {
 	return SecurityGroupsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -99,8 +100,7 @@ func (client SecurityGroupsClient) CreateOrUpdatePreparer(ctx context.Context, r
 // http.Response Body if it receives an error.
 func (client SecurityGroupsClient) CreateOrUpdateSender(req *http.Request) (future SecurityGroupsCreateOrUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -176,8 +176,7 @@ func (client SecurityGroupsClient) DeletePreparer(ctx context.Context, resourceG
 // http.Response Body if it receives an error.
 func (client SecurityGroupsClient) DeleteSender(req *http.Request) (future SecurityGroupsDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -261,8 +260,7 @@ func (client SecurityGroupsClient) GetPreparer(ctx context.Context, resourceGrou
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client SecurityGroupsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -337,8 +335,7 @@ func (client SecurityGroupsClient) ListPreparer(ctx context.Context, resourceGro
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client SecurityGroupsClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -447,8 +444,7 @@ func (client SecurityGroupsClient) ListAllPreparer(ctx context.Context) (*http.R
 // ListAllSender sends the ListAll request. The method will close the
 // http.Response Body if it receives an error.
 func (client SecurityGroupsClient) ListAllSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListAllResponder handles the response to the ListAll request. The method always

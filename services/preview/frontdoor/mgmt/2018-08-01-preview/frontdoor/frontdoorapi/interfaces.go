@@ -36,60 +36,21 @@ type FrontDoorsClientAPI interface {
 	Delete(ctx context.Context, resourceGroupName string, frontDoorName string) (result frontdoor.FrontDoorsDeleteFutureType, err error)
 	Get(ctx context.Context, resourceGroupName string, frontDoorName string) (result frontdoor.FrontDoor, err error)
 	List(ctx context.Context) (result frontdoor.ListResultPage, err error)
+	ListComplete(ctx context.Context) (result frontdoor.ListResultIterator, err error)
 	ListByResourceGroup(ctx context.Context, resourceGroupName string) (result frontdoor.ListResultPage, err error)
+	ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result frontdoor.ListResultIterator, err error)
 	ValidateCustomDomain(ctx context.Context, resourceGroupName string, frontDoorName string, customDomainProperties frontdoor.ValidateCustomDomainInput) (result frontdoor.ValidateCustomDomainOutput, err error)
 }
 
 var _ FrontDoorsClientAPI = (*frontdoor.FrontDoorsClient)(nil)
 
-// RoutingRulesClientAPI contains the set of methods on the RoutingRulesClient type.
-type RoutingRulesClientAPI interface {
-	CreateOrUpdate(ctx context.Context, resourceGroupName string, frontDoorName string, routingRuleName string, routingRuleParameters frontdoor.RoutingRule) (result frontdoor.RoutingRulesCreateOrUpdateFuture, err error)
-	Delete(ctx context.Context, resourceGroupName string, frontDoorName string, routingRuleName string) (result frontdoor.RoutingRulesDeleteFuture, err error)
-	Get(ctx context.Context, resourceGroupName string, frontDoorName string, routingRuleName string) (result frontdoor.RoutingRule, err error)
-	ListByFrontDoor(ctx context.Context, resourceGroupName string, frontDoorName string) (result frontdoor.RoutingRuleListResultPage, err error)
-}
-
-var _ RoutingRulesClientAPI = (*frontdoor.RoutingRulesClient)(nil)
-
-// HealthProbeSettingsClientAPI contains the set of methods on the HealthProbeSettingsClient type.
-type HealthProbeSettingsClientAPI interface {
-	CreateOrUpdate(ctx context.Context, resourceGroupName string, frontDoorName string, healthProbeSettingsName string, healthProbeSettingsParameters frontdoor.HealthProbeSettingsModel) (result frontdoor.HealthProbeSettingsCreateOrUpdateFuture, err error)
-	Delete(ctx context.Context, resourceGroupName string, frontDoorName string, healthProbeSettingsName string) (result frontdoor.HealthProbeSettingsDeleteFuture, err error)
-	Get(ctx context.Context, resourceGroupName string, frontDoorName string, healthProbeSettingsName string) (result frontdoor.HealthProbeSettingsModel, err error)
-	ListByFrontDoor(ctx context.Context, resourceGroupName string, frontDoorName string) (result frontdoor.HealthProbeSettingsListResultPage, err error)
-}
-
-var _ HealthProbeSettingsClientAPI = (*frontdoor.HealthProbeSettingsClient)(nil)
-
-// LoadBalancingSettingsClientAPI contains the set of methods on the LoadBalancingSettingsClient type.
-type LoadBalancingSettingsClientAPI interface {
-	CreateOrUpdate(ctx context.Context, resourceGroupName string, frontDoorName string, loadBalancingSettingsName string, loadBalancingSettingsParameters frontdoor.LoadBalancingSettingsModel) (result frontdoor.LoadBalancingSettingsCreateOrUpdateFuture, err error)
-	Delete(ctx context.Context, resourceGroupName string, frontDoorName string, loadBalancingSettingsName string) (result frontdoor.LoadBalancingSettingsDeleteFuture, err error)
-	Get(ctx context.Context, resourceGroupName string, frontDoorName string, loadBalancingSettingsName string) (result frontdoor.LoadBalancingSettingsModel, err error)
-	ListByFrontDoor(ctx context.Context, resourceGroupName string, frontDoorName string) (result frontdoor.LoadBalancingSettingsListResultPage, err error)
-}
-
-var _ LoadBalancingSettingsClientAPI = (*frontdoor.LoadBalancingSettingsClient)(nil)
-
-// BackendPoolsClientAPI contains the set of methods on the BackendPoolsClient type.
-type BackendPoolsClientAPI interface {
-	CreateOrUpdate(ctx context.Context, resourceGroupName string, frontDoorName string, backendPoolName string, backendPoolParameters frontdoor.BackendPool) (result frontdoor.BackendPoolsCreateOrUpdateFuture, err error)
-	Delete(ctx context.Context, resourceGroupName string, frontDoorName string, backendPoolName string) (result frontdoor.BackendPoolsDeleteFuture, err error)
-	Get(ctx context.Context, resourceGroupName string, frontDoorName string, backendPoolName string) (result frontdoor.BackendPool, err error)
-	ListByFrontDoor(ctx context.Context, resourceGroupName string, frontDoorName string) (result frontdoor.BackendPoolListResultPage, err error)
-}
-
-var _ BackendPoolsClientAPI = (*frontdoor.BackendPoolsClient)(nil)
-
 // FrontendEndpointsClientAPI contains the set of methods on the FrontendEndpointsClient type.
 type FrontendEndpointsClientAPI interface {
-	CreateOrUpdate(ctx context.Context, resourceGroupName string, frontDoorName string, frontendEndpointName string, frontendEndpointParameters frontdoor.FrontendEndpoint) (result frontdoor.FrontendEndpointsCreateOrUpdateFuture, err error)
-	Delete(ctx context.Context, resourceGroupName string, frontDoorName string, frontendEndpointName string) (result frontdoor.FrontendEndpointsDeleteFuture, err error)
 	DisableHTTPS(ctx context.Context, resourceGroupName string, frontDoorName string, frontendEndpointName string) (result frontdoor.FrontendEndpointsDisableHTTPSFuture, err error)
 	EnableHTTPS(ctx context.Context, resourceGroupName string, frontDoorName string, frontendEndpointName string, customHTTPSConfiguration frontdoor.CustomHTTPSConfiguration) (result frontdoor.FrontendEndpointsEnableHTTPSFuture, err error)
 	Get(ctx context.Context, resourceGroupName string, frontDoorName string, frontendEndpointName string) (result frontdoor.FrontendEndpoint, err error)
 	ListByFrontDoor(ctx context.Context, resourceGroupName string, frontDoorName string) (result frontdoor.FrontendEndpointsListResultPage, err error)
+	ListByFrontDoorComplete(ctx context.Context, resourceGroupName string, frontDoorName string) (result frontdoor.FrontendEndpointsListResultIterator, err error)
 }
 
 var _ FrontendEndpointsClientAPI = (*frontdoor.FrontendEndpointsClient)(nil)
@@ -107,6 +68,7 @@ type PoliciesClientAPI interface {
 	Delete(ctx context.Context, resourceGroupName string, policyName string) (result frontdoor.PoliciesDeleteFuture, err error)
 	Get(ctx context.Context, resourceGroupName string, policyName string) (result frontdoor.WebApplicationFirewallPolicy1, err error)
 	List(ctx context.Context, resourceGroupName string) (result frontdoor.WebApplicationFirewallPolicyListResultPage, err error)
+	ListComplete(ctx context.Context, resourceGroupName string) (result frontdoor.WebApplicationFirewallPolicyListResultIterator, err error)
 }
 
 var _ PoliciesClientAPI = (*frontdoor.PoliciesClient)(nil)

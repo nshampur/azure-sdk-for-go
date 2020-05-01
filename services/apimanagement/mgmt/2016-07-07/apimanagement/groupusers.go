@@ -36,7 +36,8 @@ func NewGroupUsersClient(subscriptionID string) GroupUsersClient {
 	return NewGroupUsersClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewGroupUsersClientWithBaseURI creates an instance of the GroupUsersClient client.
+// NewGroupUsersClientWithBaseURI creates an instance of the GroupUsersClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewGroupUsersClientWithBaseURI(baseURI string, subscriptionID string) GroupUsersClient {
 	return GroupUsersClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -121,8 +122,8 @@ func (client GroupUsersClient) AddPreparer(ctx context.Context, resourceGroupNam
 // AddSender sends the Add request. The method will close the
 // http.Response Body if it receives an error.
 func (client GroupUsersClient) AddSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // AddResponder handles the response to the Add request. The method always
@@ -176,10 +177,10 @@ func (client GroupUsersClient) ListByGroup(ctx context.Context, resourceGroupNam
 				{Target: "groupID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}},
+				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil}}}}},
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}}}); err != nil {
+				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("apimanagement.GroupUsersClient", "ListByGroup", err.Error())
 	}
 
@@ -239,8 +240,8 @@ func (client GroupUsersClient) ListByGroupPreparer(ctx context.Context, resource
 // ListByGroupSender sends the ListByGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client GroupUsersClient) ListByGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // ListByGroupResponder handles the response to the ListByGroup request. The method always
@@ -373,8 +374,8 @@ func (client GroupUsersClient) RemovePreparer(ctx context.Context, resourceGroup
 // RemoveSender sends the Remove request. The method will close the
 // http.Response Body if it receives an error.
 func (client GroupUsersClient) RemoveSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // RemoveResponder handles the response to the Remove request. The method always

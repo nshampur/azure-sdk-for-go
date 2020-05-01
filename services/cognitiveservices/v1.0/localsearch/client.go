@@ -28,7 +28,7 @@ import (
 
 const (
 	// DefaultBaseURI is the default URI used for the service Localsearch
-	DefaultBaseURI = "https://api.cognitive.microsoft.com/localbusinesses/v7.0/search"
+	DefaultBaseURI = "https://api.cognitive.microsoft.com/bing"
 )
 
 // BaseClient is the base client for Localsearch.
@@ -42,7 +42,8 @@ func New() BaseClient {
 	return NewWithBaseURI(DefaultBaseURI)
 }
 
-// NewWithBaseURI creates an instance of the BaseClient client.
+// NewWithBaseURI creates an instance of the BaseClient client using a custom endpoint.  Use this when interacting with
+// an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewWithBaseURI(baseURI string) BaseClient {
 	return BaseClient{
 		Client:  autorest.NewClientWithUserAgent(UserAgent()),

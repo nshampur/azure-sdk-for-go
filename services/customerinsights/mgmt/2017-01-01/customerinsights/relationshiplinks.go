@@ -38,7 +38,9 @@ func NewRelationshipLinksClient(subscriptionID string) RelationshipLinksClient {
 	return NewRelationshipLinksClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewRelationshipLinksClientWithBaseURI creates an instance of the RelationshipLinksClient client.
+// NewRelationshipLinksClientWithBaseURI creates an instance of the RelationshipLinksClient client using a custom
+// endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure
+// stack).
 func NewRelationshipLinksClientWithBaseURI(baseURI string, subscriptionID string) RelationshipLinksClient {
 	return RelationshipLinksClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -118,8 +120,7 @@ func (client RelationshipLinksClient) CreateOrUpdatePreparer(ctx context.Context
 // http.Response Body if it receives an error.
 func (client RelationshipLinksClient) CreateOrUpdateSender(req *http.Request) (future RelationshipLinksCreateOrUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -197,8 +198,7 @@ func (client RelationshipLinksClient) DeletePreparer(ctx context.Context, resour
 // http.Response Body if it receives an error.
 func (client RelationshipLinksClient) DeleteSender(req *http.Request) (future RelationshipLinksDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -280,8 +280,7 @@ func (client RelationshipLinksClient) GetPreparer(ctx context.Context, resourceG
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client RelationshipLinksClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -358,8 +357,7 @@ func (client RelationshipLinksClient) ListByHubPreparer(ctx context.Context, res
 // ListByHubSender sends the ListByHub request. The method will close the
 // http.Response Body if it receives an error.
 func (client RelationshipLinksClient) ListByHubSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByHubResponder handles the response to the ListByHub request. The method always

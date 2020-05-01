@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2020 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,8 +19,9 @@
 
 package documentdbapi
 
-import original "github.com/Azure/azure-sdk-for-go/services/cosmos-db/mgmt/2015-04-08/documentdb/documentdbapi"
+import original "github.com/Azure/azure-sdk-for-go/services/cosmos-db/mgmt/2019-12-12/documentdb/documentdbapi"
 
+type CassandraResourcesClientAPI = original.CassandraResourcesClientAPI
 type CollectionClientAPI = original.CollectionClientAPI
 type CollectionPartitionClientAPI = original.CollectionPartitionClientAPI
 type CollectionPartitionRegionClientAPI = original.CollectionPartitionRegionClientAPI
@@ -28,9 +29,15 @@ type CollectionRegionClientAPI = original.CollectionRegionClientAPI
 type DatabaseAccountRegionClientAPI = original.DatabaseAccountRegionClientAPI
 type DatabaseAccountsClientAPI = original.DatabaseAccountsClientAPI
 type DatabaseClientAPI = original.DatabaseClientAPI
+type GremlinResourcesClientAPI = original.GremlinResourcesClientAPI
+type MongoDBResourcesClientAPI = original.MongoDBResourcesClientAPI
 type OperationsClientAPI = original.OperationsClientAPI
 type PartitionKeyRangeIDClientAPI = original.PartitionKeyRangeIDClientAPI
 type PartitionKeyRangeIDRegionClientAPI = original.PartitionKeyRangeIDRegionClientAPI
 type PercentileClientAPI = original.PercentileClientAPI
 type PercentileSourceTargetClientAPI = original.PercentileSourceTargetClientAPI
 type PercentileTargetClientAPI = original.PercentileTargetClientAPI
+type PrivateEndpointConnectionsClientAPI = original.PrivateEndpointConnectionsClientAPI
+type PrivateLinkResourcesClientAPI = original.PrivateLinkResourcesClientAPI
+type SQLResourcesClientAPI = original.SQLResourcesClientAPI
+type TableResourcesClientAPI = original.TableResourcesClientAPI

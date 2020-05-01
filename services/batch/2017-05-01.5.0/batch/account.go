@@ -38,7 +38,8 @@ func NewAccountClient() AccountClient {
 	return NewAccountClientWithBaseURI(DefaultBaseURI)
 }
 
-// NewAccountClientWithBaseURI creates an instance of the AccountClient client.
+// NewAccountClientWithBaseURI creates an instance of the AccountClient client using a custom endpoint.  Use this when
+// interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewAccountClientWithBaseURI(baseURI string) AccountClient {
 	return AccountClient{NewWithBaseURI(baseURI)}
 }
@@ -70,7 +71,7 @@ func (client AccountClient) ListNodeAgentSkus(ctx context.Context, filter string
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "maxResults", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "maxResults", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("batch.AccountClient", "ListNodeAgentSkus", err.Error())
 	}
@@ -143,8 +144,7 @@ func (client AccountClient) ListNodeAgentSkusPreparer(ctx context.Context, filte
 // ListNodeAgentSkusSender sends the ListNodeAgentSkus request. The method will close the
 // http.Response Body if it receives an error.
 func (client AccountClient) ListNodeAgentSkusSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListNodeAgentSkusResponder handles the response to the ListNodeAgentSkus request. The method always

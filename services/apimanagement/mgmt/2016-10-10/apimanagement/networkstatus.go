@@ -36,7 +36,8 @@ func NewNetworkStatusClient(subscriptionID string) NetworkStatusClient {
 	return NewNetworkStatusClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewNetworkStatusClientWithBaseURI creates an instance of the NetworkStatusClient client.
+// NewNetworkStatusClientWithBaseURI creates an instance of the NetworkStatusClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewNetworkStatusClientWithBaseURI(baseURI string, subscriptionID string) NetworkStatusClient {
 	return NetworkStatusClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -110,8 +111,8 @@ func (client NetworkStatusClient) GetByServicePreparer(ctx context.Context, reso
 // GetByServiceSender sends the GetByService request. The method will close the
 // http.Response Body if it receives an error.
 func (client NetworkStatusClient) GetByServiceSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // GetByServiceResponder handles the response to the GetByService request. The method always

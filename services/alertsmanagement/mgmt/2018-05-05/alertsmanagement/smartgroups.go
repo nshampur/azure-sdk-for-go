@@ -35,7 +35,8 @@ func NewSmartGroupsClient(subscriptionID string) SmartGroupsClient {
 	return NewSmartGroupsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewSmartGroupsClientWithBaseURI creates an instance of the SmartGroupsClient client.
+// NewSmartGroupsClientWithBaseURI creates an instance of the SmartGroupsClient client using a custom endpoint.  Use
+// this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewSmartGroupsClientWithBaseURI(baseURI string, subscriptionID string) SmartGroupsClient {
 	return SmartGroupsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -100,8 +101,7 @@ func (client SmartGroupsClient) ChangeStatePreparer(ctx context.Context, smartGr
 // ChangeStateSender sends the ChangeState request. The method will close the
 // http.Response Body if it receives an error.
 func (client SmartGroupsClient) ChangeStateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ChangeStateResponder handles the response to the ChangeState request. The method always
@@ -133,17 +133,18 @@ func (client SmartGroupsClient) ChangeStateResponder(resp *http.Response) (resul
 // sortBy - sort the query results by input field. Default value is sort by 'lastModifiedDateTime'.
 // sortOrder - sort the query results order in either ascending or descending.  Default value is 'desc' for
 // time fields and 'asc' for others.
-func (client SmartGroupsClient) GetAll(ctx context.Context, targetResource string, targetResourceGroup string, targetResourceType string, monitorService MonitorService, monitorCondition MonitorCondition, severity Severity, smartGroupState AlertState, timeRange TimeRange, pageCount *int32, sortBy SmartGroupsSortByFields, sortOrder string) (result SmartGroupsList, err error) {
+func (client SmartGroupsClient) GetAll(ctx context.Context, targetResource string, targetResourceGroup string, targetResourceType string, monitorService MonitorService, monitorCondition MonitorCondition, severity Severity, smartGroupState AlertState, timeRange TimeRange, pageCount *int32, sortBy SmartGroupsSortByFields, sortOrder string) (result SmartGroupsListPage, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/SmartGroupsClient.GetAll")
 		defer func() {
 			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
+			if result.sgl.Response.Response != nil {
+				sc = result.sgl.Response.Response.StatusCode
 			}
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
+	result.fn = client.getAllNextResults
 	req, err := client.GetAllPreparer(ctx, targetResource, targetResourceGroup, targetResourceType, monitorService, monitorCondition, severity, smartGroupState, timeRange, pageCount, sortBy, sortOrder)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "alertsmanagement.SmartGroupsClient", "GetAll", nil, "Failure preparing request")
@@ -152,12 +153,12 @@ func (client SmartGroupsClient) GetAll(ctx context.Context, targetResource strin
 
 	resp, err := client.GetAllSender(req)
 	if err != nil {
-		result.Response = autorest.Response{Response: resp}
+		result.sgl.Response = autorest.Response{Response: resp}
 		err = autorest.NewErrorWithError(err, "alertsmanagement.SmartGroupsClient", "GetAll", resp, "Failure sending request")
 		return
 	}
 
-	result, err = client.GetAllResponder(resp)
+	result.sgl, err = client.GetAllResponder(resp)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "alertsmanagement.SmartGroupsClient", "GetAll", resp, "Failure responding to request")
 	}
@@ -220,8 +221,7 @@ func (client SmartGroupsClient) GetAllPreparer(ctx context.Context, targetResour
 // GetAllSender sends the GetAll request. The method will close the
 // http.Response Body if it receives an error.
 func (client SmartGroupsClient) GetAllSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetAllResponder handles the response to the GetAll request. The method always
@@ -234,6 +234,43 @@ func (client SmartGroupsClient) GetAllResponder(resp *http.Response) (result Sma
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// getAllNextResults retrieves the next set of results, if any.
+func (client SmartGroupsClient) getAllNextResults(ctx context.Context, lastResults SmartGroupsList) (result SmartGroupsList, err error) {
+	req, err := lastResults.smartGroupsListPreparer(ctx)
+	if err != nil {
+		return result, autorest.NewErrorWithError(err, "alertsmanagement.SmartGroupsClient", "getAllNextResults", nil, "Failure preparing next results request")
+	}
+	if req == nil {
+		return
+	}
+	resp, err := client.GetAllSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		return result, autorest.NewErrorWithError(err, "alertsmanagement.SmartGroupsClient", "getAllNextResults", resp, "Failure sending next results request")
+	}
+	result, err = client.GetAllResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "alertsmanagement.SmartGroupsClient", "getAllNextResults", resp, "Failure responding to next results request")
+	}
+	return
+}
+
+// GetAllComplete enumerates all values, automatically crossing page boundaries as required.
+func (client SmartGroupsClient) GetAllComplete(ctx context.Context, targetResource string, targetResourceGroup string, targetResourceType string, monitorService MonitorService, monitorCondition MonitorCondition, severity Severity, smartGroupState AlertState, timeRange TimeRange, pageCount *int32, sortBy SmartGroupsSortByFields, sortOrder string) (result SmartGroupsListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SmartGroupsClient.GetAll")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	result.page, err = client.GetAll(ctx, targetResource, targetResourceGroup, targetResourceType, monitorService, monitorCondition, severity, smartGroupState, timeRange, pageCount, sortBy, sortOrder)
 	return
 }
 
@@ -295,8 +332,7 @@ func (client SmartGroupsClient) GetByIDPreparer(ctx context.Context, smartGroupI
 // GetByIDSender sends the GetByID request. The method will close the
 // http.Response Body if it receives an error.
 func (client SmartGroupsClient) GetByIDSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetByIDResponder handles the response to the GetByID request. The method always
@@ -370,8 +406,7 @@ func (client SmartGroupsClient) GetHistoryPreparer(ctx context.Context, smartGro
 // GetHistorySender sends the GetHistory request. The method will close the
 // http.Response Body if it receives an error.
 func (client SmartGroupsClient) GetHistorySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetHistoryResponder handles the response to the GetHistory request. The method always

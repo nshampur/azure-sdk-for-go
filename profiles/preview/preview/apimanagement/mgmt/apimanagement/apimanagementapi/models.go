@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2020 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 
 package apimanagementapi
 
-import original "github.com/Azure/azure-sdk-for-go/services/preview/apimanagement/mgmt/2018-06-01-preview/apimanagement/apimanagementapi"
+import original "github.com/Azure/azure-sdk-for-go/services/preview/apimanagement/mgmt/2019-12-01-preview/apimanagement/apimanagementapi"
 
 type APIClientAPI = original.APIClientAPI
 type APIDiagnosticClientAPI = original.APIDiagnosticClientAPI
@@ -32,11 +32,13 @@ type APIOperationPolicyClientAPI = original.APIOperationPolicyClientAPI
 type APIPolicyClientAPI = original.APIPolicyClientAPI
 type APIProductClientAPI = original.APIProductClientAPI
 type APIReleaseClientAPI = original.APIReleaseClientAPI
-type APIRevisionsClientAPI = original.APIRevisionsClientAPI
+type APIRevisionClientAPI = original.APIRevisionClientAPI
 type APISchemaClientAPI = original.APISchemaClientAPI
+type APITagDescriptionClientAPI = original.APITagDescriptionClientAPI
 type APIVersionSetClientAPI = original.APIVersionSetClientAPI
 type AuthorizationServerClientAPI = original.AuthorizationServerClientAPI
 type BackendClientAPI = original.BackendClientAPI
+type CacheClientAPI = original.CacheClientAPI
 type CertificateClientAPI = original.CertificateClientAPI
 type DelegationSettingsClientAPI = original.DelegationSettingsClientAPI
 type DiagnosticClientAPI = original.DiagnosticClientAPI
@@ -44,7 +46,9 @@ type EmailTemplateClientAPI = original.EmailTemplateClientAPI
 type GroupClientAPI = original.GroupClientAPI
 type GroupUserClientAPI = original.GroupUserClientAPI
 type IdentityProviderClientAPI = original.IdentityProviderClientAPI
+type IssueClientAPI = original.IssueClientAPI
 type LoggerClientAPI = original.LoggerClientAPI
+type NamedValueClientAPI = original.NamedValueClientAPI
 type NetworkStatusClientAPI = original.NetworkStatusClientAPI
 type NotificationClientAPI = original.NotificationClientAPI
 type NotificationRecipientEmailClientAPI = original.NotificationRecipientEmailClientAPI
@@ -53,16 +57,15 @@ type OpenIDConnectProviderClientAPI = original.OpenIDConnectProviderClientAPI
 type OperationClientAPI = original.OperationClientAPI
 type OperationsClientAPI = original.OperationsClientAPI
 type PolicyClientAPI = original.PolicyClientAPI
-type PolicySnippetsClientAPI = original.PolicySnippetsClientAPI
+type PolicyDescriptionClientAPI = original.PolicyDescriptionClientAPI
 type ProductAPIClientAPI = original.ProductAPIClientAPI
 type ProductClientAPI = original.ProductClientAPI
 type ProductGroupClientAPI = original.ProductGroupClientAPI
 type ProductPolicyClientAPI = original.ProductPolicyClientAPI
 type ProductSubscriptionsClientAPI = original.ProductSubscriptionsClientAPI
-type PropertyClientAPI = original.PropertyClientAPI
 type QuotaByCounterKeysClientAPI = original.QuotaByCounterKeysClientAPI
 type QuotaByPeriodKeysClientAPI = original.QuotaByPeriodKeysClientAPI
-type RegionsClientAPI = original.RegionsClientAPI
+type RegionClientAPI = original.RegionClientAPI
 type ReportsClientAPI = original.ReportsClientAPI
 type ServiceClientAPI = original.ServiceClientAPI
 type ServiceSkusClientAPI = original.ServiceSkusClientAPI
@@ -70,12 +73,12 @@ type SignInSettingsClientAPI = original.SignInSettingsClientAPI
 type SignUpSettingsClientAPI = original.SignUpSettingsClientAPI
 type SubscriptionClientAPI = original.SubscriptionClientAPI
 type TagClientAPI = original.TagClientAPI
-type TagDescriptionClientAPI = original.TagDescriptionClientAPI
 type TagResourceClientAPI = original.TagResourceClientAPI
 type TenantAccessClientAPI = original.TenantAccessClientAPI
 type TenantAccessGitClientAPI = original.TenantAccessGitClientAPI
 type TenantConfigurationClientAPI = original.TenantConfigurationClientAPI
 type UserClientAPI = original.UserClientAPI
+type UserConfirmationPasswordClientAPI = original.UserConfirmationPasswordClientAPI
 type UserGroupClientAPI = original.UserGroupClientAPI
 type UserIdentitiesClientAPI = original.UserIdentitiesClientAPI
 type UserSubscriptionClientAPI = original.UserSubscriptionClientAPI

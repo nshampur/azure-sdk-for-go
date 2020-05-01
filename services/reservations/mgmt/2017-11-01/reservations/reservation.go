@@ -35,7 +35,8 @@ func NewClient() Client {
 	return NewClientWithBaseURI(DefaultBaseURI)
 }
 
-// NewClientWithBaseURI creates an instance of the Client client.
+// NewClientWithBaseURI creates an instance of the Client client using a custom endpoint.  Use this when interacting
+// with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewClientWithBaseURI(baseURI string) Client {
 	return Client{NewWithBaseURI(baseURI)}
 }
@@ -99,8 +100,7 @@ func (client Client) GetPreparer(ctx context.Context, reservationID string, rese
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -174,8 +174,7 @@ func (client Client) ListPreparer(ctx context.Context, reservationOrderID string
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -288,8 +287,7 @@ func (client Client) ListRevisionsPreparer(ctx context.Context, reservationID st
 // ListRevisionsSender sends the ListRevisions request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) ListRevisionsSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListRevisionsResponder handles the response to the ListRevisions request. The method always
@@ -398,8 +396,7 @@ func (client Client) MergePreparer(ctx context.Context, reservationOrderID strin
 // http.Response Body if it receives an error.
 func (client Client) MergeSender(req *http.Request) (future ReservationMergeFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	resp, err = client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 	if err != nil {
 		return
 	}
@@ -475,8 +472,7 @@ func (client Client) SplitPreparer(ctx context.Context, reservationOrderID strin
 // http.Response Body if it receives an error.
 func (client Client) SplitSender(req *http.Request) (future SplitFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	resp, err = client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 	if err != nil {
 		return
 	}
@@ -554,8 +550,7 @@ func (client Client) UpdatePreparer(ctx context.Context, reservationOrderID stri
 // http.Response Body if it receives an error.
 func (client Client) UpdateSender(req *http.Request) (future ReservationUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	resp, err = client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 	if err != nil {
 		return
 	}

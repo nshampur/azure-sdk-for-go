@@ -4,10 +4,15 @@
 
 [![Build Status](https://travis-ci.org/Azure/azure-sdk-for-go.svg?branch=master)](https://travis-ci.org/Azure/azure-sdk-for-go)
 
+[![Build Status](https://dev.azure.com/azure-sdk/public/_apis/build/status/go/Azure.azure-sdk-for-go?branchName=latest)](https://dev.azure.com/azure-sdk/public/_build/latest?definitionId=640&branchName=latest)
+
 [![Go Report Card](https://goreportcard.com/badge/github.com/Azure/azure-sdk-for-go)](https://goreportcard.com/report/github.com/Azure/azure-sdk-for-go)
 
 azure-sdk-for-go provides Go packages for managing and using Azure services.
-It is continuously tested with Go 1.8, 1.9, 1.10, 1.11 and master.
+It officially supports the last two major releases of Go.  Older versions of
+Go will be kept running in CI until they no longer work due to changes in any
+of the SDK's external dependencies.  The CHANGELOG will be updated when a
+version of Go is removed from CI.
 
 To be notified about updates and changes, subscribe to the [Azure update
 feed](https://azure.microsoft.com/updates/).
@@ -101,6 +106,7 @@ package main
 
 import (
 	"context"
+
 	"github.com/Azure/azure-sdk-for-go/services/network/mgmt/2017-09-01/network"
 
 	"github.com/Azure/go-autorest/autorest/azure/auth"
@@ -159,7 +165,7 @@ VM. The following snippet from [the previous section](#use) demonstrates
 this helper.
 
 ```go
-import github.com/Azure/go-autorest/autorest/azure/auth
+import "github.com/Azure/go-autorest/autorest/azure/auth"
 
 // create a VirtualNetworks client
 vnetClient := network.NewVirtualNetworksClient("<subscriptionID>")
@@ -274,7 +280,7 @@ below.
 
   ```go
   config := auth.NewDeviceFlowConfig(clientID, tenantID)
-  a, err = config.Authorizer()
+  a, err := config.Authorizer()
   ```
 
 [device flow]: https://oauth.net/2/device-flow/
@@ -388,7 +394,7 @@ Combined, these techniques will ensure that breaking changes should not occur. I
 ### Built-in Basic Request/Response Logging
 
 Starting with `go-autorest v10.15.0` you can enable basic logging of requests and responses through setting environment variables.
-Setting `AZURE_GO_SDK_LOG_LEVEL` to `LogInfo` will log request/response without their bodies. To include the bodies set the log level to `LogDebug`.
+Setting `AZURE_GO_SDK_LOG_LEVEL` to `INFO` will log request/response without their bodies. To include the bodies set the log level to `DEBUG`.
 
 By default the logger writes to strerr, however it can also write to stdout or a file
 if specified in `AZURE_GO_SDK_LOG_FILE`. Note that if the specified file already exists it will be truncated.
@@ -410,7 +416,7 @@ vnetClient := network.NewVirtualNetworksClient("<subscriptionID>")
 vnetClient.RequestInspector = LogRequest()
 vnetClient.ResponseInspector = LogResponse()
 
-...
+// ...
 
 func LogRequest() autorest.PrepareDecorator {
 	return func(p autorest.Preparer) autorest.Preparer {
@@ -447,10 +453,15 @@ All packages and the runtime are instrumented using [OpenCensus](https://opencen
 
 ### Enable
 
-As of now, tracing is disabled by default. There are 2 ways to enable tracing:
+By default, no tracing provider will be compiled into your program, and the legacy approach of setting `AZURE_SDK_TRACING_ENABLED` environment variable will no longer take effect.
 
-- set the environment variable `AZURE_SDK_TRACING_ENABLED` (_Recommended_)
-- alternatively, import the `github.com/Azure/go-autorest/tracing` package and call the `tracing.Enable()` function or `tracing.EnableWithAIForwarding()` if using the [App Insights Forwarder](https://docs.microsoft.com/en-us/azure/application-insights/opencensus-local-forwarder).
+To enable tracing, you must now add the following include to your source file.
+
+``` go
+import _ "github.com/Azure/go-autorest/tracing/opencensus"
+```
+
+To hook up a tracer simply call `tracing.Register()` passing in a type that satisfies the `tracing.Tracer` interface.
 
 **Note**: In future major releases of the SDK, tracing may become enabled by default.
 
@@ -462,29 +473,69 @@ To correlate the SDK calls between them and with the rest of your code, pass in 
 
 ```go
 func doAzureCalls() {
-    // The resulting context will be initialized with a root span as the context passed to
-    // trace.StartSpan() has no existing span.
-    ctx, span := trace.StartSpan(context.Background(),"doAzureCalls", trace.WithSampler(trace.AlwaysSample()))
-    defer span.End()
+	// The resulting context will be initialized with a root span as the context passed to
+	// trace.StartSpan() has no existing span.
+	ctx, span := trace.StartSpan(context.Background(), "doAzureCalls", trace.WithSampler(trace.AlwaysSample()))
+	defer span.End()
 
-    // The traces from the SDK calls will be correlated under the span inside the context that is passed in.
-    zone, _ := zonesClient.CreateOrUpdate(ctx, rg, zoneName, dns.Zone{Location: to.StringPtr("global")}, "", "")
-    zone, _ = zonesClient.Get(ctx, rg, *zone.Name)
-    for i := 0; i < rrCount; i++ {
-        rr, _ := recordsClient.CreateOrUpdate(ctx, rg, zoneName, fmt.Sprintf("rr%d", i), dns.CNAME, rdSet{
-            RecordSetProperties: &dns.RecordSetProperties{
-                TTL: to.Int64Ptr(3600),
-                CnameRecord: &dns.CnameRecord{
-                    Cname: to.StringPtr("vladdbCname"),
-                },
-            },
-        },
-            "",
-            "",
-        )
-    }
+	// The traces from the SDK calls will be correlated under the span inside the context that is passed in.
+	zone, _ := zonesClient.CreateOrUpdate(ctx, rg, zoneName, dns.Zone{Location: to.StringPtr("global")}, "", "")
+	zone, _ = zonesClient.Get(ctx, rg, *zone.Name)
+	for i := 0; i < rrCount; i++ {
+		rr, _ := recordsClient.CreateOrUpdate(ctx, rg, zoneName, fmt.Sprintf("rr%d", i), dns.CNAME, rdSet{
+			RecordSetProperties: &dns.RecordSetProperties{
+				TTL: to.Int64Ptr(3600),
+				CnameRecord: &dns.CnameRecord{
+					Cname: to.StringPtr("vladdbCname"),
+				},
+			},
+		},
+			"",
+			"",
+		)
+	}
 }
 ```
+
+## Request Retry Policy
+
+The SDK provides a baked in retry policy for failed requests with default values that can be configured.
+Each [client](https://godoc.org/github.com/Azure/go-autorest/autorest#Client) object contains the follow fields.
+- `RetryAttempts` - the number of times to retry a failed request
+- `RetryDuration` - the duration to wait between retries
+
+For async operations the follow values are also used.
+- `PollingDelay` - the duration to wait between polling requests
+- `PollingDuration` - the total time to poll an async request before timing out
+
+Please see the [documentation](https://godoc.org/github.com/Azure/go-autorest/autorest#pkg-constants) for the default values used.
+
+Changing one or more values will affect all subsequet API calls.
+
+The default policy is to call `autorest.DoRetryForStatusCodes()` from an API's `Sender` method.  Example:
+```go
+func (client OperationsClient) ListSender(req *http.Request) (*http.Response, error) {
+	sd := autorest.GetSendDecorators(req.Context(), autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return autorest.SendWithSender(client, req, sd...)
+}
+```
+
+Details on how `autorest.DoRetryforStatusCodes()` works can be found in the [documentation](https://godoc.org/github.com/Azure/go-autorest/autorest#DoRetryForStatusCodes).
+
+The slice of `SendDecorators` used in a `Sender` method can be customized per API call by smuggling them in the context.  Here's an example.
+
+```go
+ctx := context.Background()
+autorest.WithSendDecorators(ctx, []autorest.SendDecorator{
+	autorest.DoRetryForStatusCodesWithCap(client.RetryAttempts,
+		client.RetryDuration, time.Duration(0),
+		autorest.StatusCodesForRetry...)})
+client.List(ctx)
+```
+
+This will replace the default slice of `SendDecorators` with the provided slice.
+
+The `PollingDelay` and `PollingDuration` values are used exclusively by [WaitForCompletionRef()](https://godoc.org/github.com/Azure/go-autorest/autorest/azure#Future.WaitForCompletionRef) when blocking on an async call until it completes.
 
 # Resources
 
@@ -496,7 +547,21 @@ func doAzureCalls() {
 
 ## License
 
-Apache 2.0, see [LICENSE](./LICENSE).
+```
+   Copyright 2020 Microsoft Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+```
 
 ## Contribute
 

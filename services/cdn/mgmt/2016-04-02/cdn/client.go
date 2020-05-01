@@ -1,8 +1,6 @@
 // Package cdn implements the Azure ARM Cdn service API version 2016-04-02.
 //
-// Use these APIs to manage Azure CDN resources through the Azure Resource Manager. You must make sure that requests
-// made to these resources are secure. For more information, see
-// https://msdn.microsoft.com/en-us/library/azure/dn790557.aspx.
+// Cdn Management Client
 package cdn
 
 // Copyright (c) Microsoft and contributors.  All rights reserved.
@@ -43,7 +41,8 @@ func New(subscriptionID string) BaseClient {
 	return NewWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewWithBaseURI creates an instance of the BaseClient client.
+// NewWithBaseURI creates an instance of the BaseClient client using a custom endpoint.  Use this when interacting with
+// an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 	return BaseClient{
 		Client:         autorest.NewClientWithUserAgent(UserAgent()),

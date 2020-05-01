@@ -35,24 +35,23 @@ func NewRecoveryPointsClient(subscriptionID string) RecoveryPointsClient {
 	return NewRecoveryPointsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewRecoveryPointsClientWithBaseURI creates an instance of the RecoveryPointsClient client.
+// NewRecoveryPointsClientWithBaseURI creates an instance of the RecoveryPointsClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewRecoveryPointsClientWithBaseURI(baseURI string, subscriptionID string) RecoveryPointsClient {
 	return RecoveryPointsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
-// Get provides the information of the backed up data identified using RecoveryPointID. This is an asynchronous
-// operation.
-// To know the status of the operation, call the GetProtectedItemOperationResult API.
+// GetAccessToken sends the get access token request.
 // Parameters:
 // vaultName - the name of the recovery services vault.
 // resourceGroupName - the name of the resource group where the recovery services vault is present.
-// fabricName - fabric name associated with backed up item.
-// containerName - container name associated with backed up item.
-// protectedItemName - backed up item name whose backup data needs to be fetched.
-// recoveryPointID - recoveryPointID represents the backed up data to be fetched.
-func (client RecoveryPointsClient) Get(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, protectedItemName string, recoveryPointID string) (result RecoveryPointResource, err error) {
+// fabricName - fabric name associated with the container.
+// containerName - name of the container.
+// protectedItemName - name of the Protected Item.
+// recoveryPointID - recovery Point Id
+func (client RecoveryPointsClient) GetAccessToken(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, protectedItemName string, recoveryPointID string) (result CrrAccessTokenResource, err error) {
 	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/RecoveryPointsClient.Get")
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecoveryPointsClient.GetAccessToken")
 		defer func() {
 			sc := -1
 			if result.Response.Response != nil {
@@ -61,29 +60,29 @@ func (client RecoveryPointsClient) Get(ctx context.Context, vaultName string, re
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	req, err := client.GetPreparer(ctx, vaultName, resourceGroupName, fabricName, containerName, protectedItemName, recoveryPointID)
+	req, err := client.GetAccessTokenPreparer(ctx, vaultName, resourceGroupName, fabricName, containerName, protectedItemName, recoveryPointID)
 	if err != nil {
-		err = autorest.NewErrorWithError(err, "backup.RecoveryPointsClient", "Get", nil, "Failure preparing request")
+		err = autorest.NewErrorWithError(err, "backup.RecoveryPointsClient", "GetAccessToken", nil, "Failure preparing request")
 		return
 	}
 
-	resp, err := client.GetSender(req)
+	resp, err := client.GetAccessTokenSender(req)
 	if err != nil {
 		result.Response = autorest.Response{Response: resp}
-		err = autorest.NewErrorWithError(err, "backup.RecoveryPointsClient", "Get", resp, "Failure sending request")
+		err = autorest.NewErrorWithError(err, "backup.RecoveryPointsClient", "GetAccessToken", resp, "Failure sending request")
 		return
 	}
 
-	result, err = client.GetResponder(resp)
+	result, err = client.GetAccessTokenResponder(resp)
 	if err != nil {
-		err = autorest.NewErrorWithError(err, "backup.RecoveryPointsClient", "Get", resp, "Failure responding to request")
+		err = autorest.NewErrorWithError(err, "backup.RecoveryPointsClient", "GetAccessToken", resp, "Failure responding to request")
 	}
 
 	return
 }
 
-// GetPreparer prepares the Get request.
-func (client RecoveryPointsClient) GetPreparer(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, protectedItemName string, recoveryPointID string) (*http.Request, error) {
+// GetAccessTokenPreparer prepares the GetAccessToken request.
+func (client RecoveryPointsClient) GetAccessTokenPreparer(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, protectedItemName string, recoveryPointID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"containerName":     autorest.Encode("path", containerName),
 		"fabricName":        autorest.Encode("path", fabricName),
@@ -94,29 +93,28 @@ func (client RecoveryPointsClient) GetPreparer(ctx context.Context, vaultName st
 		"vaultName":         autorest.Encode("path", vaultName),
 	}
 
-	const APIVersion = "2016-12-01"
+	const APIVersion = "2018-12-20"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
 
 	preparer := autorest.CreatePreparer(
-		autorest.AsGet(),
+		autorest.AsPost(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/Subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{vaultName}/backupFabrics/{fabricName}/protectionContainers/{containerName}/protectedItems/{protectedItemName}/recoveryPoints/{recoveryPointId}", pathParameters),
+		autorest.WithPathParameters("/Subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{vaultName}/backupFabrics/{fabricName}/protectionContainers/{containerName}/protectedItems/{protectedItemName}/recoveryPoints/{recoveryPointId}/accessToken", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// GetSender sends the Get request. The method will close the
+// GetAccessTokenSender sends the GetAccessToken request. The method will close the
 // http.Response Body if it receives an error.
-func (client RecoveryPointsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+func (client RecoveryPointsClient) GetAccessTokenSender(req *http.Request) (*http.Response, error) {
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
-// GetResponder handles the response to the Get request. The method always
+// GetAccessTokenResponder handles the response to the GetAccessToken request. The method always
 // closes the http.Response Body.
-func (client RecoveryPointsClient) GetResponder(resp *http.Response) (result RecoveryPointResource, err error) {
+func (client RecoveryPointsClient) GetAccessTokenResponder(resp *http.Response) (result CrrAccessTokenResource, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
@@ -124,130 +122,5 @@ func (client RecoveryPointsClient) GetResponder(resp *http.Response) (result Rec
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}
-	return
-}
-
-// List lists the backup copies for the backed up item.
-// Parameters:
-// vaultName - the name of the recovery services vault.
-// resourceGroupName - the name of the resource group where the recovery services vault is present.
-// fabricName - fabric name associated with the backed up item.
-// containerName - container name associated with the backed up item.
-// protectedItemName - backed up item whose backup copies are to be fetched.
-// filter - oData filter options.
-func (client RecoveryPointsClient) List(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, protectedItemName string, filter string) (result RecoveryPointResourceListPage, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/RecoveryPointsClient.List")
-		defer func() {
-			sc := -1
-			if result.rprl.Response.Response != nil {
-				sc = result.rprl.Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	result.fn = client.listNextResults
-	req, err := client.ListPreparer(ctx, vaultName, resourceGroupName, fabricName, containerName, protectedItemName, filter)
-	if err != nil {
-		err = autorest.NewErrorWithError(err, "backup.RecoveryPointsClient", "List", nil, "Failure preparing request")
-		return
-	}
-
-	resp, err := client.ListSender(req)
-	if err != nil {
-		result.rprl.Response = autorest.Response{Response: resp}
-		err = autorest.NewErrorWithError(err, "backup.RecoveryPointsClient", "List", resp, "Failure sending request")
-		return
-	}
-
-	result.rprl, err = client.ListResponder(resp)
-	if err != nil {
-		err = autorest.NewErrorWithError(err, "backup.RecoveryPointsClient", "List", resp, "Failure responding to request")
-	}
-
-	return
-}
-
-// ListPreparer prepares the List request.
-func (client RecoveryPointsClient) ListPreparer(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, protectedItemName string, filter string) (*http.Request, error) {
-	pathParameters := map[string]interface{}{
-		"containerName":     autorest.Encode("path", containerName),
-		"fabricName":        autorest.Encode("path", fabricName),
-		"protectedItemName": autorest.Encode("path", protectedItemName),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
-		"vaultName":         autorest.Encode("path", vaultName),
-	}
-
-	const APIVersion = "2016-12-01"
-	queryParameters := map[string]interface{}{
-		"api-version": APIVersion,
-	}
-	if len(filter) > 0 {
-		queryParameters["$filter"] = autorest.Encode("query", filter)
-	}
-
-	preparer := autorest.CreatePreparer(
-		autorest.AsGet(),
-		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/Subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{vaultName}/backupFabrics/{fabricName}/protectionContainers/{containerName}/protectedItems/{protectedItemName}/recoveryPoints", pathParameters),
-		autorest.WithQueryParameters(queryParameters))
-	return preparer.Prepare((&http.Request{}).WithContext(ctx))
-}
-
-// ListSender sends the List request. The method will close the
-// http.Response Body if it receives an error.
-func (client RecoveryPointsClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
-}
-
-// ListResponder handles the response to the List request. The method always
-// closes the http.Response Body.
-func (client RecoveryPointsClient) ListResponder(resp *http.Response) (result RecoveryPointResourceList, err error) {
-	err = autorest.Respond(
-		resp,
-		client.ByInspecting(),
-		azure.WithErrorUnlessStatusCode(http.StatusOK),
-		autorest.ByUnmarshallingJSON(&result),
-		autorest.ByClosing())
-	result.Response = autorest.Response{Response: resp}
-	return
-}
-
-// listNextResults retrieves the next set of results, if any.
-func (client RecoveryPointsClient) listNextResults(ctx context.Context, lastResults RecoveryPointResourceList) (result RecoveryPointResourceList, err error) {
-	req, err := lastResults.recoveryPointResourceListPreparer(ctx)
-	if err != nil {
-		return result, autorest.NewErrorWithError(err, "backup.RecoveryPointsClient", "listNextResults", nil, "Failure preparing next results request")
-	}
-	if req == nil {
-		return
-	}
-	resp, err := client.ListSender(req)
-	if err != nil {
-		result.Response = autorest.Response{Response: resp}
-		return result, autorest.NewErrorWithError(err, "backup.RecoveryPointsClient", "listNextResults", resp, "Failure sending next results request")
-	}
-	result, err = client.ListResponder(resp)
-	if err != nil {
-		err = autorest.NewErrorWithError(err, "backup.RecoveryPointsClient", "listNextResults", resp, "Failure responding to next results request")
-	}
-	return
-}
-
-// ListComplete enumerates all values, automatically crossing page boundaries as required.
-func (client RecoveryPointsClient) ListComplete(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, protectedItemName string, filter string) (result RecoveryPointResourceListIterator, err error) {
-	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/RecoveryPointsClient.List")
-		defer func() {
-			sc := -1
-			if result.Response().Response.Response != nil {
-				sc = result.page.Response().Response.Response.StatusCode
-			}
-			tracing.EndSpan(ctx, sc, err)
-		}()
-	}
-	result.page, err = client.List(ctx, vaultName, resourceGroupName, fabricName, containerName, protectedItemName, filter)
 	return
 }

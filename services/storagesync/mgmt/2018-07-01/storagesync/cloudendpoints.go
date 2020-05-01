@@ -36,7 +36,8 @@ func NewCloudEndpointsClient(subscriptionID string) CloudEndpointsClient {
 	return NewCloudEndpointsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewCloudEndpointsClientWithBaseURI creates an instance of the CloudEndpointsClient client.
+// NewCloudEndpointsClientWithBaseURI creates an instance of the CloudEndpointsClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewCloudEndpointsClientWithBaseURI(baseURI string, subscriptionID string) CloudEndpointsClient {
 	return CloudEndpointsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -113,8 +114,7 @@ func (client CloudEndpointsClient) CreatePreparer(ctx context.Context, resourceG
 // http.Response Body if it receives an error.
 func (client CloudEndpointsClient) CreateSender(req *http.Request) (future CloudEndpointsCreateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -204,8 +204,7 @@ func (client CloudEndpointsClient) DeletePreparer(ctx context.Context, resourceG
 // http.Response Body if it receives an error.
 func (client CloudEndpointsClient) DeleteSender(req *http.Request) (future CloudEndpointsDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -299,8 +298,7 @@ func (client CloudEndpointsClient) GetPreparer(ctx context.Context, resourceGrou
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client CloudEndpointsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -388,8 +386,7 @@ func (client CloudEndpointsClient) ListBySyncGroupPreparer(ctx context.Context, 
 // ListBySyncGroupSender sends the ListBySyncGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client CloudEndpointsClient) ListBySyncGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListBySyncGroupResponder handles the response to the ListBySyncGroup request. The method always
@@ -477,8 +474,7 @@ func (client CloudEndpointsClient) PostBackupPreparer(ctx context.Context, resou
 // http.Response Body if it receives an error.
 func (client CloudEndpointsClient) PostBackupSender(req *http.Request) (future CloudEndpointsPostBackupFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -571,8 +567,7 @@ func (client CloudEndpointsClient) PostRestorePreparer(ctx context.Context, reso
 // http.Response Body if it receives an error.
 func (client CloudEndpointsClient) PostRestoreSender(req *http.Request) (future CloudEndpointsPostRestoreFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -664,8 +659,7 @@ func (client CloudEndpointsClient) PreBackupPreparer(ctx context.Context, resour
 // http.Response Body if it receives an error.
 func (client CloudEndpointsClient) PreBackupSender(req *http.Request) (future CloudEndpointsPreBackupFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -757,8 +751,7 @@ func (client CloudEndpointsClient) PreRestorePreparer(ctx context.Context, resou
 // http.Response Body if it receives an error.
 func (client CloudEndpointsClient) PreRestoreSender(req *http.Request) (future CloudEndpointsPreRestoreFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -852,8 +845,7 @@ func (client CloudEndpointsClient) RestoreheartbeatPreparer(ctx context.Context,
 // RestoreheartbeatSender sends the Restoreheartbeat request. The method will close the
 // http.Response Body if it receives an error.
 func (client CloudEndpointsClient) RestoreheartbeatSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // RestoreheartbeatResponder handles the response to the Restoreheartbeat request. The method always

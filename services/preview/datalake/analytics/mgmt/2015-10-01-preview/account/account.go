@@ -36,7 +36,8 @@ func NewClient(subscriptionID string) Client {
 	return NewClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewClientWithBaseURI creates an instance of the Client client.
+// NewClientWithBaseURI creates an instance of the Client client using a custom endpoint.  Use this when interacting
+// with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewClientWithBaseURI(baseURI string, subscriptionID string) Client {
 	return Client{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -113,8 +114,7 @@ func (client Client) AddDataLakeStoreAccountPreparer(ctx context.Context, resour
 // AddDataLakeStoreAccountSender sends the AddDataLakeStoreAccount request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) AddDataLakeStoreAccountSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // AddDataLakeStoreAccountResponder handles the response to the AddDataLakeStoreAccount request. The method always
@@ -201,8 +201,7 @@ func (client Client) AddStorageAccountPreparer(ctx context.Context, resourceGrou
 // AddStorageAccountSender sends the AddStorageAccount request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) AddStorageAccountSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // AddStorageAccountResponder handles the response to the AddStorageAccount request. The method always
@@ -263,6 +262,8 @@ func (client Client) CreatePreparer(ctx context.Context, resourceGroupName strin
 		"api-version": APIVersion,
 	}
 
+	parameters.Type = nil
+	parameters.ID = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
@@ -277,8 +278,7 @@ func (client Client) CreatePreparer(ctx context.Context, resourceGroupName strin
 // http.Response Body if it receives an error.
 func (client Client) CreateSender(req *http.Request) (future CreateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -354,8 +354,7 @@ func (client Client) DeletePreparer(ctx context.Context, resourceGroupName strin
 // http.Response Body if it receives an error.
 func (client Client) DeleteSender(req *http.Request) (future DeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -438,8 +437,7 @@ func (client Client) DeleteDataLakeStoreAccountPreparer(ctx context.Context, res
 // DeleteDataLakeStoreAccountSender sends the DeleteDataLakeStoreAccount request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) DeleteDataLakeStoreAccountSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteDataLakeStoreAccountResponder handles the response to the DeleteDataLakeStoreAccount request. The method always
@@ -516,8 +514,7 @@ func (client Client) DeleteStorageAccountPreparer(ctx context.Context, resourceG
 // DeleteStorageAccountSender sends the DeleteStorageAccount request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) DeleteStorageAccountSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteStorageAccountResponder handles the response to the DeleteStorageAccount request. The method always
@@ -592,8 +589,7 @@ func (client Client) GetPreparer(ctx context.Context, resourceGroupName string, 
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -673,8 +669,7 @@ func (client Client) GetDataLakeStoreAccountPreparer(ctx context.Context, resour
 // GetDataLakeStoreAccountSender sends the GetDataLakeStoreAccount request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) GetDataLakeStoreAccountSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetDataLakeStoreAccountResponder handles the response to the GetDataLakeStoreAccount request. The method always
@@ -753,8 +748,7 @@ func (client Client) GetStorageAccountPreparer(ctx context.Context, resourceGrou
 // GetStorageAccountSender sends the GetStorageAccount request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) GetStorageAccountSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetStorageAccountResponder handles the response to the GetStorageAccount request. The method always
@@ -835,8 +829,7 @@ func (client Client) GetStorageContainerPreparer(ctx context.Context, resourceGr
 // GetStorageContainerSender sends the GetStorageContainer request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) GetStorageContainerSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetStorageContainerResponder handles the response to the GetStorageContainer request. The method always
@@ -953,8 +946,7 @@ func (client Client) ListPreparer(ctx context.Context, filter string, top *int32
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -1110,8 +1102,7 @@ func (client Client) ListByResourceGroupPreparer(ctx context.Context, resourceGr
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -1269,8 +1260,7 @@ func (client Client) ListDataLakeStoreAccountsPreparer(ctx context.Context, reso
 // ListDataLakeStoreAccountsSender sends the ListDataLakeStoreAccounts request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) ListDataLakeStoreAccountsSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListDataLakeStoreAccountsResponder handles the response to the ListDataLakeStoreAccounts request. The method always
@@ -1390,8 +1380,7 @@ func (client Client) ListSasTokensPreparer(ctx context.Context, resourceGroupNam
 // ListSasTokensSender sends the ListSasTokens request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) ListSasTokensSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListSasTokensResponder handles the response to the ListSasTokens request. The method always
@@ -1549,8 +1538,7 @@ func (client Client) ListStorageAccountsPreparer(ctx context.Context, resourceGr
 // ListStorageAccountsSender sends the ListStorageAccounts request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) ListStorageAccountsSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListStorageAccountsResponder handles the response to the ListStorageAccounts request. The method always
@@ -1667,8 +1655,7 @@ func (client Client) ListStorageContainersPreparer(ctx context.Context, resource
 // ListStorageContainersSender sends the ListStorageContainers request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) ListStorageContainersSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListStorageContainersResponder handles the response to the ListStorageContainers request. The method always
@@ -1766,6 +1753,8 @@ func (client Client) UpdatePreparer(ctx context.Context, resourceGroupName strin
 		"api-version": APIVersion,
 	}
 
+	parameters.Type = nil
+	parameters.ID = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPatch(),
@@ -1780,8 +1769,7 @@ func (client Client) UpdatePreparer(ctx context.Context, resourceGroupName strin
 // http.Response Body if it receives an error.
 func (client Client) UpdateSender(req *http.Request) (future UpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -1868,8 +1856,7 @@ func (client Client) UpdateStorageAccountPreparer(ctx context.Context, resourceG
 // UpdateStorageAccountSender sends the UpdateStorageAccount request. The method will close the
 // http.Response Body if it receives an error.
 func (client Client) UpdateStorageAccountSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateStorageAccountResponder handles the response to the UpdateStorageAccount request. The method always

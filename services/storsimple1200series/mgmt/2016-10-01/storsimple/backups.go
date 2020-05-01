@@ -36,7 +36,8 @@ func NewBackupsClient(subscriptionID string) BackupsClient {
 	return NewBackupsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewBackupsClientWithBaseURI creates an instance of the BackupsClient client.
+// NewBackupsClientWithBaseURI creates an instance of the BackupsClient client using a custom endpoint.  Use this when
+// interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewBackupsClientWithBaseURI(baseURI string, subscriptionID string) BackupsClient {
 	return BackupsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -130,8 +131,7 @@ func (client BackupsClient) ClonePreparer(ctx context.Context, deviceName string
 // http.Response Body if it receives an error.
 func (client BackupsClient) CloneSender(req *http.Request) (future BackupsCloneFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -217,8 +217,7 @@ func (client BackupsClient) DeletePreparer(ctx context.Context, deviceName strin
 // http.Response Body if it receives an error.
 func (client BackupsClient) DeleteSender(req *http.Request) (future BackupsDeleteFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -316,8 +315,7 @@ func (client BackupsClient) ListByDevicePreparer(ctx context.Context, deviceName
 // ListByDeviceSender sends the ListByDevice request. The method will close the
 // http.Response Body if it receives an error.
 func (client BackupsClient) ListByDeviceSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByDeviceResponder handles the response to the ListByDevice request. The method always
@@ -442,8 +440,7 @@ func (client BackupsClient) ListByManagerPreparer(ctx context.Context, resourceG
 // ListByManagerSender sends the ListByManager request. The method will close the
 // http.Response Body if it receives an error.
 func (client BackupsClient) ListByManagerSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByManagerResponder handles the response to the ListByManager request. The method always

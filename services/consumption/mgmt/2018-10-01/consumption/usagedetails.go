@@ -37,7 +37,8 @@ func NewUsageDetailsClient(subscriptionID string) UsageDetailsClient {
 	return NewUsageDetailsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewUsageDetailsClientWithBaseURI creates an instance of the UsageDetailsClient client.
+// NewUsageDetailsClientWithBaseURI creates an instance of the UsageDetailsClient client using a custom endpoint.  Use
+// this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewUsageDetailsClientWithBaseURI(baseURI string, subscriptionID string) UsageDetailsClient {
 	return UsageDetailsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -71,7 +72,7 @@ func (client UsageDetailsClient) List(ctx context.Context, expand string, filter
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("consumption.UsageDetailsClient", "List", err.Error())
 	}
@@ -135,8 +136,7 @@ func (client UsageDetailsClient) ListPreparer(ctx context.Context, expand string
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client UsageDetailsClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -219,7 +219,7 @@ func (client UsageDetailsClient) ListByBillingAccount(ctx context.Context, billi
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("consumption.UsageDetailsClient", "ListByBillingAccount", err.Error())
 	}
@@ -283,8 +283,7 @@ func (client UsageDetailsClient) ListByBillingAccountPreparer(ctx context.Contex
 // ListByBillingAccountSender sends the ListByBillingAccount request. The method will close the
 // http.Response Body if it receives an error.
 func (client UsageDetailsClient) ListByBillingAccountSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListByBillingAccountResponder handles the response to the ListByBillingAccount request. The method always
@@ -368,7 +367,7 @@ func (client UsageDetailsClient) ListByBillingPeriod(ctx context.Context, billin
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("consumption.UsageDetailsClient", "ListByBillingPeriod", err.Error())
 	}
@@ -433,8 +432,7 @@ func (client UsageDetailsClient) ListByBillingPeriodPreparer(ctx context.Context
 // ListByBillingPeriodSender sends the ListByBillingPeriod request. The method will close the
 // http.Response Body if it receives an error.
 func (client UsageDetailsClient) ListByBillingPeriodSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByBillingPeriodResponder handles the response to the ListByBillingPeriod request. The method always
@@ -517,7 +515,7 @@ func (client UsageDetailsClient) ListByDepartment(ctx context.Context, departmen
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("consumption.UsageDetailsClient", "ListByDepartment", err.Error())
 	}
@@ -581,8 +579,7 @@ func (client UsageDetailsClient) ListByDepartmentPreparer(ctx context.Context, d
 // ListByDepartmentSender sends the ListByDepartment request. The method will close the
 // http.Response Body if it receives an error.
 func (client UsageDetailsClient) ListByDepartmentSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListByDepartmentResponder handles the response to the ListByDepartment request. The method always
@@ -665,7 +662,7 @@ func (client UsageDetailsClient) ListByEnrollmentAccount(ctx context.Context, en
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("consumption.UsageDetailsClient", "ListByEnrollmentAccount", err.Error())
 	}
@@ -729,8 +726,7 @@ func (client UsageDetailsClient) ListByEnrollmentAccountPreparer(ctx context.Con
 // ListByEnrollmentAccountSender sends the ListByEnrollmentAccount request. The method will close the
 // http.Response Body if it receives an error.
 func (client UsageDetailsClient) ListByEnrollmentAccountSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListByEnrollmentAccountResponder handles the response to the ListByEnrollmentAccount request. The method always
@@ -813,7 +809,7 @@ func (client UsageDetailsClient) ListByManagementGroup(ctx context.Context, mana
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("consumption.UsageDetailsClient", "ListByManagementGroup", err.Error())
 	}
@@ -877,8 +873,7 @@ func (client UsageDetailsClient) ListByManagementGroupPreparer(ctx context.Conte
 // ListByManagementGroupSender sends the ListByManagementGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client UsageDetailsClient) ListByManagementGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListByManagementGroupResponder handles the response to the ListByManagementGroup request. The method always
@@ -963,7 +958,7 @@ func (client UsageDetailsClient) ListForBillingPeriodByBillingAccount(ctx contex
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("consumption.UsageDetailsClient", "ListForBillingPeriodByBillingAccount", err.Error())
 	}
@@ -1028,8 +1023,7 @@ func (client UsageDetailsClient) ListForBillingPeriodByBillingAccountPreparer(ct
 // ListForBillingPeriodByBillingAccountSender sends the ListForBillingPeriodByBillingAccount request. The method will close the
 // http.Response Body if it receives an error.
 func (client UsageDetailsClient) ListForBillingPeriodByBillingAccountSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListForBillingPeriodByBillingAccountResponder handles the response to the ListForBillingPeriodByBillingAccount request. The method always
@@ -1114,7 +1108,7 @@ func (client UsageDetailsClient) ListForBillingPeriodByDepartment(ctx context.Co
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("consumption.UsageDetailsClient", "ListForBillingPeriodByDepartment", err.Error())
 	}
@@ -1179,8 +1173,7 @@ func (client UsageDetailsClient) ListForBillingPeriodByDepartmentPreparer(ctx co
 // ListForBillingPeriodByDepartmentSender sends the ListForBillingPeriodByDepartment request. The method will close the
 // http.Response Body if it receives an error.
 func (client UsageDetailsClient) ListForBillingPeriodByDepartmentSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListForBillingPeriodByDepartmentResponder handles the response to the ListForBillingPeriodByDepartment request. The method always
@@ -1265,7 +1258,7 @@ func (client UsageDetailsClient) ListForBillingPeriodByEnrollmentAccount(ctx con
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("consumption.UsageDetailsClient", "ListForBillingPeriodByEnrollmentAccount", err.Error())
 	}
@@ -1330,8 +1323,7 @@ func (client UsageDetailsClient) ListForBillingPeriodByEnrollmentAccountPreparer
 // ListForBillingPeriodByEnrollmentAccountSender sends the ListForBillingPeriodByEnrollmentAccount request. The method will close the
 // http.Response Body if it receives an error.
 func (client UsageDetailsClient) ListForBillingPeriodByEnrollmentAccountSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListForBillingPeriodByEnrollmentAccountResponder handles the response to the ListForBillingPeriodByEnrollmentAccount request. The method always
@@ -1416,7 +1408,7 @@ func (client UsageDetailsClient) ListForBillingPeriodByManagementGroup(ctx conte
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMaximum, Rule: int64(1000), Chain: nil},
-					{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+					{Target: "top", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("consumption.UsageDetailsClient", "ListForBillingPeriodByManagementGroup", err.Error())
 	}
@@ -1481,8 +1473,7 @@ func (client UsageDetailsClient) ListForBillingPeriodByManagementGroupPreparer(c
 // ListForBillingPeriodByManagementGroupSender sends the ListForBillingPeriodByManagementGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client UsageDetailsClient) ListForBillingPeriodByManagementGroupSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListForBillingPeriodByManagementGroupResponder handles the response to the ListForBillingPeriodByManagementGroup request. The method always

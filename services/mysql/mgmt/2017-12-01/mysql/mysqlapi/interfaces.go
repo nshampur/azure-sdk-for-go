@@ -29,6 +29,7 @@ type ServersClientAPI interface {
 	Get(ctx context.Context, resourceGroupName string, serverName string) (result mysql.Server, err error)
 	List(ctx context.Context) (result mysql.ServerListResult, err error)
 	ListByResourceGroup(ctx context.Context, resourceGroupName string) (result mysql.ServerListResult, err error)
+	Restart(ctx context.Context, resourceGroupName string, serverName string) (result mysql.ServersRestartFuture, err error)
 	Update(ctx context.Context, resourceGroupName string, serverName string, parameters mysql.ServerUpdateParameters) (result mysql.ServersUpdateFuture, err error)
 }
 
@@ -57,6 +58,7 @@ type VirtualNetworkRulesClientAPI interface {
 	Delete(ctx context.Context, resourceGroupName string, serverName string, virtualNetworkRuleName string) (result mysql.VirtualNetworkRulesDeleteFuture, err error)
 	Get(ctx context.Context, resourceGroupName string, serverName string, virtualNetworkRuleName string) (result mysql.VirtualNetworkRule, err error)
 	ListByServer(ctx context.Context, resourceGroupName string, serverName string) (result mysql.VirtualNetworkRuleListResultPage, err error)
+	ListByServerComplete(ctx context.Context, resourceGroupName string, serverName string) (result mysql.VirtualNetworkRuleListResultIterator, err error)
 }
 
 var _ VirtualNetworkRulesClientAPI = (*mysql.VirtualNetworkRulesClient)(nil)

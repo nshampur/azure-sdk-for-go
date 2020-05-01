@@ -36,7 +36,8 @@ func NewPolicyClient(subscriptionID string) PolicyClient {
 	return NewPolicyClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewPolicyClientWithBaseURI creates an instance of the PolicyClient client.
+// NewPolicyClientWithBaseURI creates an instance of the PolicyClient client using a custom endpoint.  Use this when
+// interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewPolicyClientWithBaseURI(baseURI string, subscriptionID string) PolicyClient {
 	return PolicyClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -46,7 +47,8 @@ func NewPolicyClientWithBaseURI(baseURI string, subscriptionID string) PolicyCli
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // parameters - the policy contents to apply.
-func (client PolicyClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, parameters PolicyContract) (result PolicyContract, err error) {
+// ifMatch - eTag of the Entity. Not required when creating an entity, but required when updating an entity.
+func (client PolicyClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, parameters PolicyContract, ifMatch string) (result PolicyContract, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyClient.CreateOrUpdate")
 		defer func() {
@@ -68,7 +70,7 @@ func (client PolicyClient) CreateOrUpdate(ctx context.Context, resourceGroupName
 		return result, validation.NewError("apimanagement.PolicyClient", "CreateOrUpdate", err.Error())
 	}
 
-	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, serviceName, parameters)
+	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, serviceName, parameters, ifMatch)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.PolicyClient", "CreateOrUpdate", nil, "Failure preparing request")
 		return
@@ -90,7 +92,7 @@ func (client PolicyClient) CreateOrUpdate(ctx context.Context, resourceGroupName
 }
 
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
-func (client PolicyClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, parameters PolicyContract) (*http.Request, error) {
+func (client PolicyClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, parameters PolicyContract, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"policyId":          autorest.Encode("path", "policy"),
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
@@ -110,14 +112,18 @@ func (client PolicyClient) CreateOrUpdatePreparer(ctx context.Context, resourceG
 		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/policies/{policyId}", pathParameters),
 		autorest.WithJSON(parameters),
 		autorest.WithQueryParameters(queryParameters))
+	if len(ifMatch) > 0 {
+		preparer = autorest.DecoratePreparer(preparer,
+			autorest.WithHeader("If-Match", autorest.String(ifMatch)))
+	}
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -205,8 +211,8 @@ func (client PolicyClient) DeletePreparer(ctx context.Context, resourceGroupName
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -290,8 +296,8 @@ func (client PolicyClient) GetPreparer(ctx context.Context, resourceGroupName st
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -376,8 +382,8 @@ func (client PolicyClient) GetEntityTagPreparer(ctx context.Context, resourceGro
 // GetEntityTagSender sends the GetEntityTag request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyClient) GetEntityTagSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // GetEntityTagResponder handles the response to the GetEntityTag request. The method always
@@ -396,8 +402,7 @@ func (client PolicyClient) GetEntityTagResponder(resp *http.Response) (result au
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
-// scope - policy scope.
-func (client PolicyClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, scope PolicyScopeContract) (result PolicyCollection, err error) {
+func (client PolicyClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string) (result PolicyCollection, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyClient.ListByService")
 		defer func() {
@@ -416,7 +421,7 @@ func (client PolicyClient) ListByService(ctx context.Context, resourceGroupName 
 		return result, validation.NewError("apimanagement.PolicyClient", "ListByService", err.Error())
 	}
 
-	req, err := client.ListByServicePreparer(ctx, resourceGroupName, serviceName, scope)
+	req, err := client.ListByServicePreparer(ctx, resourceGroupName, serviceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.PolicyClient", "ListByService", nil, "Failure preparing request")
 		return
@@ -438,7 +443,7 @@ func (client PolicyClient) ListByService(ctx context.Context, resourceGroupName 
 }
 
 // ListByServicePreparer prepares the ListByService request.
-func (client PolicyClient) ListByServicePreparer(ctx context.Context, resourceGroupName string, serviceName string, scope PolicyScopeContract) (*http.Request, error) {
+func (client PolicyClient) ListByServicePreparer(ctx context.Context, resourceGroupName string, serviceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
 		"serviceName":       autorest.Encode("path", serviceName),
@@ -448,9 +453,6 @@ func (client PolicyClient) ListByServicePreparer(ctx context.Context, resourceGr
 	const APIVersion = "2018-06-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
-	}
-	if len(string(scope)) > 0 {
-		queryParameters["scope"] = autorest.Encode("query", scope)
 	}
 
 	preparer := autorest.CreatePreparer(
@@ -464,8 +466,8 @@ func (client PolicyClient) ListByServicePreparer(ctx context.Context, resourceGr
 // ListByServiceSender sends the ListByService request. The method will close the
 // http.Response Body if it receives an error.
 func (client PolicyClient) ListByServiceSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
+	return autorest.SendWithSender(client, req, sd...)
 }
 
 // ListByServiceResponder handles the response to the ListByService request. The method always

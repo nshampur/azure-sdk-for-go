@@ -36,7 +36,8 @@ func NewDatabaseClient(subscriptionID string) DatabaseClient {
 	return NewDatabaseClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewDatabaseClientWithBaseURI creates an instance of the DatabaseClient client.
+// NewDatabaseClientWithBaseURI creates an instance of the DatabaseClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewDatabaseClientWithBaseURI(baseURI string, subscriptionID string) DatabaseClient {
 	return DatabaseClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -64,7 +65,8 @@ func (client DatabaseClient) ListMetricDefinitions(ctx context.Context, resource
 				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 50, Chain: nil},
-				{Target: "accountName", Name: validation.MinLength, Rule: 3, Chain: nil}}}}); err != nil {
+				{Target: "accountName", Name: validation.MinLength, Rule: 3, Chain: nil},
+				{Target: "accountName", Name: validation.Pattern, Rule: `^[a-z0-9]+(-[a-z0-9]+)*`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("documentdb.DatabaseClient", "ListMetricDefinitions", err.Error())
 	}
 
@@ -114,8 +116,7 @@ func (client DatabaseClient) ListMetricDefinitionsPreparer(ctx context.Context, 
 // ListMetricDefinitionsSender sends the ListMetricDefinitions request. The method will close the
 // http.Response Body if it receives an error.
 func (client DatabaseClient) ListMetricDefinitionsSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListMetricDefinitionsResponder handles the response to the ListMetricDefinitions request. The method always
@@ -157,7 +158,8 @@ func (client DatabaseClient) ListMetrics(ctx context.Context, resourceGroupName 
 				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 50, Chain: nil},
-				{Target: "accountName", Name: validation.MinLength, Rule: 3, Chain: nil}}}}); err != nil {
+				{Target: "accountName", Name: validation.MinLength, Rule: 3, Chain: nil},
+				{Target: "accountName", Name: validation.Pattern, Rule: `^[a-z0-9]+(-[a-z0-9]+)*`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("documentdb.DatabaseClient", "ListMetrics", err.Error())
 	}
 
@@ -208,8 +210,7 @@ func (client DatabaseClient) ListMetricsPreparer(ctx context.Context, resourceGr
 // ListMetricsSender sends the ListMetrics request. The method will close the
 // http.Response Body if it receives an error.
 func (client DatabaseClient) ListMetricsSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListMetricsResponder handles the response to the ListMetrics request. The method always
@@ -250,7 +251,8 @@ func (client DatabaseClient) ListUsages(ctx context.Context, resourceGroupName s
 				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 50, Chain: nil},
-				{Target: "accountName", Name: validation.MinLength, Rule: 3, Chain: nil}}}}); err != nil {
+				{Target: "accountName", Name: validation.MinLength, Rule: 3, Chain: nil},
+				{Target: "accountName", Name: validation.Pattern, Rule: `^[a-z0-9]+(-[a-z0-9]+)*`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("documentdb.DatabaseClient", "ListUsages", err.Error())
 	}
 
@@ -303,8 +305,7 @@ func (client DatabaseClient) ListUsagesPreparer(ctx context.Context, resourceGro
 // ListUsagesSender sends the ListUsages request. The method will close the
 // http.Response Body if it receives an error.
 func (client DatabaseClient) ListUsagesSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListUsagesResponder handles the response to the ListUsages request. The method always

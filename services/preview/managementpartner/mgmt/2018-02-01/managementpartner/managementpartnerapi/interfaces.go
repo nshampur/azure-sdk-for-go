@@ -36,6 +36,14 @@ var _ PartnerClientAPI = (*managementpartner.PartnerClient)(nil)
 // OperationClientAPI contains the set of methods on the OperationClient type.
 type OperationClientAPI interface {
 	List(ctx context.Context) (result managementpartner.OperationListPage, err error)
+	ListComplete(ctx context.Context) (result managementpartner.OperationListIterator, err error)
 }
 
 var _ OperationClientAPI = (*managementpartner.OperationClient)(nil)
+
+// PartnersClientAPI contains the set of methods on the PartnersClient type.
+type PartnersClientAPI interface {
+	Get(ctx context.Context) (result managementpartner.PartnerResponse, err error)
+}
+
+var _ PartnersClientAPI = (*managementpartner.PartnersClient)(nil)

@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2019 Microsoft Corporation
+// Copyright 2020 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -72,6 +72,7 @@ const (
 type ServerVersion = original.ServerVersion
 
 const (
+	EightFullStopZero ServerVersion = original.EightFullStopZero
 	FiveFullStopSeven ServerVersion = original.FiveFullStopSeven
 	FiveFullStopSix   ServerVersion = original.FiveFullStopSix
 )
@@ -91,6 +92,13 @@ const (
 	SslEnforcementEnumEnabled  SslEnforcementEnum = original.SslEnforcementEnumEnabled
 )
 
+type StorageAutogrow = original.StorageAutogrow
+
+const (
+	StorageAutogrowDisabled StorageAutogrow = original.StorageAutogrowDisabled
+	StorageAutogrowEnabled  StorageAutogrow = original.StorageAutogrowEnabled
+)
+
 type VirtualNetworkRuleState = original.VirtualNetworkRuleState
 
 const (
@@ -101,9 +109,11 @@ const (
 	Unknown      VirtualNetworkRuleState = original.Unknown
 )
 
+type AzureEntityResource = original.AzureEntityResource
 type BaseClient = original.BaseClient
 type BasicServerPropertiesForCreate = original.BasicServerPropertiesForCreate
 type CheckNameAvailabilityClient = original.CheckNameAvailabilityClient
+type CloudError = original.CloudError
 type Configuration = original.Configuration
 type ConfigurationListResult = original.ConfigurationListResult
 type ConfigurationProperties = original.ConfigurationProperties
@@ -115,6 +125,8 @@ type DatabaseProperties = original.DatabaseProperties
 type DatabasesClient = original.DatabasesClient
 type DatabasesCreateOrUpdateFuture = original.DatabasesCreateOrUpdateFuture
 type DatabasesDeleteFuture = original.DatabasesDeleteFuture
+type ErrorAdditionalInfo = original.ErrorAdditionalInfo
+type ErrorResponse = original.ErrorResponse
 type FirewallRule = original.FirewallRule
 type FirewallRuleListResult = original.FirewallRuleListResult
 type FirewallRuleProperties = original.FirewallRuleProperties
@@ -137,6 +149,7 @@ type PerformanceTierProperties = original.PerformanceTierProperties
 type PerformanceTierServiceLevelObjectives = original.PerformanceTierServiceLevelObjectives
 type ProxyResource = original.ProxyResource
 type ReplicasClient = original.ReplicasClient
+type Resource = original.Resource
 type SecurityAlertPolicyProperties = original.SecurityAlertPolicyProperties
 type Server = original.Server
 type ServerForCreate = original.ServerForCreate
@@ -155,6 +168,7 @@ type ServerUpdateParametersProperties = original.ServerUpdateParametersPropertie
 type ServersClient = original.ServersClient
 type ServersCreateFuture = original.ServersCreateFuture
 type ServersDeleteFuture = original.ServersDeleteFuture
+type ServersRestartFuture = original.ServersRestartFuture
 type ServersUpdateFuture = original.ServersUpdateFuture
 type Sku = original.Sku
 type StorageProfile = original.StorageProfile
@@ -269,6 +283,9 @@ func PossibleSkuTierValues() []SkuTier {
 }
 func PossibleSslEnforcementEnumValues() []SslEnforcementEnum {
 	return original.PossibleSslEnforcementEnumValues()
+}
+func PossibleStorageAutogrowValues() []StorageAutogrow {
+	return original.PossibleStorageAutogrowValues()
 }
 func PossibleVirtualNetworkRuleStateValues() []VirtualNetworkRuleState {
 	return original.PossibleVirtualNetworkRuleStateValues()

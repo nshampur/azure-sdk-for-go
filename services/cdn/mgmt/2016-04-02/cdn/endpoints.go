@@ -26,9 +26,7 @@ import (
 	"net/http"
 )
 
-// EndpointsClient is the use these APIs to manage Azure CDN resources through the Azure Resource Manager. You must
-// make sure that requests made to these resources are secure. For more information, see
-// https://msdn.microsoft.com/en-us/library/azure/dn790557.aspx.
+// EndpointsClient is the cdn Management Client
 type EndpointsClient struct {
 	BaseClient
 }
@@ -38,7 +36,8 @@ func NewEndpointsClient(subscriptionID string) EndpointsClient {
 	return NewEndpointsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewEndpointsClientWithBaseURI creates an instance of the EndpointsClient client.
+// NewEndpointsClientWithBaseURI creates an instance of the EndpointsClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewEndpointsClientWithBaseURI(baseURI string, subscriptionID string) EndpointsClient {
 	return EndpointsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -111,8 +110,7 @@ func (client EndpointsClient) CreatePreparer(ctx context.Context, endpointName s
 // http.Response Body if it receives an error.
 func (client EndpointsClient) CreateSender(req *http.Request) (future EndpointsCreateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -190,8 +188,7 @@ func (client EndpointsClient) DeleteIfExistsPreparer(ctx context.Context, endpoi
 // http.Response Body if it receives an error.
 func (client EndpointsClient) DeleteIfExistsSender(req *http.Request) (future EndpointsDeleteIfExistsFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -273,8 +270,7 @@ func (client EndpointsClient) GetPreparer(ctx context.Context, endpointName stri
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client EndpointsClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -350,8 +346,7 @@ func (client EndpointsClient) ListByProfilePreparer(ctx context.Context, profile
 // ListByProfileSender sends the ListByProfile request. The method will close the
 // http.Response Body if it receives an error.
 func (client EndpointsClient) ListByProfileSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByProfileResponder handles the response to the ListByProfile request. The method always
@@ -433,8 +428,7 @@ func (client EndpointsClient) LoadContentPreparer(ctx context.Context, endpointN
 // http.Response Body if it receives an error.
 func (client EndpointsClient) LoadContentSender(req *http.Request) (future EndpointsLoadContentFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -520,8 +514,7 @@ func (client EndpointsClient) PurgeContentPreparer(ctx context.Context, endpoint
 // http.Response Body if it receives an error.
 func (client EndpointsClient) PurgeContentSender(req *http.Request) (future EndpointsPurgeContentFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -598,8 +591,7 @@ func (client EndpointsClient) StartPreparer(ctx context.Context, endpointName st
 // http.Response Body if it receives an error.
 func (client EndpointsClient) StartSender(req *http.Request) (future EndpointsStartFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -677,8 +669,7 @@ func (client EndpointsClient) StopPreparer(ctx context.Context, endpointName str
 // http.Response Body if it receives an error.
 func (client EndpointsClient) StopSender(req *http.Request) (future EndpointsStopFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -759,8 +750,7 @@ func (client EndpointsClient) UpdatePreparer(ctx context.Context, endpointName s
 // http.Response Body if it receives an error.
 func (client EndpointsClient) UpdateSender(req *http.Request) (future EndpointsUpdateFuture, err error) {
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -852,8 +842,7 @@ func (client EndpointsClient) ValidateCustomDomainPreparer(ctx context.Context, 
 // ValidateCustomDomainSender sends the ValidateCustomDomain request. The method will close the
 // http.Response Body if it receives an error.
 func (client EndpointsClient) ValidateCustomDomainSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ValidateCustomDomainResponder handles the response to the ValidateCustomDomain request. The method always

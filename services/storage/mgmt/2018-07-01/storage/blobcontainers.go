@@ -36,7 +36,8 @@ func NewBlobContainersClient(subscriptionID string) BlobContainersClient {
 	return NewBlobContainersClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewBlobContainersClientWithBaseURI creates an instance of the BlobContainersClient client.
+// NewBlobContainersClientWithBaseURI creates an instance of the BlobContainersClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewBlobContainersClientWithBaseURI(baseURI string, subscriptionID string) BlobContainersClient {
 	return BlobContainersClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -116,6 +117,7 @@ func (client BlobContainersClient) ClearLegalHoldPreparer(ctx context.Context, r
 		"api-version": APIVersion,
 	}
 
+	legalHold.HasLegalHold = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPost(),
@@ -129,8 +131,7 @@ func (client BlobContainersClient) ClearLegalHoldPreparer(ctx context.Context, r
 // ClearLegalHoldSender sends the ClearLegalHold request. The method will close the
 // http.Response Body if it receives an error.
 func (client BlobContainersClient) ClearLegalHoldSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ClearLegalHoldResponder handles the response to the ClearLegalHold request. The method always
@@ -240,8 +241,7 @@ func (client BlobContainersClient) CreatePreparer(ctx context.Context, resourceG
 // CreateSender sends the Create request. The method will close the
 // http.Response Body if it receives an error.
 func (client BlobContainersClient) CreateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateResponder handles the response to the Create request. The method always
@@ -359,8 +359,7 @@ func (client BlobContainersClient) CreateOrUpdateImmutabilityPolicyPreparer(ctx 
 // CreateOrUpdateImmutabilityPolicySender sends the CreateOrUpdateImmutabilityPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BlobContainersClient) CreateOrUpdateImmutabilityPolicySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateOrUpdateImmutabilityPolicyResponder handles the response to the CreateOrUpdateImmutabilityPolicy request. The method always
@@ -458,8 +457,7 @@ func (client BlobContainersClient) DeletePreparer(ctx context.Context, resourceG
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client BlobContainersClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -564,8 +562,7 @@ func (client BlobContainersClient) DeleteImmutabilityPolicyPreparer(ctx context.
 // DeleteImmutabilityPolicySender sends the DeleteImmutabilityPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BlobContainersClient) DeleteImmutabilityPolicySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteImmutabilityPolicyResponder handles the response to the DeleteImmutabilityPolicy request. The method always
@@ -679,8 +676,7 @@ func (client BlobContainersClient) ExtendImmutabilityPolicyPreparer(ctx context.
 // ExtendImmutabilityPolicySender sends the ExtendImmutabilityPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BlobContainersClient) ExtendImmutabilityPolicySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ExtendImmutabilityPolicyResponder handles the response to the ExtendImmutabilityPolicy request. The method always
@@ -778,8 +774,7 @@ func (client BlobContainersClient) GetPreparer(ctx context.Context, resourceGrou
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client BlobContainersClient) GetSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -886,13 +881,117 @@ func (client BlobContainersClient) GetImmutabilityPolicyPreparer(ctx context.Con
 // GetImmutabilityPolicySender sends the GetImmutabilityPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BlobContainersClient) GetImmutabilityPolicySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetImmutabilityPolicyResponder handles the response to the GetImmutabilityPolicy request. The method always
 // closes the http.Response Body.
 func (client BlobContainersClient) GetImmutabilityPolicyResponder(resp *http.Response) (result ImmutabilityPolicy, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// Lease the Lease Container operation establishes and manages a lock on a container for delete operations. The lock
+// duration can be 15 to 60 seconds, or can be infinite.
+// Parameters:
+// resourceGroupName - the name of the resource group within the user's subscription. The name is case
+// insensitive.
+// accountName - the name of the storage account within the specified resource group. Storage account names
+// must be between 3 and 24 characters in length and use numbers and lower-case letters only.
+// containerName - the name of the blob container within the specified storage account. Blob container names
+// must be between 3 and 63 characters in length and use numbers, lower-case letters and dash (-) only. Every
+// dash (-) character must be immediately preceded and followed by a letter or number.
+// parameters - lease Container request body.
+func (client BlobContainersClient) Lease(ctx context.Context, resourceGroupName string, accountName string, containerName string, parameters *LeaseContainerRequest) (result LeaseContainerResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BlobContainersClient.Lease")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: accountName,
+			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 24, Chain: nil},
+				{Target: "accountName", Name: validation.MinLength, Rule: 3, Chain: nil}}},
+		{TargetValue: containerName,
+			Constraints: []validation.Constraint{{Target: "containerName", Name: validation.MaxLength, Rule: 63, Chain: nil},
+				{Target: "containerName", Name: validation.MinLength, Rule: 3, Chain: nil}}},
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("storage.BlobContainersClient", "Lease", err.Error())
+	}
+
+	req, err := client.LeasePreparer(ctx, resourceGroupName, accountName, containerName, parameters)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "storage.BlobContainersClient", "Lease", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.LeaseSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "storage.BlobContainersClient", "Lease", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.LeaseResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "storage.BlobContainersClient", "Lease", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// LeasePreparer prepares the Lease request.
+func (client BlobContainersClient) LeasePreparer(ctx context.Context, resourceGroupName string, accountName string, containerName string, parameters *LeaseContainerRequest) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"accountName":       autorest.Encode("path", accountName),
+		"containerName":     autorest.Encode("path", containerName),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-07-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPost(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.Storage/storageAccounts/{accountName}/blobServices/default/containers/{containerName}/lease", pathParameters),
+		autorest.WithQueryParameters(queryParameters))
+	if parameters != nil {
+		preparer = autorest.DecoratePreparer(preparer,
+			autorest.WithJSON(parameters))
+	}
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// LeaseSender sends the Lease request. The method will close the
+// http.Response Body if it receives an error.
+func (client BlobContainersClient) LeaseSender(req *http.Request) (*http.Response, error) {
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
+}
+
+// LeaseResponder handles the response to the Lease request. The method always
+// closes the http.Response Body.
+func (client BlobContainersClient) LeaseResponder(resp *http.Response) (result LeaseContainerResponse, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
@@ -979,8 +1078,7 @@ func (client BlobContainersClient) ListPreparer(ctx context.Context, resourceGro
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client BlobContainersClient) ListSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -1083,8 +1181,7 @@ func (client BlobContainersClient) LockImmutabilityPolicyPreparer(ctx context.Co
 // LockImmutabilityPolicySender sends the LockImmutabilityPolicy request. The method will close the
 // http.Response Body if it receives an error.
 func (client BlobContainersClient) LockImmutabilityPolicySender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // LockImmutabilityPolicyResponder handles the response to the LockImmutabilityPolicy request. The method always
@@ -1175,6 +1272,7 @@ func (client BlobContainersClient) SetLegalHoldPreparer(ctx context.Context, res
 		"api-version": APIVersion,
 	}
 
+	legalHold.HasLegalHold = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPost(),
@@ -1188,8 +1286,7 @@ func (client BlobContainersClient) SetLegalHoldPreparer(ctx context.Context, res
 // SetLegalHoldSender sends the SetLegalHold request. The method will close the
 // http.Response Body if it receives an error.
 func (client BlobContainersClient) SetLegalHoldSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // SetLegalHoldResponder handles the response to the SetLegalHold request. The method always
@@ -1291,8 +1388,7 @@ func (client BlobContainersClient) UpdatePreparer(ctx context.Context, resourceG
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client BlobContainersClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateResponder handles the response to the Update request. The method always
